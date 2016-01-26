@@ -1,13 +1,13 @@
 #FrameWorks
-ÊµçâÍøÂç¿ª·¢¿ò¼Ü
+å®žçŽ®ç½‘ç»œå¼€å‘æ¡†æž¶
 
 
 
-¹¦ÄÜ
+åŠŸèƒ½
 ===========
-1¡¢ºóÌ¨»ù´¡¹ÜÀí¹¦ÄÜ
+1ã€åŽå°åŸºç¡€ç®¡ç†åŠŸèƒ½
 
-2¡¢Ç°Ì¨Ò³ÃæÏÔÊ¾
+2ã€å‰å°é¡µé¢æ˜¾ç¤º
 
 
 copyright
@@ -15,6 +15,6 @@ copyright
 GPL, Version 3.0
 
 
-¹Ø×¢ÎÒ
+å…³æ³¨æˆ‘
 ====================
-![ÊµçâÍøÂç](http://www.seevia.cn/theme/SEEVIA/img/guanzhu.jpg"ÊµçâÍøÂç")
+![å®žçŽ®ç½‘ç»œ](http://www.seevia.cn/theme/SEEVIA/img/guanzhu.jpg "å®žçŽ®ç½‘ç»œ")
