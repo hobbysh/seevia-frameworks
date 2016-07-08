@@ -137,12 +137,15 @@ class AppController extends Controller
         $this->ld = $this->Dictionary->getformatcode($this->backend_locale);
         $this->set('ld', $this->ld);
         $this->admin_webroot = $this->base.'/';
-        $this->webroot = dirname($this->base);
+        //$this->webroot = dirname($this->base);
+	 $this->webroot = str_replace('\\','/',dirname($this->base).'/');
+	 $this->webroot = str_replace('//','/',$this->webroot);
         $this->set('admin_webroot', $this->admin_webroot);
         $this->set('webroot', $this->webroot);
         //商店设置参数
         $this->Config->set_locale($this->backend_locale);
         $this->configs = $this->Config->getformatcode();
+        $this->check_version();
         if (!empty($pagers_num_cookies)) {
             $this->configs['show_count'] = $pagers_num_cookies;//重置分页数
         }
@@ -258,4 +261,17 @@ class AppController extends Controller
             }
         }
     }
+    
+    /*
+		检查版本信息
+	*/
+	function check_version(){
+		if(isset($this->configs['version'])&&defined('Version')){
+			$version_config=$this->configs['version'];
+			if($version_config!=Version){
+				header('Location:'.$this->server_host.$this->webroot.'/tools/upgrades');
+			        exit();
+			}
+		}
+	}
 }

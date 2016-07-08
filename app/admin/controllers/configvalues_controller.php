@@ -26,7 +26,7 @@ class ConfigvaluesController extends AppController
     public $name = 'Configvalues';
     public $helpers = array('Html','Pagination');
     public $components = array('Pagination','RequestHandler','Email');
-    public $uses = array('NavigationI18n','Navigation','Resource','Config','ConfigI18n','Dictionary','Config','ConfigI18n','OperatorLog','Route');
+    public $uses = array('NavigationI18n','Navigation','Resource','Config','ConfigI18n','Dictionary','Config','ConfigI18n','OperatorLog','Route','Page');
 
     /**
      *显示商店的各个内容.
@@ -385,6 +385,15 @@ class ConfigvaluesController extends AppController
 
     public function changehome($route, $keyword = '')
     {
+        Configure::write('debug', 0);
+        $this->layout = 'ajax';
+    	 //静态页面
+    	 if ($route == 'PAGE'&& $keyword != 'no') {
+    	 	$condition['Page.status'] = '1';
+    	 	$condition['PageI18n.locale'] = $this->locale;
+            	$condition['PageI18n.title like'] = "%$keyword%";
+    	 	$s_info = $this->Page->find('all', array('conditions' => $condition));
+    	 }
         //商品分类
         if ($route == 'PC') {
             $s_info = $this->CategoryProduct->find('all', array('conditions' => array('CategoryProduct.status' => 1, 'CategoryProductI18n.locale' => $this->locale, 'CategoryProduct.type' => 'P')));
@@ -415,9 +424,6 @@ class ConfigvaluesController extends AppController
             $this->set('info', $s_info);
         }
         $this->set('route', $route);
-        Configure::write('debug', 1);
-        $this->layout = 'ajax';
-//	    die(json_encode($result));
     }
 
     /**

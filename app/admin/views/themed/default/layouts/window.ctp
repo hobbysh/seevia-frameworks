@@ -19,15 +19,15 @@ var ip = "<?php echo $_SERVER['REMOTE_ADDR'] ?>";
 		$language = 'jp';
 	};
 ?>
-<script type="text/javascript" src="/admin/js/selectlang/<?php echo $backend_locale;?>"></script>
-<link href="/plugins/AmazeUI/css/amazeui.min.css" type="text/css" rel="stylesheet">
-<link href="/plugins/AmazeUI/css/app.css" type="text/css" rel="stylesheet">
-<link href="/plugins/AmazeUI/css/admin.css" type="text/css" rel="stylesheet">
-<script src="/plugins/AmazeUI/js/jquery.min.js" type="text/javascript"></script>
-<script src="/plugins/AmazeUI/js/amazeui.js" type="text/javascript"></script>
-<script src="/plugins/AmazeUI/js/utils.js" type="text/javascript"></script>
-<script src="/plugins/AmazeUI/js/listtable.js" type="text/javascript"></script>
-<script src="/plugins/AmazeUI/js/common.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo $admin_webroot;?>js/selectlang/<?php echo $backend_locale;?>"></script>
+<link href="<?php echo $webroot;?>plugins/AmazeUI/css/amazeui.min.css" type="text/css" rel="stylesheet">
+<link href="<?php echo $webroot;?>plugins/AmazeUI/css/app.css" type="text/css" rel="stylesheet">
+<link href="<?php echo $webroot;?>plugins/AmazeUI/css/admin.css" type="text/css" rel="stylesheet">
+<script src="<?php echo $webroot;?>plugins/AmazeUI/js/jquery.min.js" type="text/javascript"></script>
+<script src="<?php echo $webroot;?>plugins/AmazeUI/js/amazeui.js" type="text/javascript"></script>
+<script src="<?php echo $webroot;?>plugins/AmazeUI/js/utils.js" type="text/javascript"></script>
+<script src="<?php echo $webroot;?>plugins/AmazeUI/js/listtable.js" type="text/javascript"></script>
+<script src="<?php echo $webroot;?>plugins/AmazeUI/js/common.js" type="text/javascript"></script>
 <?php
 	if(Configure::read('debug')==0&&$configs['is_cache']){
 		

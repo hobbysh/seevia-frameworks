@@ -1,11 +1,11 @@
 <header class="am-topbar am-topbar-fixed-top">
   <div class="am-container">
 	<div class="am-u-lg-1 am-u-md-2 am-u-sm-7">
-	  <button class="am-btn am-btn-sm am-btn-success am-btn-xs am-show-sm-only am-fl am-menu-openbtn" data-am-offcanvas="{target: '#doc-oc-demo2', effect: 'push'}" style="margin-top:8px;"><span class="am-sr-only">�����л�</span>
-<span class="am-icon-bars"></span></button><?php  if(!empty($configs['admin_logo'])){
-       	echo "<a href='/admin/pages/home' class='am-hide-sm-only' style='height:50px;display:block;'><img style='width:100%;height:100%;' src=".$configs['admin_logo']." /></a>";
-      }else{
-       	echo $svshow->link($svshow->image('/img/logo.jpg',array("style"=>"width:100%;height:100%;")),"/admin/pages/home",array("style"=>"height:50px;display:block;","class"=>'am-hide-sm-only'));
+	  <button class="am-btn am-btn-sm am-btn-success am-btn-xs am-show-sm-only am-fl am-menu-openbtn" data-am-offcanvas="{target: '#doc-oc-demo2', effect: 'push'}" style="margin-top:8px;"><span class="am-sr-only"></span>
+<span class="am-icon-bars"></span></button><?php  if(!empty($configs['admin_logo'])){ ?>
+       	<a href='/admin/pages/home' class='am-hide-sm-only' style='height:50px;display:block;'><?php echo $html->image($configs['admin_logo'],array("style"=>"width:100%;height:100%;")); ?></a>
+    <?php  }else{
+       	echo $svshow->link($svshow->image('/img/logo.jpg',array("style"=>"width:100%;height:100%;")),$admin_webroot."/pages/home",array("style"=>"height:50px;display:block;","class"=>'am-hide-sm-only'));
       }?>
 	</div>
 	<div class="am-menu-parent am-u-lg-9 am-u-md-8 am-u-sm-1">

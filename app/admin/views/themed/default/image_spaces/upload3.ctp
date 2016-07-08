@@ -35,7 +35,7 @@
 			<h2><?php echo $ld['upload_setting']?></h2>
 			<div class="show_border">
 				<table id='t1' class="alonetable">
-					<tr><th><?php echo $ld['add_watermark']?></th><td><select id="watermark1" onchange="swf_upload_addr()"><option value="0"><?php echo $ld['no_add']?></options><option value="1"><?php echo $ld['image_watermark']?></options><option value="2"><?php echo $ld['text_watermark']?></options></select><a href="/admin/configvalues?type=1"><?php echo $ld['set_up']?></a></td></tr>
+					<tr><th><?php echo $ld['add_watermark']?></th><td><select id="watermark1" onchange="swf_upload_addr()"><option value="0"><?php echo $ld['no_add']?></options><option value="1"><?php echo $ld['image_watermark']?></options><option value="2"><?php echo $ld['text_watermark']?></options></select><a href="<?php echo $admin_webroot; ?>configvalues?type=1"><?php echo $ld['set_up']?></a></td></tr>
 					<tr><th><?php echo $ld['upload_picture']?></th>
 						<td>
 							<?php if((isset($configs['image-watermake-upload'])&&$configs['image-watermake-upload']==0)||(!isset($configs['image-watermake-upload']))){
@@ -103,7 +103,7 @@ $(function(){
 					'formData'     : formData,
 					'auto'     : true,//自动上传
 	    			'removeTimeout' : 1,//文件队列上传完成1秒后删除
-					'swf'      : '/plugins/uploadify/uploadify.swf',
+					'swf'      : webroot+'plugins/uploadify/uploadify.swf',
 					'uploader' : admin_webroot+"photo_category_gallery/product_photo/",
 					'method'   : 'post',//方法，服务端可以用$_POST数组获取数据
 					'buttonText' : '选择图片',//设置按钮文本

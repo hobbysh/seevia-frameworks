@@ -372,8 +372,7 @@ class HtmlHelper extends AppHelper
                     $path .= '.css';
                 }
             }
-            $url = $this->assetTimestamp($this->webroot($path));
-            $url = Configure::read('themes_host').$url;
+            $url = $this->assetTimestamp($this->webroot(Configure::read('themes_host').$path));
             if (Configure::read('Asset.filter.css')) {
                 $pos = strpos($url, CSS_URL);
                 if ($pos !== false) {

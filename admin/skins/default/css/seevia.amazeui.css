@@ -249,7 +249,12 @@ a{color: #5eb95e;}
 		border-radius:3px;
 		margin-bottom: 1.6rem;
 	}
-
+      a.helpbtn {
+    		background: rgba(0, 0, 0, 0) url("../img/helpbtn.png") no-repeat scroll center top;
+    		display: inline-block;
+    		height: 14px;
+    		width: 14px;
+	}
 	#othercat select{
 		width:200px;
 	}
@@ -340,8 +345,8 @@ a{color: #5eb95e;}
 	.am-navbar-nav a{padding-top:20px;height:60px;}
 	#navbar,.am-navbar-default .am-navbar-nav{background:#5eb95e;}
 	#navbar .am-navbar-nav a .am-navbar-label{font-size:2rem;overflow: visible;}
-	.popup_pro_code{width:120px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;}
-	.popup_pro_name{width:150px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;}
+	.popup_pro_code{min-width:150px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;}
+	.popup_pro_name{min-width:150px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;}
 	.referer{width:250px;overflow:hidden;text-overflow:ellipsis;white-space:normal;}
 	.page_home{min-height:600px;}
 	.user_mgt,.order_mgt{margin-top:210px;width:200px;height:200px;line-height:180px;}
@@ -493,19 +498,9 @@ and (orientation : portrait) {
 /*
  *详情页 右边菜单 sm 显示 的效果 
  */
-.am-form-align{top:10px;}
 
-/*information_resources index*/
-@media only screen and (max-width:615px) and (min-width:369px){
+  .cake-sql-log{word-break:break-all;margin:0 10px;}
 
-	.am-source{margin-top:23px;margin-right:4px;}
-}
 
-/*operator actions index*/
-@media only screen and (max-width:881px) and (min-width:496px){
-	.am-delaction{margin-top:10px;}
-}
-.am-operator-action label{font-weight:normal;}
-.am-actions-align{top:18px;}
- #accordion div .am-panel-body .am-panel-child .am-panel-childbd a{color:#333;}
-  
+  .color_red{color:red;line-height: 37px;}
+  .div_lineheight{line-height: 37px;font-size: 16px;}

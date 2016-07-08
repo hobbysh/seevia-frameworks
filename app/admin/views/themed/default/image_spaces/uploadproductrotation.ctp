@@ -2,9 +2,9 @@
 $timestamp = time();//时间标示
 echo $javascript->link('/skins/default/js/image_space');
 if((isset($configs['image-watermake-upload'])&&$configs['image-watermake-upload']==0)||(!isset($configs['image-watermake-upload']))){ ?>
-<script src="/plugins/uploadify/jquery.uploadify.js" type="text/javascript"></script>
+<script src="<?php echo $webroot; ?>plugins/uploadify/jquery.uploadify.js" type="text/javascript"></script>
 <?php }else if(isset($configs['image-watermake-upload'])&&$configs['image-watermake-upload']==1){ ?>
-<script src="/plugins/ajaxfileupload.js" type="text/javascript"></script>
+<script src="<?php echo $webroot; ?>plugins/ajaxfileupload.js" type="text/javascript"></script>
 <?php } ?>
 <style type="text/css">
 /*
@@ -50,7 +50,7 @@ if((isset($configs['image-watermake-upload'])&&$configs['image-watermake-upload'
         <div id="upload_setting" class="am-panel-collapse am-collapse am-in">
             <div class="am-panel-bd am-form-detail am-form am-form-horizontal" style="padding-bottom:0;">
                 <table id="t1" class="am-table">
-                    <tr><th style="padding-top:12px;"><?php echo $ld['add_watermark']?></th><td><select id="watermark1" data-am-selected onchange="swf_upload_addr()"><option value="0"><?php echo $ld['no_add']?></option><option value="1"><?php echo $ld['image_watermark']?></option><option value="2"><?php echo $ld['text_watermark']?></option></select><a href="/admin/configvalues?type=1"><?php echo $ld['set_up']?></a></td></tr>
+                    <tr><th style="padding-top:12px;"><?php echo $ld['add_watermark']?></th><td><select id="watermark1" data-am-selected onchange="swf_upload_addr()"><option value="0"><?php echo $ld['no_add']?></option><option value="1"><?php echo $ld['image_watermark']?></option><option value="2"><?php echo $ld['text_watermark']?></option></select><a href="<?php echo $admin_webroot; ?>configvalues?type=1"><?php echo $ld['set_up']?></a></td></tr>
                     <tr><th style="padding-top:20px;"><?php echo $ld['upload_picture']?></th>
                         <td>
                             <?php if((isset($configs['image-watermake-upload'])&&$configs['image-watermake-upload']==0)||(!isset($configs['image-watermake-upload']))){
@@ -134,7 +134,7 @@ $(function(){
                     'formData'     : formData,
                     'auto'     : true,//自动上传
                     'removeTimeout' : 1,//文件队列上传完成1秒后删除
-                    'swf'      : '/plugins/uploadify/uploadify.swf',
+                    'swf'      : webroot+'plugins/uploadify/uploadify.swf',
                     'uploader' : admin_webroot+"photo_category_gallery/product_photo/",
                     'method'   : 'post',//方法，服务端可以用$_POST数组获取数据
                     'buttonText' : '选择图片',//设置按钮文本
@@ -286,44 +286,7 @@ function swf_upload_addr(){
     };
 }
 function add_rotation_img(img_url,img_name){
-    var html_str="<li><blockquote><a class='div_img' href='javascript:void(0);'><img src='"+img_url+"'></a><p class='div_img_name'>"+img_name+"</p></blockquote></li>";
+    var html_str="<li><blockquote><a class='div_img' href='javascript:void(0);'><img src='"+webroot+img_url+"'></a><p class='div_img_name'>"+img_name+"</p></blockquote></li>";
     $("#imglist").append(html_str);
 }
-
-/*
- var publicobj = "";
- function remove_img(obj,thisid){
- publicobj = obj;
- if(confirm("<?php echo $ld['confirm_delete']?>")){
- YUI().use("io",function(Y) {
- var PhotoCategoryGallery_id = "PhotoCategoryGallery_id="+thisid;
- var sUrl = admin_webroot+"photo_categories/photo_del/?status=1";//访问的URL地址
- var cfg = {
- method: "POST",
- data:PhotoCategoryGallery_id
- };
- var request = Y.io(sUrl, cfg);//开始请求
- var newhtml = "";
- var handleSuccess = function(ioId, o){
- var rep_value = publicobj.parentNode.parentNode.innerHTML;
- if(isFirefox=navigator.userAgent.indexOf("Firefox")>0){
- rep_value = "<li>"+rep_value+"</li>";
- }
- else{
- rep_value = "<LI>"+rep_value+"</LI>";
- }
- var thispreServerData = document.getElementById("preServerData");
- thispreServerDatavalue = thispreServerData.innerHTML;
- thispreServerData.innerHTML = thispreServerDatavalue.replace(rep_value," ");
-
- }
- var handleFailure = function(ioId, o){
- alert("<?php echo $ld['asynchronous_request_failed']?>");
- }
- Y.on('io:success', handleSuccess);
- Y.on('io:failure', handleFailure);
- });
- }
- }
- */
 </script>

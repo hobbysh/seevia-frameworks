@@ -19,6 +19,11 @@
 				
 <div class="am-g am-other_action">
 	<div class="am-fr am-u-lg-12 am-btn-group-xs" style="text-align:right;margin-bottom:10px;margin-right:15px;">
+	<?php if(  isset($profile_id) && !empty($profile_id)   ) {  ?>
+		<a  class="am-btn am-radius  am-btn-default am-btn-sm"   href="<?php echo $html->url("/roles/role_upload/") ?>"  >
+			<?php  echo $ld['bulk_upload'] ?>
+		</a>
+	<?php } ?>
 		<a class="am-btn am-btn-warning am-btn-sm am-radius" href="<?php echo $html->url('/roles/add/'); ?>">
 			<span class="am-icon-plus"></span><?php echo $ld['add'] ?>
 		</a>
@@ -60,7 +65,7 @@
 				<div class="am-u-lg-3  am-u-md-3 am-u-sm-3 am-action">
 					<?php if($svshow->operator_privilege("operator_roles_edit")){?>
 					 
-						 <a class="am-btn am-btn-default am-btn-xs  am-seevia-btn-edit" href="<?php echo $html->url('/roles/edit/'.$v['OperatorRole']['id']); ?>">
+						 <a class="am-btn am-btn-default am-btn-xs am-text-secondary am-seevia-btn-edit" href="<?php echo $html->url('/roles/edit/'.$v['OperatorRole']['id']); ?>">
                         <span class="am-icon-pencil-square-o"></span> <?php echo $ld['edit']; ?>
                     </a>
 						
@@ -86,20 +91,73 @@
 <?php if($svshow->operator_privilege("operator_roles_remove")){?>
 	<?php if(isset($role_list) && sizeof($role_list)){?>
 		<div id="btnouterlist" class="btnouterlist am-form-group ">
-			<div  class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-hide-sm-only">
-				<label class="am-checkbox am-success" style="font-size:14px; line-height:14px;display: inline;"><input onclick='listTable.selectAll(this,"checkboxes[]")' data-am-ucheck type="checkbox" /><?php echo $ld['select_all']?></label>&nbsp;
-				<button type="button" class="am-btn am-btn-danger am-btn-sm am-radius" value="" onclick="batch_operations()" ><?php echo $ld['delete']?></button>
-			</div>
-			<div class="am-u-lg-9 am-u-md-9 am-u-sm-9">
-				<?php echo $this->element('pagers')?>
-			</div>
-            <div class="am-cf"></div>
+				<div class="am-u-lg-5 am-u-md-5 am-u-sm-5 am-hide-sm-down" style="left:6px;">
+							<div class="am-fl">
+								<label class="am-checkbox am-success" style="font-size:14px; line-height:14px;">
+									<input onclick='listTable.selectAll(this,"checkboxes[]")' data-am-ucheck type="checkbox" />
+									<span><?php echo $ld['select_all']?></span>
+								</label>
+				            	</div>
+							<div class="am-fl" style="margin-left:3px;">
+						            <select name="barch_opration_select" id="barch_opration_select" data-am-selected  onchange="batch_opration_select_onchange(this)">
+						              <option value="0"><?php echo $ld['batch_operate']?></option>
+						              <option value="delete"><?php echo $ld['batch_delete']?></option>
+								<?php if( isset($profile_id) && !empty($profile_id) ){ ?>
+						    		  <option value="export_csv"><?php echo $ld['batch_export']?></option>
+						    		 <?php } ?>
+						            </select>
+		            			</div> 
+							<div class="am-fl" style="display:none;margin-left:3px;">
+					                    <select id="export_csv" data-am-selected name="barch_opration_select_onchange" >
+					                        <option value=""><?php echo $ld['click_select']?></option>
+					                        <option value="all_export_csv"><?php echo  $ld['all_export']?></option>
+					                        <option value="choice_export"><?php echo $ld['choice_export']?></option>
+					                    </select>&nbsp;
+				              	</div>
+							<div class="am-fl" style="margin-left:3px;">
+				               	   <button type="button" class="am-btn am-radius am-btn-danger am-btn-sm" onclick="select_batch_operations()"><?php echo $ld['submit']?></button>
+				              	</div>
+				</div>
+		
+				
+            		<div class="am-cf">
+            		</div>
 		</div>
+		<div class="btnouterlist am-form-group " >
+				<div class="am-u-lg-3 am-u-md-3 am-u-sm-3">
+						&nbsp;
+				</div>		
+				<div class="am-u-lg-9 am-u-md-9 am-u-sm-9" >
+					<?php echo $this->element('pagers')?>
+				</div>
+				<div class="am-cf">
+            		</div>
+		</div>				
 	<?php }?>
 <?php }?>
 <?php echo $form->end();?>
-<script>
-
+<script type="text/javascript">
+function select_batch_operations(){
+	var barch_opration_select = document.getElementById("barch_opration_select");
+      var export_csv = document.getElementById("export_csv");
+      if(barch_opration_select.value==0){
+      	  	alert(j_select_operation_type);
+			return;
+      }
+      if(barch_opration_select.value=='delete'){
+		batch_operations();
+	}
+	if(barch_opration_select.value=='export_csv'){
+		if(export_csv.value=='all_export_csv'){
+			window.location.href=admin_webroot+"/roles/all_export_csv";
+		
+		}
+		if(export_csv.value=='choice_export'){
+			choice_upload();
+		}
+	}
+}
+//批量删除
 function batch_operations(){
 	var bratch_operat_check = document.getElementsByName("checkboxes[]");
 	var postData = "";
@@ -113,9 +171,9 @@ function batch_operations(){
 		return;
 	}
 	if(confirm("<?php echo $ld['confirm_delete']?>")){
-		$.ajax({
+		$.ajax({ 
 			url:admin_webroot+"roles/batch_operations/",
-			type:"POST",
+			type:"GET",
 			dataType:"json",
 			data: postData,
 			success:function(data){
@@ -123,5 +181,40 @@ function batch_operations(){
 			}
 		});
 	}
+}	
+//选择导出
+function choice_upload(){
+	var bratch_operat_check = document.getElementsByName("checkboxes[]");
+	var postData = "";
+	for(var i=0;i<bratch_operat_check.length;i++){
+		if(bratch_operat_check[i].checked){
+			postData+="&checkboxes[]="+bratch_operat_check[i].value;
+		}
+	}
+	if( postData=="" ){
+		alert("<?php echo $ld['please_select'] ?>");
+		return;
+	}else{
+	window.location.href=admin_webroot+"roles/choice_export/"+postData;
+	
+	}
+}	
+//触发子下拉
+function batch_opration_select_onchange(obj){
+	if(obj.value!="export_csv"){
+		$("#export_csv").parent().hide();		
+	}
+	$("select[name='barch_opration_select_onchange[]']").parent().hide();
+	
+	var export_csv=document.getElementById("export_csv").value;
+	
+	if(obj.value=="export_csv"){
+		if(export_csv=="all_export_csv"){
+			$("#export_csv").parent().show();
+		}else{
+			$("#export_csv").parent().show();
+		}
+	}
+
 }
 </script>

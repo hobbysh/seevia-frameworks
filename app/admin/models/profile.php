@@ -2,7 +2,7 @@
 class profile extends AppModel
 {
     /*
-    * @var $useDbConfig Êı¾İ¿âÅäÖÃ
+    * @var $useDbConfig æ•°æ®åº“é…ç½®
     */
     public $useDbConfig = 'default';
     /*
@@ -23,11 +23,11 @@ class profile extends AppModel
     }
 
     /**
-     * localeformat·½·¨£¬Êı×é½á¹¹µ÷Õû.
+     * localeformatæ–¹æ³•ï¼Œæ•°ç»„ç»“æ„è°ƒæ•´.
      *
-     * @param int $id ÊäÈë·ÖÀà±àºÅ
+     * @param int $id è¾“å…¥åˆ†ç±»ç¼–å·
      *
-     * @return array $lists_formated ·µ»ØProfileËùÓĞÓïÑÔµÄĞÅÏ¢
+     * @return array $lists_formated è¿”å›Profileæ‰€æœ‰è¯­è¨€çš„ä¿¡æ¯
      */
     public function localeformat($id)
     {

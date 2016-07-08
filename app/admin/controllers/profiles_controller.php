@@ -209,7 +209,6 @@ class  ProfilesController extends AppController
                 $tmp[] = $v['ProfilesFieldI18n']['description'];
                 $fields_array[] = $v['ProfileFiled']['code'];
             }
-
             $excel[] = $tmp;
             $conditions = '';
             if (isset($_REQUEST['profiles_keywords']) && $_REQUEST['profiles_keywords'] != '') {
@@ -324,14 +323,14 @@ class  ProfilesController extends AppController
         set_time_limit(300);
         if (!empty($_FILES['file'])) {
             if ($_FILES['file']['error'] > 0) {
-                echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />;<script>alert('".$this->ld['file_upload_error']."');window.location.href='/admin/articles/uploadarticles';</script>";
+                echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />;<script>alert('".$this->ld['file_upload_error']."');window.location.href='/admin/profiles/uploadprofiles';</script>";
                 die();
             } else {
                 $handle = @fopen($_FILES['file']['tmp_name'], 'r');
                 $profile_info = $this->Profile->find('first', array('fields' => array('Profile.id'), 'conditions' => array('Profile.code' => $flag_code, 'Profile.status' => 1)));
                 $profilefiled_info = $this->ProfileFiled->find('all', array('fields' => array('ProfileFiled.code', 'ProfilesFieldI18n.description'), 'conditions' => array('ProfilesFieldI18n.locale' => $this->backend_locale, 'ProfileFiled.profile_id' => $profile_info['Profile']['id'], 'ProfileFiled.status' => 1), 'order' => 'ProfileFiled.orderby asc'));
                 if (empty($profilefiled_info)) {
-                    echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script>alert('".$this->ld['file_upload_error']."');window.location.href='/admin/articles/uploadarticles';</script>";
+                    echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script>alert('".$this->ld['file_upload_error']."');window.location.href='/admin/profiles/uploadprofiles';</script>";
                     die();
                 }
                 $key_arr = array();
@@ -347,7 +346,7 @@ class  ProfilesController extends AppController
                         $check_row = iconv('GB2312', 'UTF-8', $check_row);
                         $num_count = count($profilefiled_info);
                         if ($row_count > $num_count || $check_row != $profilefiled_info[0]['ProfilesFieldI18n']['description']) {
-                            echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />;<script>alert('上传文件格式不标准');window.location.href='/admin/articles/uploadarticles';</script>";
+                            echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />;<script>alert('上传文件格式不标准');window.location.href='/admin/profiles/uploadprofiles';</script>";
                         }
                         ++$i;
                     }
@@ -356,7 +355,7 @@ class  ProfilesController extends AppController
                         $temp[$key_arr[$k]] = empty($v) ? '' : @iconv($csv_export_code, 'utf-8//IGNORE', $v);
                     }
                     if (!isset($temp) || empty($temp)) {
-                        echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script>alert('".$this->ld['file_upload_error']."');window.location.href='/admin/articles/uploadarticles';</script>";
+                        echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script>alert('".$this->ld['file_upload_error']."');window.location.href='/admin/profiles/uploadprofiles';</script>";
                         die();
                     }
                     $data[] = $temp;
@@ -422,17 +421,14 @@ class  ProfilesController extends AppController
                 }
                 ++$count_num;
                 if (!empty($Profile['id'])) {
-                    if (!empty($this->front_locales) && is_array($this->front_locales)) {
-                        foreach ($this->front_locales as $k => $v) {
-                            $profileI18ndata = $this->ProfileI18n->find('first', array('conditions' => array('locale' => $v['Language']['locale'], 'profile_id' => $Profile['id'])));
-                            $profile_I18n_data = empty($profileI18ndata['ProfileI18n']) ? array() : $profileI18ndata['ProfileI18n'];
-                            $profile_I18n_data['locale'] = $v['Language']['locale'];
-                            $profile_I18n_data['profile_id'] = $Profile['id'];
-                            $profile_I18n_data['name'] = $data['ProfileI18n']['name'];
-                            $profile_I18n_data['description'] = $data['ProfileI18n']['description'];
-                            $this->ProfileI18n->saveAll(array('ProfileI18n' => $profile_I18n_data));
-                        }
-                    }
+                    $profile_locale=isset($data['ProfileI18n']['locale'])&&trim($data['ProfileI18n']['locale'])!=""?$data['ProfileI18n']['locale']:$this->backend_locale;
+                    $profileI18ndata = $this->ProfileI18n->find('first', array('conditions' => array('locale' => $profile_locale, 'profile_id' => $Profile['id'])));
+                    $profile_I18n_data = empty($profileI18ndata['ProfileI18n']) ? array() : $profileI18ndata['ProfileI18n'];
+                    $profile_I18n_data['locale'] = $profile_locale;
+                    $profile_I18n_data['profile_id'] = $Profile['id'];
+                    $profile_I18n_data['name'] = $data['ProfileI18n']['name'];
+                    $profile_I18n_data['description'] = $data['ProfileI18n']['description'];
+                    $this->ProfileI18n->saveAll(array('ProfileI18n' => $profile_I18n_data));
                     $profilefielddata = $this->ProfileFiled->find('first', array('conditions' => array('ProfileFiled.profile_id' => $Profile['id'], 'ProfileFiled.code' => $data['ProfileFiled']['code'])));
                     $profilefield_data = empty($profilefielddata['ProfileFiled']) ? array() : $profilefielddata['ProfileFiled'];
                     $profilefield_data['profile_id'] = $Profile['id'];
@@ -447,17 +443,13 @@ class  ProfilesController extends AppController
                         $this->ProfileFiled->save(array('ProfileFiled' => $profilefield_data));
                         $ProfileFiled['id'] = $profilefield_data['id'];
                     }
-                    if (!empty($this->front_locales) && is_array($this->front_locales)) {
-                        foreach ($this->front_locales as $k => $v) {
-                            $profilefieldI18ndata = $this->ProfilesFieldI18n->find('first', array('conditions' => array('locale' => $v['Language']['locale'], '	profiles_field_id' => $ProfileFiled['id'])));
-                            $profile_field_I18n_data = empty($profilefieldI18ndata['ProfilesFieldI18n']) ? array() : $profilefieldI18ndata['ProfilesFieldI18n'];
-                            $profile_field_I18n_data['locale'] = $v['Language']['locale'];
-                            $profile_field_I18n_data['profiles_field_id'] = $ProfileFiled['id'];
-                            $profile_field_I18n_data['name'] = $data['ProfilesFieldI18n']['name'];
-                            $profile_field_I18n_data['description'] = $data['ProfilesFieldI18n']['description'];
-                            $this->ProfilesFieldI18n->saveAll(array('ProfilesFieldI18n' => $profile_field_I18n_data));
-                        }
-                    }
+                    $profilefieldI18ndata = $this->ProfilesFieldI18n->find('first', array('conditions' => array('locale' => $profile_locale, 'profiles_field_id' => $ProfileFiled['id'])));
+                    $profile_field_I18n_data = empty($profilefieldI18ndata['ProfilesFieldI18n']) ? array() : $profilefieldI18ndata['ProfilesFieldI18n'];
+                    $profile_field_I18n_data['locale'] = $profile_locale;
+                    $profile_field_I18n_data['profiles_field_id'] = $ProfileFiled['id'];
+                    $profile_field_I18n_data['name'] = $data['ProfilesFieldI18n']['name'];
+                    $profile_field_I18n_data['description'] = $data['ProfilesFieldI18n']['description'];
+                    $this->ProfilesFieldI18n->saveAll(array('ProfilesFieldI18n' => $profile_field_I18n_data));
                 }
             }
             //操作员日志

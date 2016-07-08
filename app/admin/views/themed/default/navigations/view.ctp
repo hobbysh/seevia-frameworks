@@ -84,6 +84,15 @@
     		    					<input type="hidden" id="Navigation" value="" />
     								<select id="data[Navigation][controller]" data-am-selected="{maxHeight:200}" name="data[Navigation][controller]" onChange="setNa()"  >
     									<option value="pages" <?php if(!empty($this->data['Navigation']['controller'])&&$this->data['Navigation']['controller']=='pages') echo "selected";?> ><?php echo $ld['home']?></option>
+    									<option value="p_categories" <?php if(!empty($this->data['Navigation']['controller'])&&$this->data['Navigation']['controller']=='p_categories') echo "selected";?>><?php echo $ld['product_categories']?></option>
+    									<option value="a_categories" <?php if(!empty($this->data['Navigation']['controller'])&&$this->data['Navigation']['controller']=='a_categories') echo "selected";?>><?php echo $ld['article_categories']?></option>
+    									<option value="brands" <?php if(!empty($this->data['Navigation']['controller'])&&$this->data['Navigation']['controller']=='brands') echo "selected";?>><?php echo $ld['brand']?></option>
+    									<option value="products" <?php if(!empty($this->data['Navigation']['controller'])&&$this->data['Navigation']['controller']=='products') echo "selected";?>><?php echo $ld['product']?></option>
+    									<option value="articles" <?php if(!empty($this->data['Navigation']['controller'])&&$this->data['Navigation']['controller']=='articles') echo "selected";?>><?php echo $ld['article']?></option>
+    									<option value="topics" <?php if(!empty($this->data['Navigation']['controller'])&&$this->data['Navigation']['controller']=='topics') echo "selected";?>><?php echo $ld['topics']?></option>
+    									<option value="sitemaps" <?php if(!empty($this->data['Navigation']['controller'])&&$this->data['Navigation']['controller']=='sitemaps') echo "selected";?>><?php echo $ld['sitemap']?></option>
+    									<option value="contacts" <?php if(!empty($this->data['Navigation']['controller'])&&$this->data['Navigation']['controller']=='contacts') echo "selected";?>><?php echo $ld['contacts_us']?></option>
+    									<option value="jobs" <?php if(!empty($this->data['Navigation']['controller'])&&$this->data['Navigation']['controller']=='jobs') echo "selected";?>><?php echo $ld['recruitment_management']?></option>
     									<option value="static_pages" <?php if(!empty($this->data['Navigation']['controller'])&&$this->data['Navigation']['controller']=='static_pages') echo 'selected';?>><?php echo $ld['static_page']?></option>
     								</select>
     								<br>
@@ -353,7 +362,7 @@ function setNa(){
 		$("#brand_div").css("margin-top","10px");
 	}
 	if(nav=='topics'){
-		document.getElementById("Navigation").value='/topic/';
+		document.getElementById("Navigation").value='/topics/';
 		document.getElementById("product_div").style.display='none';
 		document.getElementById("article_div").style.display='none';
 		document.getElementById("static_page_div").style.display='none';
@@ -401,7 +410,7 @@ function setNa(){
 		document.getElementById("pro_div").style.display='none';
 	}
 	if(nav=='static_pages'){
-		document.getElementById("Navigation").value='/static_pages/';
+		document.getElementById("Navigation").value='/pages/';
 		document.getElementById("product_div").style.display='none';
 		document.getElementById("article_div").style.display='none';
 		document.getElementById("static_page_div").style.display='block';
@@ -472,7 +481,7 @@ function search(a){
 	}
 	var num = document.getElementById("lan").value;
     $.ajax({
-		url:"/admin/navigations/search/"+a+'/'+key,
+		url:admin_webroot+"navigations/search/"+a+'/'+key,
 		type:"POST",
 		data:{},
 		dataType:"json",
@@ -515,7 +524,7 @@ function search(a){
 function changeUrl(url){
 	var num = document.getElementById("lan").value;
 	$.ajax({
-		url:"/admin/navigations/changeUrl/",
+		url:admin_webroot+"navigations/changeUrl/",
 		type:"POST",
 		data:{'url':url},
 		dataType:"json",
@@ -537,7 +546,7 @@ function searchNa(id){
 	var type=document.getElementById("type").value;
         $("#order_div").html('');
 	$.ajax({
-		url:"/admin/navigations/searchNa/"+type+'/'+id,
+		url:admin_webroot+"navigations/searchNa/"+type+'/'+id,
 		type:"POST",
 		data:{},
 		dataType:"json",
@@ -574,7 +583,7 @@ function searchType(type,id,this_id){
 	var node = document.getElementById("searchNa_sel");
         node.innerHTML="";
 	$.ajax({
-		url:"/admin/navigations/searchtype/"+type+'/'+id+'/'+this_id,
+		url:admin_webroot+"navigations/searchtype/"+type+'/'+id+'/'+this_id,
 		type:"POST",
 		data:{},
 		dataType:"json",

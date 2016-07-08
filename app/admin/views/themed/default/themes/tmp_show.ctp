@@ -65,7 +65,7 @@
 						</span>
 						<p class="div_img_name">
 							<span class="btn_to_set" onclick="use_theme('<?php echo $themed['BaseTheme']['name'];?>')"><?php echo $ld['set_default'];?></span>
-							<?php if(isset($themed["BaseTheme"]['flag'])&& $themed["BaseTheme"]['flag']=="1"){?><span class="btn_status" style="background-image:url(<?php echo $admin_webroot.'/themed'.$admin_webroot.'img/'.'yes.gif' ?>)"><?php echo $ld['available']."： ";?></span><?php } ?>
+							<?php if(isset($themed["BaseTheme"]['flag'])&& $themed["BaseTheme"]['flag']=="1"){?><span class="btn_status" style="background-image:url(<?php echo $admin_webroot.'/themed'.$admin_webroot.'img/'.'/admin/skins/default/img/yes.gif' ?>)"><?php echo $ld['available']."： ";?></span><?php } ?>
 							<?php echo $html->link($themed["BaseTheme"]['description'],$themed["BaseTheme"]['url'],'',false,false)?>
 							<span class="btn_to_uninstall" onclick="deletethemed('<?php echo $themed['BaseTheme']['name'];?>')"><?php echo $ld['uninstall']; ?></span>
 						</p>
@@ -96,7 +96,7 @@
 						</span>
 						<p class="div_img_name">
 							<span class="btn_to_set" onclick="use_theme('<?php echo $themed['Template']['name'];?>')"><?php echo $ld['set_default'];?></span>
-							<span class="btn_status" style="background-image:url(<?php echo $admin_webroot.'/themed'.$admin_webroot.'img/'.'yes.gif' ?>)"><?php echo $ld['available']."： ";?></span>
+							<span class="btn_status" style="background-image:url(<?php echo $admin_webroot.'/themed'.$admin_webroot.'img/'.'/admin/skins/default/img/yes.gif' ?>)"><?php echo $ld['available']."： ";?></span>
 							<?php echo $html->link($themed["Template"]['description'],$themed["Template"]['url'],array("target"=>"_blank"),false,false)?>
 						</p>
 						<p><?php if(isset($themed['desc']))echo $themed["Template"]['desc'];?></p>
@@ -162,7 +162,8 @@
 					<blockquote>
 						<span class="div_img"><?php
 								$x=explode(",",$themed["BaseTheme"]['template_img']);
-						?><img id="theme_img" src="<?php echo $x[0];?>" /></span>
+								echo $html->image($x[0],array('id'=>'theme_img'));
+						?></span>
 						<p class="div_img_name">
 							<?php echo $html->link($themed["BaseTheme"]['description'],$themed["BaseTheme"]['url'],array('target'=>'_blank'),false,false)?>
 						</p>

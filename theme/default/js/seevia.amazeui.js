@@ -5,35 +5,52 @@ $(document).ready(function(){
 		var keyword=$(this).parent().parent().find("input[type=text]").val();
 		keyword=$.trim(keyword);
 		if(keyword.length>0){
-			window.location.href="/searchs/keyword?keyword="+keyword;
+			window.location.href=web_base+"/searchs/keyword?keyword="+keyword;
 		}
 	});
+
+  $(".am-search-sm button").click(function(){
+    var keyword=$(this).parent().parent().find("input[type=text]").val();
+    keyword=$.trim(keyword);
+    if(keyword.length>0){
+      window.location.href=web_base+"/searchs/keyword?keyword="+keyword;
+    }
+  });
 	
 	$("body").click(function(){
 		$(".search_date").hide();
 		$(".search_date ul").hide();
 	})
 	
-	$('.search_keyword').keyup(function(){
+	$(".am-search input[type='text']").keyup(function(){
 		var search_date=$(this).parent().parent().find(".search_date");
-	    	auto_search($(this).val(),search_date);
+		$(search_date).html();
+	    auto_search($(this).val(),search_date);
 		var none = $(this).val();
 		if(none==""){$(search_date).hide();$(search_date).find("ul").hide();}
 	});
+	
+	$(".am-search-sm input[type='text']").keyup(function(){
+    var search_date=$(this).parent().parent().find(".search_date");
+    $(search_date).html();
+      auto_search($(this).val(),search_date);
+    var none = $(this).val();
+    if(none==""){$(search_date).hide();$(search_date).find("ul").hide();}
+  });
 	/* 商品列表like */
 	$(".like_icon img").bind("click",function(){
 	  var type=$(this).attr("id");
-	  $.ajax({ url: "/user_socials/ajax_like",
+	  $.ajax({ url: web_base+"/user_socials/ajax_like",
 			   type:"POST",
 			   dataType:"json", 
-			   context: $(".like_icon .like_num"), 
+			   context: $(".likam-user-avatare_icon .like_num"), 
 			   data: { 'type_id': type,'loacle':$("#local").val()},
 			   success: function(data){
 				 if(data.code=='1'){
 				   $(".like_icon #like_num"+type).html(data.like_num);
 				 }else{
 				   if(data.is_login=='0'){
-					 $(".am-modal-bd").html("<a href='/users/login'>"+data.msg+"</a>");
+					 $(".am-modal-bd").html("<a href='"+web_base+"/users/login'>"+data.msg+"</a>");
 					 $('#like-icon-btn').click();
 				   }else{
 					 alert(data.msg);
@@ -45,7 +62,7 @@ $(document).ready(function(){
 	/* 商品详情页like */
 	$(".my_like_icon").bind("click",function(){
 		var type=$(this).attr("id");
-		$.ajax({ url: "/user_socials/ajax_like",
+		$.ajax({ url: web_base+"/user_socials/ajax_like",
 				type:"POST",
 				dataType:"json",
 				data: { 'type_id': type,'loacle':$("#local").val()},
@@ -54,7 +71,7 @@ $(document).ready(function(){
 						$(".my_like_num").html(data.like_num);
 					}else{
 						if(data.is_login=='0'){
-							$(".am-modal-bd").html("<a href='/users/login'>"+data.msg+"</a>");
+							$(".am-modal-bd").html("<a href='"+web_base+"/users/login'>"+data.msg+"</a>");
 					 		$('#like-icon-btn').click();
 						}else{
 							alert(data.msg);
@@ -99,7 +116,7 @@ $(document).ready(function(){
 					$(ImageInfo).prop("src",New_strFileName);
 				}
 			}else{
-				$(this).prop("src","/theme/AmazeUI/images/default.png");
+				$(this).prop("src","/theme/default/images/default.png");
 			}
 		});
 	}
@@ -118,9 +135,19 @@ $(document).ready(function(){
 $(window).load(function(){
 	$("div:not(.auto_zoom) img").each(function(){
 		$(this).prop("onerror",function(e){
-			if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) { 
-		      	this.src = '/theme/AmazeUI/images/default.png'; 
-		      } 
+			var error = false;
+			if (!this.complete) {
+				error = true;
+			}
+			if (typeof this.naturalWidth != "undefined" && this.naturalWidth == 0) {
+				error = true;
+			}
+			if(error){
+				$(this).bind('error.replaceSrc',function(){
+					this.src = "/theme/default/images/default.png";
+					$(this).unbind('error.replaceSrc');
+				}).trigger('load');
+			} 
 		});
 	});
 })
@@ -130,7 +157,7 @@ $(window).load(function(){
 */
 function auto_search(keyword,search_date){
 	if(keyword == '' || keyword.length <2 ){return false;}
-	var sUrl ="/searchs/index/";
+	var sUrl =web_base+"/searchs/index/";
 	var postData ={keyword:keyword};
 	var auto_search_Success = function(result){
 		if(result.showflag == false){
@@ -215,7 +242,7 @@ function SetTextBoxTip_blur(name, defaultValue,ClassName) {
 function change_captcha(id,up_flag){
 	if(up_flag!=true){
 		document.getElementById(id).style.display="";
-		document.getElementById(id).src = "/users/captcha/?"+Math.random();
+		document.getElementById(id).src =web_base+"/users/captcha/?"+Math.random();
 		window.setTimeout("change_captcha_val('"+id+"')",1000);
 
 	}else{
@@ -225,7 +252,7 @@ function change_captcha(id,up_flag){
 
 function change_captcha_val(id){
 	var js_obj=document.getElementById(id);
-	$.ajax({ url: "/users/captcha",
+	$.ajax({ url: web_base+"/users/captcha",
 			type:"POST",
 			dataType:"json",
 			data: {},
@@ -585,15 +612,15 @@ function check_input(type,id,email,local){
 	{
 		email="";
 		if(local!=null)
-			var sUrl = local+'/users/check_input';//webroot + 'user/check';
+			var sUrl = web_base+'/users/check_input';//webroot + 'user/check';
 		else
-			var sUrl = '/users/check_input';//webroot + 'user/check';
+			var sUrl = web_base+'/users/check_input';//webroot + 'user/check';
 		eval("var postData = {"+type+":input.value,type_id:id}");
 		$.post(sUrl,postData,check_input_Success,"json");
 	}
 	if(email!="" && input.value!=email)
 	{
-		var sUrl = '/users/check_input';//webroot + 'user/check';
+		var sUrl = web_base+'/users/check_input';//webroot + 'user/check';
 		eval("var postData = {"+type+":input.value,type_id:id}");
 		$.post(sUrl,postData,check_input_Success,"json");
 	}else{
@@ -722,12 +749,12 @@ function checkSpecial(str){
 //购物车
 function checkChanges(o,arg,i){
 		var form_name=$(o).attr("id");
-		var sUrl = "/carts/update_num/";
+		var sUrl = web_base+"/carts/update_num/";
 		var postData ={
 			is_ajax:1,
 			data:$("form[name="+form_name+"]").serialize()
 		};
-		$.ajax({ url: "/carts/update_num/",
+		$.ajax({ url: web_base+"/carts/update_num/",
 				type:"POST",
 				dataType:"json",
 				data:$("form[name="+form_name+"]").serialize(), 
@@ -790,9 +817,9 @@ function buy_now_no_ajax(id,q,type){
 //删除收藏
 function del_fav_products(type_id,user_id,type,local){
 	if(local != '')
-    	window.location.href=local+"favorites/del_products_t/"+type_id+"/"+user_id+"/"+type;
+    	window.location.href=web_base+"/favorites/del_products_t/"+type_id+"/"+user_id+"/"+type;
     else
-    	window.location.href="/favorites/del_products_t/"+type_id+"/"+user_id+"/"+type;
+    	window.location.href=web_base+"/favorites/del_products_t/"+type_id+"/"+user_id+"/"+type;
 
 }
 
@@ -892,7 +919,7 @@ var documentHeight = 0;
 var topPadding =115;
 
 function ajax_cart(){
-	$.ajax({ url: "/carts/index/?ajax=1",dataType:"json", context: $("#shoppingcart a"), success: function(data){
+	$.ajax({ url: web_base+"/carts/index/?ajax=1",dataType:"json", context: $("#shoppingcart a"), success: function(data){
 			//alert(data.sum_quantity);
 			$("#shoppingcart a").html("购物车("+data.sum_quantity+")");
 	}});
@@ -1042,7 +1069,7 @@ $(".item_box").mouseover(function(){
 	function changeCart(postData) {
 	    $.ajax({
 	        type: "POST",
-	        url: "/carts/changeCart",
+	        url: web_base+"/carts/changeCart",
 	        data: postData,
 	       	dataType:"json",
 	        success: function (data) {
@@ -1211,7 +1238,7 @@ function wechat_ajax_payaction(){
 	}
 	var post_data=$("#payform").serialize();
 	$.ajax({
-	    	url: "/balances/balance_deposit2",
+	    	url: web_base+"/balances/balance_deposit2",
 	    	type: 'POST',
 	    	data: post_data,
 	    	dataType: 'html',
@@ -1267,34 +1294,10 @@ $(document).ready(function() {
 	}
 });
 
-
-function wechat_ajax_payaction(){
-	if(typeof(wechat_pay_time)!="undefined"){
-		window.clearInterval(wechat_pay_time);
-	}
-	var post_data=$("#payform_dd").serialize();
-	$.ajax({
-	    	url: "/balances/balance_deposit2",
-	    	type: 'POST',
-	    	data: post_data,
-	    	dataType: 'html',
-	    	success: function (result) {
-	        	$("#wechat_ajax_payaction").modal({width:350,height:350});
-	        	$("#wechat_ajax_payaction .am-modal-bd").html(result);
-	        	
-	        	$('#wechat_ajax_payaction').on('closed.modal.amui', function(){
-			  	if(typeof(wechat_pay_time)!="undefined"){
-					window.clearInterval(wechat_pay_time);
-				}
-			});
-	        }
-	});
-}
-
 // resumes index
 //继续添加
 	function addinfo(info_type,form_id){
-   		var sUrl = "/resumes/addinfo";
+   		var sUrl = web_base+"/resumes/addinfo";
    		var count = 0;
 		if(info_type == 'education'){
    			count = $('.cont_r_2 form').length;
@@ -1329,7 +1332,7 @@ function wechat_ajax_payaction(){
 	}
 function ajaxFileUpload(){
 		 $.ajaxFileUpload({
-			  url:'/resumes/uploadPic/', //你处理上传文件的服务端
+			  url:web_base+'/resumes/uploadPic/', //你处理上传文件的服务端
 			  secureuri:false,
 			  fileElementId:'avatar_file',
 			  dataType: 'json',
@@ -1374,12 +1377,12 @@ function search_price(link_url){
 // user_socials
 //日志分享
 	function checktoken(type){
-		$.ajax({ url: "/synchros/checktoken/"+type,
+		$.ajax({ url: web_base+"/synchros/checktoken/"+type,
 			dataType:"json",
 			type:"POST",
 			success: function(data){
 				if(data.flag==0){
-					window.location.href='/synchros/opauth/'+type.toLowerCase();
+					window.location.href=web_base+'/synchros/opauth/'+type.toLowerCase();
 				}else if(data.status=='1'){
 					$(".tongbu #"+type+"_icon").attr("style","width:16px;height:16px;");
 				}else if(data.status=='0'){
@@ -1436,7 +1439,7 @@ function update_remark(obj,Id){
 
 //users forget_password
   function to_back(){
-    window.location.href="/";
+    window.location.href=web_base+"/";
   } 
 // websites custom_domain
 function al(){
@@ -1447,18 +1450,28 @@ function al(){
 
 // elements users_menu 
 $(function(){
-	$('.admin-user-img').mouseover(function(){
-		$("#am-user-avatar.am-popover").fadeIn();
+   $(".admin-user-img img").hover(
+   		function(){
+   			$("#am-user-avatar.am-popover").show();
+   		},
+   		function(){
+   			$("#am-user-avatar.am-popover").hide();
+   		}
+	);
+   $("#am-user-avatar").hover(
+   	function(){
+   		$(this).show();
+   	},
+   	function(){
+   		$(this).hide();
+   	}
+   	);
 	});
-    
-    $('.admin-user-img').mouseout(function(){
-		$("#am-user-avatar.am-popover").fadeOut(100);
-	});
-})
+
 
 // elements users_offcanvas
 $(function(){
-	$('.admin-user-img img').click(function(){
+	$('.admin-user-img').click(function(){
 		if($("#am-user-avatar-offcanvas.am-popover").css("display")=="none"){
 			$("#am-user-avatar-offcanvas.am-popover").css("display","block");
 		}else{
@@ -1494,13 +1507,13 @@ function buy_at_once(){
 // user_socials share_settings
 
 function checktoken(type){
-	$.ajax({ url: "/products/checktoken/"+type,
+	$.ajax({ url: web_base+"/products/checktoken/"+type,
 		dataType:"json",
 		type:"POST",
 		success: function(data){
 			if(type=='sinaweibo'){
 				if(data.flag==0){
-					window.location.href='/synchros/opauth/'+type;
+					window.location.href=web_base+'/synchros/opauth/'+type;
 				}else if(data.status=='1'){
 					$("#sina_icon").attr("style","");
 				}else if(data.status=='0'){
@@ -1509,7 +1522,7 @@ function checktoken(type){
 			}
 			if(type=='qqweibo'){
 				if(data.flag==0){
-					window.location.href='/synchros/opauth/'+type;
+					window.location.href=web_base+'/synchros/opauth/'+type;
 				}else if(data.status=='1'){
 					$("#qq_icon").attr("style","");
 				}else if(data.status=='0'){
@@ -1561,7 +1574,7 @@ $(function() {
       if ($(validity.field).is('.js-ajax-validate')) {
         if(v.trim()!=""){
             return $.ajax({  
-                url: "/websites/AjaxPost",
+                url: web_base+"/websites/AjaxPost",
                 type:"post",
                 data:{subdomain:v},
                 dataType: 'text'
@@ -1582,6 +1595,9 @@ $(function() {
     }
   });
 });
+
+
+
 
 // module_pro_category
 $(".am-resp img").addClass("am-img-responsive");

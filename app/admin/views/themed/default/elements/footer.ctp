@@ -14,7 +14,7 @@
 		if(isset($GLOBALS['SQL_TIME']) && isset($GLOBALS['SQL_COUNT'])){
 			echo "(default) ".$GLOBALS['SQL_COUNT']." queries took ".$GLOBALS['SQL_TIME']. "ms&emsp;Gzip";
 		}
-		echo "FrameWorks v0.8";
+		echo "FrameWorks v0.9";
 		
 	?>
   </p>

@@ -51,16 +51,16 @@ function sv_search_action(){
 	document.SeearchForm.submit();
 }
 //回车提交
-function sv_search_action_onkeypress(obj,e){
-	if(window.event){
-		keynum = event.keyCode
-	}else if(e.which){
-		keynum = e.which
-	}
-	if(keynum==13){
-		sv_search_action();
-	}
-}
+// function sv_search_action_onkeypress(obj,e){
+// 	if(window.event){
+// 		keynum = event.keyCode
+// 	}else if(e.which){
+// 		keynum = e.which
+// 	}
+// 	if(keynum==13){
+// 		sv_search_action();
+// 	}
+// }
 
 /**
   * 新增一个图片
@@ -188,10 +188,10 @@ function config_help(id){
   * 商品关联页鼠标滑动删除图片变色
   */
 function onMouseout_deleteimg(obj){
-	obj.src="/admin/skins/default/img/delete1.gif"
+	obj.src=admin_webroot+"skins/default/img/delete1.gif"
 }
 function onmouseover_deleteimg(obj){
-	obj.src="/admin/skins/default/img/delete2.gif"
+	obj.src=admin_webroot+"skins/default/img/delete2.gif"
 }
 
 //高级搜索
@@ -203,7 +203,7 @@ function sv_advanced_search(obj,advanced_id){
 //后台选择图片用
 function select_img(id_str,type){
 	if(typeof(type)=="undefined"){type="";}
-	window.open(admin_webroot+'/image_spaces/select_image/'+id_str+"/?type="+type, 'newwindow', 'height=600, width=1024, top=0, left=0, toolbar=no, menubar=yes, scrollbars=yes,resizable=yes,location=no, status=no');
+	window.open(admin_webroot+'image_spaces/select_image/'+id_str+"/?type="+type, 'newwindow', 'height=600, width=1024, top=0, left=0, toolbar=no, menubar=yes, scrollbars=yes,resizable=yes,location=no, status=no');
 }
 
 //首页折叠

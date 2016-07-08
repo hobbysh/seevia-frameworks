@@ -110,7 +110,7 @@ class SVshowHelper extends HTMLHelper
             } else {
                 $path = $path;
             }
-            //$path = $this->assetTimestamp($this->webroot($path));
+            $path = $this->assetTimestamp($this->webroot($path));
         }
 
         $path = $this->cdn_img($path, $locale);

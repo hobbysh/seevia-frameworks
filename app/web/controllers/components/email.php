@@ -179,7 +179,7 @@ class EmailComponent
             $this->smtpHostNames = trim($mail_config['mail-smtp']);
             $this->smtpUserName = trim($mail_config['mail-account']);
             $this->smtpPassword = trim($mail_config['mail-password']);
-            $this->from = $mail_config['mail-account'];
+            $this->from = $mail_config['mail-address'];
             $this_model = new Model(false, 'mail_send_histories');
             $this->sendAs = $mailsendqueue['sendas'];
             $this->fromName = $mailsendqueue['sender_name'];
@@ -267,7 +267,12 @@ class EmailComponent
                 }
             }
             $mail_status = $this->send($mailsendname);
-            $mailsendqueue['flag'] = $mail_status == true ? '1' : '0';
+            if($mail_status===true){
+                    $mailsendqueue['flag']=$mail_status;
+                }else{
+                    $mailsendqueue['flag']=0;
+                    $mailsendqueue['error_msg']=$mail_status;
+                }
             $this_model->saveAll($mailsendqueue);
             if ($mail_status) {
                 return true;

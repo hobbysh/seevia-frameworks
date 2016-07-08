@@ -12,7 +12,7 @@
  * $Id$
 *****************************************************************************/
 ?>
-<?php if($paging['page']>0){?>
+<?php if(isset($paging['page'])&&$paging['page']>0){?>
 <div class="pages am-pagination-right">
 	<label><?php echo $ld['page_record']?></label>
 	<input class="am-text-center" type="text" size="2" value="<?php echo trim($paging['show'])?>" onkeypress="pagers_onkeypress(this,event)" onblur="pagers_onblur(this,event)" />

@@ -26,7 +26,7 @@ class ResourcesController extends AppController
 {
     public $name = 'Resources';
 //	var $helpers = array('Html');
-    public $uses = array('Resource','ResourceI18n');
+    public $uses = array('Profile','ProfileFiled','Resource','ResourceI18n');
     public $components = array('Pagination','RequestHandler','Phpexcel','Phpcsv'); // Added 
     public $helpers = array('Pagination');
 
@@ -47,7 +47,7 @@ class ResourcesController extends AppController
         $this->menu_path = array('root' => '/web_application/','sub' => '/resources/');
         $this->set('title_for_layout', $this->ld['resource_manage'].' - '.$this->configs['shop_name']);
         $this->navigations[] = array('name' => $this->ld['web_application'],'url' => '');
-        $this->navigations[] = array('name' => '系统资源管理','url' => '/resources/');
+        $this->navigations[] = array('name' => $this->ld['resource_manage'],'url' => '/resources/');
         $conditions = array();
         //$conditions['and'][]['Resource.parent_id'] = 0;
         if (isset($_REQUEST['keywords']) && $_REQUEST['keywords'] != '') {
@@ -78,6 +78,9 @@ class ResourcesController extends AppController
 
         $resource = array_slice($resource, $start, $rownum);
         $this->set('resource', $resource);
+        $this->Profile->hasOne = array();
+       $profile_id = $this->Profile->find('first', array('fields' => array('Profile.id'), 'conditions' => array('Profile.code' =>'resource_export', 'Profile.status' => 1)));
+       $this->set('profile_id',$profile_id);
     }
 
     /**
@@ -99,10 +102,10 @@ class ResourcesController extends AppController
         }
         /*end*/
         $this->menu_path = array('root' => '/web_application/','sub' => '/resources/');
-        $this->pageTitle = '编辑资源 - 资源管理'.' - '.$this->configs['shop_name'];
+        $this->pageTitle = '编辑资源 - '.$this->ld['resource_manage'].' - '.$this->configs['shop_name'];
         $this->set('title_for_layout', $this->pageTitle);
         $this->navigations[] = array('name' => $this->ld['web_application'],'url' => '');
-        $this->navigations[] = array('name' => '资源管理','url' => '/resources/');
+        $this->navigations[] = array('name' => $this->ld['resource_manage'],'url' => '/resources/');
         //$this->navigations[] = array('name'=>'编辑资源','url'=>'');
         $this->set('navigations', $this->navigations);
         $userinformation_name = '';
@@ -210,249 +213,344 @@ class ResourcesController extends AppController
         }
         die(json_encode($result));
     }
-////////////////////////////////////////导出
-       public function doload_csv_example()
-       {
-           $this->operator_privilege('resources_add');
+  
+  //批量删除
+    public function batch_operations()
+    {
+    
+        /*判断权限*/
+        if (!$this->operator_privilege('resources_remove', false)) {
+            die(json_encode(array('flag' => 2, 'message' => $this->ld['have_no_operation_perform'])));
+        }
+        $user_checkboxes = $_REQUEST['checkboxes'];
+        //pr($user_checkboxes);die();
+        foreach ($user_checkboxes as $k => $v) {
+        $ids_arr=$this->Resource->find('all',array('conditions'=>array('Resource.parent_id' => $v)));
+        //pr($ids_arr);die();
+        foreach($ids_arr as $kk =>$vv){
+        	$this->Resource->delete(array('Resource.id' => $vv['Resource']['id']));
+        	$this->ResourceI18n->deleteAll(array('ResourceI18n.resource_id' => $vv['Resource']['id']));
+        }
+            $this->Resource->delete(array('Resource.id' => $v));
+            
+        }
+      
+       
+        $result['flag'] = 1;
+        Configure::write('debug', 0);
+        $this->layout = 'ajax';
+        die(json_encode($result));
+    }
+   
+//资源管理上传
+public function resource_upload(){
+	  Configure::write('debug', 0);
+        $this->operation_return_url(true);//设置操作返回页面地址
 
            $this->menu_path = array('root' => '/web_application/','sub' => '/dictionaries/');
            $this->navigations[] = array('name' => $this->ld['web_application'],'url' => '');
            $this->navigations[] = array('name' => $this->ld['resource_manage'],'url' => '/resources/');
            $this->navigations[] = array('name' => $this->ld['bulk_upload'],'url' => '');
            $this->set('title_for_layout', $this->ld['resource_manage'].' - '.$this->ld['bulk_upload'].' - '.$this->configs['shop_name']);
-       }
+           $this->Profile->hasOne = array();
+       $profile_id = $this->Profile->find('first', array('fields' => array('Profile.id'), 'conditions' => array('Profile.code' =>'resource_export', 'Profile.status' => 1)));
+       $this->set('profile_id',$profile_id);
+    }
 
-    public function csv_uplods()
+
+
+//资源管理cvs查看
+ public function resource_uploadpreview()
     {
-        ////////////判断权限
-           $this->operator_privilege('resources_add');
-                //定义列表名数组
-                 $fields = array('Resource.parent_id',
-                                                   'Resource.code',
-                                     'Resource.resource_value',
-                                     'Resource.status',
-                                     'Resource.section',
-                                 'Resource.orderby',
-                                'ResourceI18n.locale',
-                                'ResourceI18n.name',
-                                'ResourceI18n.description', );
-        $fields_array = array(
-                                              $this->ld['parent_resource'],
-                                                   $this->ld['resource_code'],
-                                     $this->ld['z_resource_value'],
-                                     $this->ld['status'],
-                                     $this->ld['version'],
-                                     $this->ld['sort'],
-                                $this->ld['z_language'],
-                                $this->ld['resource_name'],
-                                $this->ld['z_description'], );
-        $newdatas = array();
-        $newdatas[] = $fields_array;
-                               //pr($newdatas);
-                $Resource_all = $this->Resource->find('all', array('order' => 'Resource.id ', 'limit' => 5));
-        $parent_id_resource = $this->Resource->find('list', array('fields' => array('id', 'code'), 'osder' => 'Resource.id', 'conditions' => array('parent_id' => 0)));
-                //pr($parent_id_resource);
+    	Configure::write('debug', 1);
+    	$success_num=0;
+                if (!empty($_FILES['file'])) {
+                    if (!empty($_FILES['file'])) {
+                    	$this->menu_path = array('root' => '/web_application/','sub' => '/operator_actions/');
+		        $this->navigations[] = array('name' => $this->ld['web_application'],'url' => '');
+		        $this->navigations[] = array('name' => $this->ld['resource_manage'],'url' => '/resources/');
+		        $this->navigations[] = array('name' => $this->ld['bulk_upload'],'url' => '');
+		        $this->set('title_for_layout', $this->ld['resource_manage'].' - '.$this->ld['bulk_upload'].' - '.$this->configs['shop_name']);
+                        if ($_FILES['file']['error'] > 0) {
+                            echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />;<script>alert('".$this->ld['file_upload_error']."');window.location.href='/admin/resources/resource_upload';</script>";
+                            die();	
+                        } else {
+                            $handle = @fopen($_FILES['file']['tmp_name'], 'r');
+             $profile_id = $this->Profile->find('first', array('fields' => array('Profile.id'), 'conditions' => array('Profile.code' =>'resource_export', 'Profile.status' => 1)));
+		$profilefiled_info = $this->ProfileFiled->find('all', array('fields' => array('ProfileFiled.code', 'ProfilesFieldI18n.description'), 'conditions' => array('ProfilesFieldI18n.locale' => $this->backend_locale, 'ProfileFiled.profile_id' => $profile_id['Profile']['id'], 'ProfileFiled.status' => 1), 'order' => 'ProfileFiled.orderby asc,ProfileFiled.id'));
+      	$fields_array=array();
+	  	foreach($profilefiled_info as $k=>$v){
+	  	//描述：注释
+	  	$fields[] = $v['ProfilesFieldI18n']['description'];
+	  	 //project_list(样式modal.field)
+	       $fields_array[] = $v['ProfileFiled']['code'];
+  	  }
+                            $key_arr = array();
+                            foreach($fields_array as $k=>$v){
+                            	$key_arr[] = $v;
+                            }
+                            $csv_export_code = 'gb2312';
+                            $i = 0;
+                            while ($row = $this->fgetcsv_reg($handle, 10000, ',')) {
+                                if ($i == 0) {
+                                    $check_row = $row[0];
+                                    $row_count = count($row);
+                                    $check_row = iconv('GB2312', 'UTF-8//IGNORE', $check_row);
+                                    $num_count = count($key_arr);
+                                    ++$i;
+                                }
+                                
+                                if($row_count!=$num_count){
+                                      echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script>alert(' 标题列数与内容列数不一致');window.location.href='/admin/resources/resource_upload';</script>";
+						die();
+                                }
+                                $temp = array();
+                               
+                                foreach ($row as $k => $v) {
+                                    $temp[$key_arr[$k]] = @iconv($csv_export_code, 'utf-8//IGNORE', $v);
+                                }
+                                if (!isset($temp) || empty($temp) ) {
+                                    echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script>alert('".$this->ld['file_upload_error']."');window.location.href='/admin/resources/resource_upload';</script>";
+                                    die();
+                                }
+                                $data[] = $temp;
+                            }
+                            fclose($handle);
+                            //pr($fields);pr($key_arr);die();
+                            $this->set('fields', $fields);
+                            $this->set('key_arr', $key_arr);
+                            $this->set('data_list', $data);
+                        }
+                    }
+                } elseif (isset($_REQUEST['checkbox']) && !empty($_REQUEST['checkbox'])) {
+                    $checkbox_arr = $_REQUEST['checkbox'];
+			$upload_num=count($checkbox_arr);
+                    foreach ($this->data as $key => $v) {
+                        if (!in_array($key, $checkbox_arr)) {
+                            continue;
+                        }
+                        $parent_id_resource = $this->Resource->find('list', array('fields' => array('code', 'id'), 'order' => 'Resource.id desc'));
+				$parent_id=isset($v['Resource']['parent_id'])&&isset($parent_id_resource[$v['Resource']['parent_id']])?$parent_id_resource[$v['Resource']['parent_id']]:0;
+                      	$resource_condition='';
+                      	$resource_condition['Resource.parent_id']=$parent_id;
+                      	if(!empty($v['Resource']['code'])){
+                      		$resource_condition['Resource.code']=$v['Resource']['code'];
+                      	}
+                      	if(!empty($v['Resource']['resource_value'])){
+                      		$resource_condition['Resource.resource_value']=$v['Resource']['resource_value'];
+                      	}
+                        $Resource_first = $this->Resource->find('first', array('conditions' =>$resource_condition));
+                        $v['Resource']['id']=isset($Resource_first['Resource']['id'])?$Resource_first['Resource']['id']:0;
+                        $v['Resource']['parent_id']=isset($parent_id)?$parent_id:0;
+                        $v['Resource']['section']=isset($v['Resource']['section'])?$v['Resource']['section']:'免费版';
+                        $v['Resource']['orderby']=isset($v['Resource']['orderby'])?$v['Resource']['orderby']:50;
+                        $v['Resource']['status']=isset($v['Resource']['status'])?$v['Resource']['status']:1;
+                       
+                        	if( $s1=$this->Resource->save($v['Resource']) ){
+                        		$Resource_id=$this->Resource->id;
+                        	}
+                       
+                        	$ResourceI18n_first = $this->ResourceI18n->find('first', array('conditions' => array('ResourceI18n.resource_id' =>$Resource_id, 'ResourceI18n.locale' => $v['ResourceI18n']['locale'])));
+                        $v['ResourceI18n']['id']=isset($ResourceI18n_first['ResourceI18n']['id'])?$ResourceI18n_first['ResourceI18n']['id']:0;
+                        $v['ResourceI18n']['resource_id']=isset($Resource_id)?$Resource_id:'';
+                        if(isset($v['ResourceI18n']['resource_id'])&&$v['ResourceI18n']['resource_id']!=''){	$s2=$this->ResourceI18n->save($v['ResourceI18n']); }
+                        	 if( isset($s1)&&!empty($s1)&&isset($s2)&&!empty($s2)){
+                        	 	++$success_num;
+                        	 }
+                     	    $result['code']=1;
+                    }
+		            echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script type='text/javascript'>alert('".'共上传：'.$upload_num.'　条数据'.'\\r\\n'.'上传成功：'.$success_num.'　条数据'.'\\r\\n'.'上传失败：'.($upload_num-$success_num).'　条数据'."');window.location.href='/admin/resources/'</script>";
+		            die();
+                } else {
+		            echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script type='text/javascript'>alert('未上传任何数据');window.location.href='/admin/resources/resource_upload/'</script>";
+                    	
+                }
+         
+    }
 
-                foreach ($Resource_all as $k => $v) {     //pr($v);
+      /////////////////////////////////////////////
+      public function fgetcsv_reg($handle, $length = null, $d = ',', $e = '"')
+      {
+          $d = preg_quote($d);
+          $e = preg_quote($e);
+          $_line = '';
+          $eof = false;
+          while ($eof != true) {
+              $_line .= (empty($length) ? fgets($handle) : fgets($handle, $length));
+              $itemcnt = preg_match_all('/'.$e.'/', $_line, $dummy);
+              if ($itemcnt % 2 == 0) {
+                  $eof = true;
+              }
+          }
+          $_csv_line = preg_replace('/(?: |[ ])?$/', $d, trim($_line));
+          $_csv_pattern = '/('.$e.'[^'.$e.']*(?:'.$e.$e.'[^'.$e.']*)*'.$e.'|[^'.$d.']*)'.$d.'/';
+          preg_match_all($_csv_pattern, $_csv_line, $_csv_matches);
+          $_csv_data = $_csv_matches[1];
+          for ($_csv_i = 0; $_csv_i < count($_csv_data); ++$_csv_i) {
+              $_csv_data[$_csv_i] = preg_replace('/^'.$e.'(.*)'.$e.'$/s', '$1', $_csv_data[$_csv_i]);
+              $_csv_data[$_csv_i] = str_replace($e.$e, $e, $_csv_data[$_csv_i]);
+          }
 
-                      //pr($v['Resource']['code']);
+          return empty($_line) ? false : $_csv_data;
+      }
 
-                    $user_tmp = array();
-                    foreach ($fields  as $ks => $vs) {
-                        //分解字符串为数组
-                                      $fields_ks = explode('.', $vs);
-                                     //pr($vs);
 
-                                     if ($fields_ks[1] == 'parent_id') {
-                                         $user_tmp[] = isset($parent_id_resource[$v['Resource']['parent_id']]) ? $parent_id_resource[$v['Resource']['parent_id']] : '';
+
+		 
+//资源管理csv
+public function download_resource_csv_example($out_type = 'Resource'){
+ Configure::write('debug', 1);
+     $this->layout="ajax";
+     $this->Resource->set_locale($this->backend_locale);
+     //定义一个数组
+     $this->Profile->hasOne = array();
+       $profile_id = $this->Profile->find('first', array('fields' => array('Profile.id'), 'conditions' => array('Profile.code' =>'resource_export', 'Profile.status' => 1)));
+      if (isset($profile_id) && !empty($profile_id)) {
+       $profilefiled_info = $this->ProfileFiled->find('all', array('fields' => array('ProfileFiled.code', 'ProfilesFieldI18n.description'), 'conditions' => array('ProfilesFieldI18n.locale' => $this->backend_locale, 'ProfileFiled.profile_id' => $profile_id['Profile']['id'], 'ProfileFiled.status' => 1), 'order' => 'ProfileFiled.orderby asc,ProfileFiled.id'));
+  	$fields_array=array();
+	  	foreach($profilefiled_info as $k=>$v){
+	  	//描述：注释
+	  	 $tmp[] = $v['ProfilesFieldI18n']['description'];
+	  	 //project_list(样式modal.field)
+	       $fields_array[] = $v['ProfileFiled']['code'];
+	  	}
+  	}
+  	//pr($tmp);pr($fields_array);die();
+   		$newdatas = array();
+          $newdatas[] =  $tmp;
+          //查询所有表里面所有信息 
+          $Resource_info = $this->Resource->find('all', array('fields'=>array('Resource.parent_id','Resource.code','Resource.resource_value','Resource.status','Resource.section','Resource.orderby','ResourceI18n.locale','ResourceI18n.name','ResourceI18n.description'),'order' => 'Resource.id desc','limit'=>10));
+	//pr($Resource_info);die();
+    $parent_id_resource = $this->Resource->find('list', array('fields' => array('id', 'code'), 'order' => 'Resource.id desc'));
+            
+              //循环数组
+              foreach($Resource_info as $k=>$v){
+              	  $user_tmp = array();
+	              foreach ($fields_array as $ks => $vs) {
+	                    //分解字符串为数组
+	                  $fields_ks = explode('.', $vs);
+	                  if ($fields_ks[1] == 'parent_id') {
+                                         $user_tmp[] = isset($parent_id_resource[$v['Resource']['parent_id']])?$parent_id_resource[$v['Resource']['parent_id']]:'';
+                                     } else {
+                                         $user_tmp[] = isset($v[$fields_ks[0]][$fields_ks[1]])?$v[$fields_ks[0]][$fields_ks[1]]:'';
+                                     }
+	                  
+	               
+	              }
+	              //pr($user_tmp);die();
+	              $newdatas[] = $user_tmp;
+          }
+          //定义文件名称
+         //pr($newdatas);die();
+           $this->Phpcsv->output($out_type.date('YmdHis').'.csv', $newdatas);
+        	exit;
+      
+}
+//全部导出   
+public function all_export_csv($out_type = 'Resource'){
+ Configure::write('debug', 1);
+     $this->layout="ajax";
+     $this->Resource->set_locale($this->backend_locale);
+     //定义一个数组
+     $this->Profile->hasOne = array();
+       $profile_id = $this->Profile->find('first', array('fields' => array('Profile.id'), 'conditions' => array('Profile.code' =>'resource_export', 'Profile.status' => 1)));
+      if (isset($profile_id) && !empty($profile_id)) {
+       $profilefiled_info = $this->ProfileFiled->find('all', array('fields' => array('ProfileFiled.code', 'ProfilesFieldI18n.description'), 'conditions' => array('ProfilesFieldI18n.locale' => $this->backend_locale, 'ProfileFiled.profile_id' => $profile_id['Profile']['id'], 'ProfileFiled.status' => 1), 'order' => 'ProfileFiled.orderby asc,ProfileFiled.id'));
+  	$fields_array=array();
+	  	foreach($profilefiled_info as $k=>$v){
+	  	//描述：注释
+	  	 $tmp[] = $v['ProfilesFieldI18n']['description'];
+	  	 //project_list(样式modal.field)
+	       $fields_array[] = $v['ProfileFiled']['code'];
+	  	}
+  	}
+  //	pr($tmp);
+   		$newdatas = array();
+          $newdatas[] =  $tmp;
+          //查询所有表里面所有信息 
+          $Resource_info = $this->Resource->find('all', array('fields'=>array('Resource.parent_id','Resource.code','Resource.resource_value','Resource.status','Resource.section','Resource.orderby','ResourceI18n.locale','ResourceI18n.name','ResourceI18n.description'),'order' => 'Resource.id desc'));
+		//pr($OperatorRole_info);die();
+    $name_id_resource = $this->ResourceI18n->find('list', array('fields' => array('resource_id', 'name'), 'order' => 'ResourceI18n.id desc'));
+
+            
+              //循环数组
+              foreach($Resource_info as $k=>$v){
+              	  $user_tmp = array();
+	              foreach ($fields_array as $ks => $vs) {
+	                    //分解字符串为数组
+	                  $fields_ks = explode('.', $vs);
+	                if ($fields_ks[1] == 'parent_id') {
+                                         $user_tmp[] = isset($name_id_resource[$v['Resource']['parent_id']]) ? $name_id_resource[$v['Resource']['parent_id']] : '';
                                      } else {
                                          $user_tmp[] = isset($v[$fields_ks[0]][$fields_ks[1]]) ? $v[$fields_ks[0]][$fields_ks[1]] : '';
                                      }
-                    }
+	                  
+	                 
+	              }
+	              //pr($user_tmp);die();
+	              $newdatas[] = $user_tmp;
+          }
+          //定义文件名称
+         //pr($newdatas);die();
+           $this->Phpexcel->output($out_type.date('YmdHis').'.xls', $newdatas);
+        	exit;
+      
+}  
 
-                    $newdatas[] = $user_tmp;
-                }
+//选择导出   
+public function choice_export($out_type = 'Resource'){
+ Configure::write('debug', 1);
+     $this->layout="ajax";
+     $user_checkboxes = $_REQUEST['checkboxes'];
+	$this->Resource->set_locale($this->backend_locale);
+     //定义一个数组
+     $this->Profile->hasOne = array();
+       $profile_id = $this->Profile->find('first', array('fields' => array('Profile.id'), 'conditions' => array('Profile.code' =>'resource_export', 'Profile.status' => 1)));
+      if (isset($profile_id) && !empty($profile_id)) {
+       $profilefiled_info = $this->ProfileFiled->find('all', array('fields' => array('ProfileFiled.code', 'ProfilesFieldI18n.description'), 'conditions' => array('ProfilesFieldI18n.locale' => $this->backend_locale, 'ProfileFiled.profile_id' => $profile_id['Profile']['id'], 'ProfileFiled.status' => 1), 'order' => 'ProfileFiled.orderby asc,ProfileFiled.id'));
+  	$fields_array=array();
+	  	foreach($profilefiled_info as $k=>$v){
+	  	//描述：注释
+	  	 $tmp[] = $v['ProfilesFieldI18n']['description'];
+	  	 //project_list(样式modal.field)
+	       $fields_array[] = $v['ProfileFiled']['code'];
+	  	}
+  	}
+  //	pr($tmp);
+   		$newdatas = array();
+          $newdatas[] =  $tmp;
+          //查询所有表里面所有信息 
+          $Resource_conditions['OR']['Resource.parent_id']=$user_checkboxes; 
+          $Resource_conditions['OR']['Resource.id']=$user_checkboxes; 
+          
+          $Resource_info = $this->Resource->find('all', array('fields'=>array('Resource.parent_id','Resource.code','Resource.resource_value','Resource.status','Resource.section','Resource.orderby','ResourceI18n.locale','ResourceI18n.name','ResourceI18n.description'),'order' => 'Resource.id desc','conditions'=>$Resource_conditions));
+//	pr($Resource_info);die();
+    $name_id_resource = $this->ResourceI18n->find('list', array('fields' => array('resource_id', 'name'), 'order' => 'ResourceI18n.id desc'));
 
-        $nameexl = $this->ld['Resource_upload'].date('Ymd').'.csv';
+            
+              //循环数组
+              foreach($Resource_info as $k=>$v){
+              	  $user_tmp = array();
+	              foreach ($fields_array as $ks => $vs) {
+	                    //分解字符串为数组
+	                  $fields_ks = explode('.', $vs);
+	                if ($fields_ks[1] == 'parent_id') {
+                                         $user_tmp[] = isset($name_id_resource[$v['Resource']['parent_id']]) ? $name_id_resource[$v['Resource']['parent_id']] : '';
+                                     } else {
+                                         $user_tmp[] = isset($v[$fields_ks[0]][$fields_ks[1]]) ? $v[$fields_ks[0]][$fields_ks[1]] : '';
+                                     }
+	                  
+	                 
+	              }
+	              //pr($user_tmp);die();
+	              $newdatas[] = $user_tmp;
+          }
+          //定义文件名称
+         //pr($newdatas);die();
+           $this->Phpexcel->output($out_type.date('YmdHis').'.xls', $newdatas);
+        	exit;
+      
+}     
 
-        $this->Phpcsv->output($nameexl, $newdatas);
-        die();
-            ///////////////////权限
-    }
-
-     ////////////////上传文件
-     public function csv_add()
-     {
-
-        ////////////判断权限
-       ////////////判断权限
-          $this->operator_privilege('resources_add');
-      //获得提交过来的数组
-         if (!empty($_FILES['file'])) {
-             //echo "<script>alert('OKOKOKOK');</script>";
-                  //文件不为空
-                 if (!empty($_FILES['file'])) {
-                     $this->menu_path = array('root' => '/web_application/','sub' => '/dictionaries/');
-                     $this->navigations[] = array('name' => $this->ld['web_application'],'url' => '');
-                     $this->navigations[] = array('name' => $this->ld['resource_manage'] ,'url' => '/resources/');
-                     $this->navigations[] = array('name' => $this->ld['bulk_upload'],'url' => '');
-                     $this->set('title_for_layout', $this->ld['resource_manage'].' - '.$this->ld['bulk_upload'].' - '.$this->configs['shop_name']);
-                               //文件错误大于0 提示 并且返回
-                         if ($_FILES['file']['error'] > 0) {
-                             echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />;<script>alert('".$this->ld['file_upload_error']."');window.location.href='/admin/resources/csv_add';</script>";
-                             die(); //如果不为空 并且没有错误 那么 读取这个文件
-                         } else {
-                             $handle = @fopen($_FILES['file']['tmp_name'], 'r');
-                                       //定义表的字段数组
-                                    $fields_array = array(
-                                            'Resource.parent_id',
-                                                   'Resource.code',
-                                     'Resource.resource_value',
-                                     'Resource.status',
-                                     'Resource.section',
-                                     'Resource.orderby',
-                                    'ResourceI18n.locale',
-                                    'ResourceI18n.name',
-                                    'ResourceI18n.description', );
-
-                             $fieldarray = array(
-                                              $this->ld['parent_resource'],
-                                                   $this->ld['resource_code'],
-                                     $this->ld['z_resource_value'],
-                                     $this->ld['status'],
-                                     $this->ld['version'],
-                                     $this->ld['sort'],
-                                $this->ld['z_language'],
-                                $this->ld['resource_name'],
-                                $this->ld['z_description'], );
-                             $key_arr = array();
-                             foreach ($fields_array as $k => $v) {
-                                 $fields_k = explode('.', $v);
-                                 $key_arr[] = isset($fields_k[1]) ? $fields_k[1] : '';
-                             }
-                                    //pr($key_arr);
-                                                      $csv_export_code = 'gb2312';
-                             $i = 0;
-                                         //循环		
-                                while ($row = $this->fgetcsv_reg($handle, 10000, ',')) {
-                                    if ($i == 0) {
-                                        $check_row = $row[0];
-                                               //pr($check_row);
-                                                   $row_count = count($row);
-                                        $check_row = iconv('GB2312', 'UTF-8', $check_row);
-                                        $num_count = count($key_arr);
-                                        ++$i;
-                                    }
-                                    $temp = array();
-                                       //$k=0;循环一次row 是8次 所以说 k= 0 1 2 3 4 5 ........
-                                        foreach ($row as $k => $v) {
-                                            //pr($v);
-                                        $temp[$key_arr[$k]] = empty($v) ? '' : @iconv($csv_export_code, 'utf-8//IGNORE', $v);
-                                        }
-                                   //pr($v);
-                                   //判断
-                                    if (!isset($temp) || empty($temp)) {
-                                        echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script>alert('".$this->ld['file_upload_error']."');window.location.href='/admin/users/uploadusers';</script>";
-                                        die();
-                                    }
-                                    $data[] = $temp;
-                                }
-                             fclose($handle);
-                             $this->set('fieldarray', $fieldarray);
-                             $this->set('key_arr', $key_arr);
-                             $this->set('data_list', $data);
-                         }
-                 }
-         } elseif ($_POST['sub2'] == 2) {
-             $checkbox_arr = $_REQUEST['checkbox'];
-
-             foreach ($this->data as $key => $v) {
-                 if (!in_array($key, $checkbox_arr)) {
-                     continue;
-                 }
-                 pr($v);
-
-                 $Resource_type = array('id','parent_id','code','resource_value','status','section','orderby');
-                 $ResourceI18n_type = array('locale', 'name','description');
-
-                 $resources_arr = array();//主表数组
-                        $resources_i8n = array();//次表数组
-                        foreach ($v as $ks => $vs) {
-                            if (in_array($ks, $Resource_type)) {
-                                $resources_arr[$ks] = $vs;
-                            }
-                            if (in_array($ks, $ResourceI18n_type)) {
-                                $resources_i8n[$ks] = $vs;
-                            }
-                        }
-
-                 $arr = array();
-                 if (!empty($v['parent_id'])) {
-                     $parentarr = $this->Resource->find('first', array('conditions' => array('Resource.code' => $resources_arr['parent_id'])));
-                     if (empty($parentarr)) {
-                         continue;
-                     } else {
-                         $conditions = array();
-                         $conditions['Resource.parent_id'] = $parentarr['Resource']['id'];
-                         $conditions['Resource.resource_value'] = $v['resource_value'];
-                         if (!empty($v['code'])) {
-                             $conditions['Resource.code'] = $v['code'];
-                         }
-                         $arr = $this->Resource->find('first', array('conditions' => $conditions));
-                         $resources_arr['parent_id'] = $parentarr['Resource']['id'];
-                     }
-                 } else {
-                     $conditions = array();
-                     $conditions['Resource.parent_id'] = 0;
-                     $conditions['Resource.code'] = $v['code'];
-                     $arr = $this->Resource->find('first', array('conditions' => $conditions));
-                     $resources_arr['parent_id'] = 0;
-                 }
-
-                 $resources_arr['id'] = isset($arr['Resource']['id']) ? $arr['Resource']['id'] : 0;
-
-                 pr($resources_arr);
-                 $this->Resource->save($resources_arr);
-                 $i = $this->Resource->id;
-
-                 $resources_i8n['resource_id'] = $this->Resource->id;
-                 $i8n_arr = $this->
-                        Resource->find('first', array('conditions' => array('ResourceI18n.locale' => $resources_i8n['locale'], 'ResourceI18n.resource_id' => $resources_i8n['resource_id'])));
-
-                 $resources_i8n['id'] = isset($i8n_arr['ResourceI18n']['id']) ? $i8n_arr['ResourceI18n']['id'] : 0;
-                 pr($resources_i8n);
-                 $this->ResourceI18n->save($resources_i8n);
-                 $Res18n_id = $this->ResourceI18n->id;
-             }
-
-             $this->redirect('/Resources/');
-         }
-
-                ////////权限	 
-     }
-
-    public function fgetcsv_reg($handle, $length = null, $d = ',', $e = '"')
-    {
-        $d = preg_quote($d);
-        $e = preg_quote($e);
-        $_line = '';
-        $eof = false;
-        while ($eof != true) {
-            $_line .= (empty($length) ? fgets($handle) : fgets($handle, $length));
-            $itemcnt = preg_match_all('/'.$e.'/', $_line, $dummy);
-            if ($itemcnt % 2 == 0) {
-                $eof = true;
-            }
-        }
-        $_csv_line = preg_replace('/(?: |[ ])?$/', $d, trim($_line));
-        $_csv_pattern = '/('.$e.'[^'.$e.']*(?:'.$e.$e.'[^'.$e.']*)*'.$e.'|[^'.$d.']*)'.$d.'/';
-        preg_match_all($_csv_pattern, $_csv_line, $_csv_matches);
-        $_csv_data = $_csv_matches[1];
-        for ($_csv_i = 0; $_csv_i < count($_csv_data); ++$_csv_i) {
-            $_csv_data[$_csv_i] = preg_replace('/^'.$e.'(.*)'.$e.'$/s', '$1', $_csv_data[$_csv_i]);
-            $_csv_data[$_csv_i] = str_replace($e.$e, $e, $_csv_data[$_csv_i]);
-        }
-
-        return empty($_line) ? false : $_csv_data;
-    }
+  
 }

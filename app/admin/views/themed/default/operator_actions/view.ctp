@@ -18,7 +18,6 @@ label{text-align:right;}
 .am-form-horizontal .am-form-label, .am-form-horizontal .am-radio, .am-form-horizontal .am-checkbox, .am-form-horizontal .am-radio-inline, .am-form-horizontal .am-checkbox-inline {padding-top:0px;}
 .am-radio, .am-checkbox{display:inline;}
 
-
 </style>
 <div class="am-g">
 	<div class="am-u-lg-2 am-u-md-3 am-u-sm-4">
@@ -42,8 +41,8 @@ label{text-align:right;}
 							<input name="data[OperatorActionI18n][<?php echo $k;?>][locale]" type="hidden" value="<?php echo $v['Language']['locale'];?>">
 						<?php }}?>
 							<div class="am-form-group">
-								<label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:13px"><?php echo $ld['previous_menu'];?>:</label>
-								<div class="am-u-lg-6 am-u-md-7 am-u-sm-8" >
+								<label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:15px;" ><?php echo $ld['previous_menu'];?>:</label>
+								<div class="am-u-lg-7 am-u-md-7 am-u-sm-8" >
 									<select data-am-selected="{maxHeight:300}" id="ActionParentId" name="data[OperatorAction][parent_id]" >
 										<option value="0"><?php echo $ld['root']?></option>
 										<?php if(isset($action_tree) && sizeof($action_tree)){foreach($action_tree as $k=>$v){//第一层 ?>
@@ -57,41 +56,36 @@ label{text-align:right;}
 							</div>
 										
 							<div class="am-form-group">
-								<label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label am-actions-align"><?php echo $ld['z_action_name'];?>:</label>
-								<div class="am-u-lg-8 am-u-md-7 am-u-sm-8">
+								<label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:15px;"><?php echo $ld['z_action_name'];?>:</label>
+								<div class="am-u-lg-7 am-u-md-7 am-u-sm-8">
 								<?php if(isset($backend_locales)&&sizeof($backend_locales)>0){foreach ($backend_locales as $k => $v){?>
-									<div class="am-u-lg-9 am-u-md-12 am-u-sm-12" style="padding:0" >
+									<div class="am-u-sm-11" style="margin-top:5px;padding-left:0;padding-right:0">
 									<input type="text" id="menu_name_<?php echo $v['Language']['locale']?>"  name="data[OperatorActionI18n][<?php echo $k;?>][name]" value="<?php echo isset($operator_action_data['OperatorActionI18n'][$v['Language']['locale']])?$operator_action_data['OperatorActionI18n'][$v['Language']['locale']]['name']:'';?>" />
 									</div>
 									<?php if(sizeof($backend_locales)>1){?>	
-										<label class="am-u-lg-1 am-u-md-1 am-u-sm-1 am-form-label am-actions-align am-text-left ">	
+										<label class="am-u-lg-1 am-u-md-1 am-u-sm-1 am-form-label am-text-left" style="margin-left:0;top:10px;white-space:nowrap">	
 											<?php echo $ld[$v['Language']['locale']];?>&nbsp;<em>*</em>
 										</label>
 									<?php }?>
 								<?php }}?>	
 								</div>						
 							</div>
-							<div class="am-form-group">
-								<label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label am-actions-align"><?php echo $ld['code'];?>:</label>
-								<div class="am-u-lg-6 am-u-md-7 am-u-sm-8">
-									<div>
-										<input id="action_code" name="data[OperatorAction][code]" type="text" value="<?php echo isset($operator_action_data['OperatorAction']['code'])?$operator_action_data['OperatorAction']['code']:'';?>">
+							<div class="am-form-group" style="margin-top:5px;">
+								<label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:10px"><?php echo $ld['code'];?>:</label>
+								<div class="am-u-lg-7 am-u-md-7 am-u-sm-7">
+									<input id="action_code" name="data[OperatorAction][code]" type="text" value="<?php echo isset($operator_action_data['OperatorAction']['code'])?$operator_action_data['OperatorAction']['code']:'';?>">
 								</div>
-							      	</div>
-								<span class="am-u-lg-1 am-u-md-1 am-u-sm-1"><em style="color:red">*</em></span>
+								<span class="am-u-lg-1 am-u-md-1 am-u-sm-1"><em>*</em></span>
 							</div>
-							<div class="am-form-group">
-								<label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label am-actions-align"><?php echo $ld['versions'];?>:</label>
-								<div class="am-u-lg-6 am-u-md-7 am-u-sm-8">
-									<div>
-										<input name="data[OperatorAction][section]" type="text" value="<?php echo isset($operator_action_data['OperatorAction']['section'])?$operator_action_data['OperatorAction']['section']:'';?>">
-									</div>
+							<div class="am-form-group" style="margin-top:5px;">
+								<label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:10px"><?php echo $ld['versions'];?>:</label>
+								<div class="am-u-lg-7 am-u-md-7 am-u-sm-8">
+									<input name="data[OperatorAction][section]" type="text" value="<?php echo isset($operator_action_data['OperatorAction']['section'])?$operator_action_data['OperatorAction']['section']:'';?>">
 								</div>	
 							</div>
-							<div class="am-form-group">
-								<label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:10px;"><?php echo $ld['status'];?>:</label>
-								<div class="am-u-lg-6 am-u-md-7 am-u-sm-8">
-									<div>
+							<div class="am-form-group" style="margin-top:5px;">
+								<label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:2px"><?php echo $ld['status'];?>:</label>
+								<div class="am-u-lg-7 am-u-md-7 am-u-sm-8">
 									<label class="am-radio am-success">
 										<input type="radio" name="data[OperatorAction][status]" style="margin-left:0px;" data-am-ucheck value="1" <?php if((isset($operator_action_data['OperatorAction']['status'])&&$operator_action_data['OperatorAction']['status'] == 1)||!isset($operator_action_data['OperatorAction']['status'])){echo "checked";}?> /><?php echo $ld['yes']?>
 									</label>&nbsp;&nbsp;&nbsp;
@@ -100,15 +94,12 @@ label{text-align:right;}
 										<?php echo $ld['no']?>
 									</label>
 								</div>
-								</div>
 							</div>
-							<div class="am-form-group">
-								<label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label am-actions-align"><?php echo $ld['orderby'];?>:</label>
-								<div class="am-u-lg-6 am-u-md-7 am-u-sm-8">
-									<div>
-										<input type="text" style="width:113px;border:1px solid #649776" name="data[OperatorAction][orderby]" value="<?php echo isset($operator_action_data['OperatorAction']['orderby'])?$operator_action_data['OperatorAction']['orderby']:50 ?>" onkeyup="check_input_num(this)"/><br /><?php echo $ld['sorting_prompt']?>
-								</div>	
-									</div>	
+							<div class="am-form-group" style="margin-top:5px;">
+								<label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:6px"><?php echo $ld['orderby'];?>:</label>
+								<div class="am-u-lg-7 am-u-md-7 am-u-sm-8">
+									<input type="text" style="width:113px;border:1px solid #649776" name="data[OperatorAction][orderby]" value="<?php echo isset($operator_action_data['OperatorAction']['orderby'])?$operator_action_data['OperatorAction']['orderby']:50 ?>" onkeyup="check_input_num(this)"/><?php echo $ld['sorting_prompt']?>
+								</div>		
 							</div>
 							<div class="btnouter">
 								<button type="submit" class="am-btn am-btn-success am-radius" value="" ><?php echo $ld['d_submit'];?></button>

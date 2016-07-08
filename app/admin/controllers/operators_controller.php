@@ -15,9 +15,9 @@
 class OperatorsController extends AppController
 {
     public $name = 'Operators';
-    public $components = array('Captcha','Pagination','RequestHandler');
+    public $components = array('Phpexcel','Phpcsv','Captcha','Pagination','RequestHandler');
     public $helpers = array('Pagination','Html','Form','Javascript','Ckeditor','Svshow');
-    public $uses = array('Operator','OperatorRole','Language','OperatorLog','OperatorAction');
+    public $uses = array('Profile','ProfileFiled','Operator','OperatorRole','Language','OperatorLog','OperatorAction');
 
     public function ajax_login()
     {
@@ -87,7 +87,7 @@ class OperatorsController extends AppController
             $operator['Operator']['last_login_time'] = date('Y-m-d H:i:s');
             $operator['Operator']['last_login_ip'] = $_SERVER['REMOTE_ADDR'];
             $operator['Operator']['session'] = session_id();
-            $operator['Operator']['default_lang'] = $_REQUEST['locale'];
+            $operator['Operator']['default_lang'] = isset($_REQUEST['locale'])&&$_REQUEST['locale']!=""?$_REQUEST['locale']:$this->backend_locale;
             $this->Operator->save($operator);//更新IP地址  和  登入时间
                 //管理员管理权限
                 if (isset($_REQUEST['cookie_session']) && $_REQUEST['cookie_session'] != '0') {
@@ -96,10 +96,10 @@ class OperatorsController extends AppController
                     $this->Cookie->delete('session');
                 }
 
-            if ($operator['Operator']['template_code'] == 'AmazeUI') {
-                $result['url'] = '/admin/pages/home';
+            if ($operator['Operator']['template_code'] == 'default') {
+                $result['url'] = '/pages/home';
             } else {
-                if (isset($_SESSION['url']) && $_SESSION['url'] != '/admin/pages/home') {
+                if (isset($_SESSION['url']) && $_SESSION['url'] != '/pages/home') {
                     $result['url'] = $_SESSION['url'];
                     unset($_SESSION['url']);
                 } else {
@@ -188,6 +188,9 @@ class OperatorsController extends AppController
         $operator_data = $this->Operator->find('all', array('conditions' => $condition, 'page' => $page, 'limit' => $rownum, 'order' => 'Operator.id'));
         $this->set('operator_data', $operator_data);
         $this->set('title_for_layout', $this->ld['operators'].' - '.$this->ld['page'].' '.$page.' - '.$this->configs['shop_name']);
+        $this->Profile->hasOne = array();
+       $profile_id = $this->Profile->find('first', array('fields' => array('Profile.id'), 'conditions' => array('Profile.code' =>'operator_export', 'Profile.status' => 1)));
+   	$this->set('profile_id',$profile_id);
     }
 
     public function view($id = 0)
@@ -313,6 +316,7 @@ class OperatorsController extends AppController
             }
         }
         $operator_data = $this->Operator->find('first', array('conditions' => array('id' => $id)));
+        
         $operator_data['Operator']['action_arr'] = explode(';', $operator_data['Operator']['actions']);
         $this->set('operator_data', $operator_data);
 
@@ -460,7 +464,7 @@ class OperatorsController extends AppController
         }
         die(json_encode($result));
     }
-
+//批量删除
     public function batch_operations()
     {
         $user_checkboxes = $_REQUEST['checkboxes'];
@@ -493,4 +497,376 @@ class OperatorsController extends AppController
         $this->layout = 'ajax';
         die(json_encode($result));
     }
+    
+    
+    
+    
+    
+    
+    
+    
+//操作员管理上传
+public function operator_upload(){
+	  Configure::write('debug', 0);
+        $this->operation_return_url(true);//设置操作返回页面地址
+        $this->menu_path = array('root' => '/system/','sub' => '/operators/');
+        /*end*/
+
+        $this->navigations[] = array('name' => $this->ld['manage_system'],'url' => '');
+        $this->navigations[] = array('name' => $this->ld['operators'],'url' => '/operators/');
+        $this->navigations[] = array('name' => $this->ld['bulk_upload'],'url' => '');
+      $this->set('title_for_layout', $this->ld['bulk_upload'].' - '.$this->ld['operators'].' - '.$this->ld['manage_system'].' - '.$this->configs['shop_name']);
+      $this->Profile->hasOne = array();
+       $profile_id = $this->Profile->find('first', array('fields' => array('Profile.id'), 'conditions' => array('Profile.code' =>'operator_export', 'Profile.status' => 1)));
+   	$this->set('profile_id',$profile_id);
+    }
+
+
+
+//操作员管理cvs查看
+ public function operator_uploadpreview()
+    {
+    	Configure::write('debug', 1);
+    	$success_num=0;
+                if (!empty($_FILES['file'])) {
+                    if (!empty($_FILES['file'])) {
+                    	$this->menu_path = array('root' => '/system/','sub' => '/operators/');
+			        $this->navigations[] = array('name' => $this->ld['manage_system'],'url' => '');
+			        $this->navigations[] = array('name' => $this->ld['operators'],'url' => '/operators/');
+			        $this->navigations[] = array('name' => $this->ld['bulk_upload'],'url' => '');
+			      $this->set('title_for_layout', $this->ld['bulk_upload'].' - '.$this->ld['operators'].' - '.$this->ld['manage_system'].' - '.$this->configs['shop_name']);
+                        if ($_FILES['file']['error'] > 0) {
+                            echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />;<script>alert('".$this->ld['file_upload_error']."');window.location.href='/admin/operators/operator_upload';</script>";
+                            die();	
+                        } else {
+                            $handle = @fopen($_FILES['file']['tmp_name'], 'r');
+             $profile_id = $this->Profile->find('first', array('fields' => array('Profile.id'), 'conditions' => array('Profile.code' =>'operator_export', 'Profile.status' => 1)));
+		$profilefiled_info = $this->ProfileFiled->find('all', array('fields' => array('ProfileFiled.code', 'ProfilesFieldI18n.description'), 'conditions' => array('ProfilesFieldI18n.locale' => $this->backend_locale, 'ProfileFiled.profile_id' => $profile_id['Profile']['id'], 'ProfileFiled.status' => 1), 'order' => 'ProfileFiled.orderby asc,ProfileFiled.id'));
+      	$fields_array=array();
+	  	foreach($profilefiled_info as $k=>$v){
+	  	//描述：注释
+	  	$fields[] = $v['ProfilesFieldI18n']['description'];
+	  	 //project_list(样式modal.field)
+	       $fields_array[] = $v['ProfileFiled']['code'];
+  	  }
+                            $key_arr = array();
+                            foreach($fields_array as $k=>$v){
+                            	$key_arr[] = $v;
+                            }
+                            $csv_export_code = 'gb2312';
+                            $i = 0;
+                            while ($row = $this->fgetcsv_reg($handle, 10000, ',')) {
+                                if ($i == 0) {
+                                    $check_row = $row[0];
+                                    $row_count = count($row);
+                                    $check_row = iconv('GB2312', 'UTF-8//IGNORE', $check_row);
+                                    $num_count = count($key_arr);
+                                    ++$i;
+                                }
+                                 if($row_count!=$num_count){
+                                      echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script>alert(' 标题列数与内容列数不一致');window.location.href='/admin/operators/operator_upload';</script>";
+						die();
+                                }
+                                $temp = array();
+                                foreach ($row as $k => $v) {
+                                    $temp[$key_arr[$k]] = @iconv($csv_export_code, 'utf-8//IGNORE', $v);
+                                }
+                                if (!isset($temp) || empty($temp)) {
+                                    echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script>alert('".$this->ld['file_upload_error']."');window.location.href='/admin/operators/operator_upload';</script>";
+                                    die();
+                                }
+                                $data[] = $temp;
+                            }
+                            fclose($handle);
+                            $this->set('fields', $fields);
+                            $this->set('key_arr', $key_arr);
+                            $this->set('data_list', $data);
+                        }
+                    }
+                } elseif (isset($_REQUEST['checkbox']) && !empty($_REQUEST['checkbox'])) {
+                    $checkbox_arr = $_REQUEST['checkbox'];
+			$upload_num=count($checkbox_arr);
+                    foreach ($this->data as $key => $v) {
+                        if (!in_array($key, $checkbox_arr)) {
+                            continue;
+                        }
+                        $code_array=array();
+                        $code_array=explode(';',$v['Operator']['actions']);
+                        foreach($code_array as $code_key=>$code_val){
+                        		$OperatorAction_id_array[]=$this->OperatorAction->find('first',array('fields'=>array('OperatorAction.id'),'conditions'=>array('OperatorAction.code'=>$code_val)));
+                        }
+                        $OperatorAction_id_str='';
+			        $role_array=array();
+			        $role_array=explode(';',$v['Operator']['role_id']);
+			        		$action_array=$this->OperatorRole->find('list',array('fields'=>array('OperatorRole.actions'),'conditions'=>array('OperatorRole.id'=>$role_array)));
+			        	//pr($action_array);
+			       
+                        	foreach($action_array as $ids_val){
+                        		$OperatorAction_id_str.=$ids_val.";";
+                        	}
+                        	//	pr($OperatorAction_id_str);die();
+                        
+                        $Operator_first = $this->Operator->find('first', array('conditions' => array('Operator.name' =>$v['Operator']['name'])));
+                        $v['Operator']['id']=isset($Operator_first['Operator']['id'])?$Operator_first['Operator']['id']:0;
+                        $v['Operator']['default_lang']=isset($v['Operator']['default_lang'])&&!empty($v['Operator']['default_lang'])?$v['Operator']['default_lang']:'chi';
+                        $v['Operator']['template_code']=isset($v['Operator']['template_code'])&&!empty($v['Operator']['template_code'])?$v['Operator']['template_code']:'default';
+                        $v['Operator']['time_zone']=isset($v['Operator']['time_zone'])&&!empty($v['Operator']['time_zone'])?$v['Operator']['time_zone']:'-8';
+                        $v['Operator']['role_id']=isset($v['Operator']['role_id'])&&!empty($v['Operator']['role_id'])?$v['Operator']['role_id']:0;
+                        $v['Operator']['log_flag']=isset($v['Operator']['log_flag'])&&!empty($v['Operator']['log_flag'])?$v['Operator']['log_flag']:1;
+                        if(!empty($v['Operator']['actions'])){
+                        	$v['Operator']['actions'].=$OperatorAction_id_str.";";
+                        }else{
+                        	$v['Operator']['actions']=$OperatorAction_id_str;
+                        }
+                        //pr($v['Operator']['actions']);die();
+                        $v['Operator']['password']=md5($v['Operator']['password']);
+                        
+                         $s1=$this->Operator->save($v['Operator']);
+                        
+                        	 if( isset($s1)&&!empty($s1)){
+                        	 	++$success_num;
+                        	 }
+                     	    $result['code']=1;
+                    }
+		            echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script type='text/javascript'>alert('".'共上传：'.$upload_num.'　条数据'.'\\r\\n'.'上传成功：'.$success_num.'　条数据'.'\\r\\n'.'上传失败：'.($upload_num-$success_num).'　条数据'."');window.location.href='/admin/operators/operator_upload/'</script>";
+		            die();
+                } else {
+		            echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script type='text/javascript'>alert('未上传任何数据');window.location.href='/admin/operators/operator_upload/'</script>";
+                    	
+                }
+         
+    }
+
+      /////////////////////////////////////////////
+      public function fgetcsv_reg($handle, $length = null, $d = ',', $e = '"')
+      {
+          $d = preg_quote($d);
+          $e = preg_quote($e);
+          $_line = '';
+          $eof = false;
+          while ($eof != true) {
+              $_line .= (empty($length) ? fgets($handle) : fgets($handle, $length));
+              $itemcnt = preg_match_all('/'.$e.'/', $_line, $dummy);
+              if ($itemcnt % 2 == 0) {
+                  $eof = true;
+              }
+          }
+          $_csv_line = preg_replace('/(?: |[ ])?$/', $d, trim($_line));
+          $_csv_pattern = '/('.$e.'[^'.$e.']*(?:'.$e.$e.'[^'.$e.']*)*'.$e.'|[^'.$d.']*)'.$d.'/';
+          preg_match_all($_csv_pattern, $_csv_line, $_csv_matches);
+          $_csv_data = $_csv_matches[1];
+          for ($_csv_i = 0; $_csv_i < count($_csv_data); ++$_csv_i) {
+              $_csv_data[$_csv_i] = preg_replace('/^'.$e.'(.*)'.$e.'$/s', '$1', $_csv_data[$_csv_i]);
+              $_csv_data[$_csv_i] = str_replace($e.$e, $e, $_csv_data[$_csv_i]);
+          }
+
+          return empty($_line) ? false : $_csv_data;
+      }
+
+
+
+		 
+//操作员管理csv
+public function download_operator_csv_example($out_type = 'Operator'){
+ Configure::write('debug', 1);
+     $this->layout="ajax";
+     $this->Operator->set_locale($this->backend_locale);
+     //定义一个数组
+     $this->Profile->hasOne = array();
+       $profile_id = $this->Profile->find('first', array('fields' => array('Profile.id'), 'conditions' => array('Profile.code' =>'operator_export', 'Profile.status' => 1)));
+      if (isset($profile_id) && !empty($profile_id)) {
+       $profilefiled_info = $this->ProfileFiled->find('all', array('fields' => array('ProfileFiled.code', 'ProfilesFieldI18n.description'), 'conditions' => array('ProfilesFieldI18n.locale' => $this->backend_locale, 'ProfileFiled.profile_id' => $profile_id['Profile']['id'], 'ProfileFiled.status' => 1), 'order' => 'ProfileFiled.orderby asc,ProfileFiled.id'));
+  	$fields_array=array();
+	  	foreach($profilefiled_info as $k=>$v){
+	  	//描述：注释
+	  	 $tmp[] = $v['ProfilesFieldI18n']['description'];
+	  	 //project_list(样式modal.field)
+	       $fields_array[] = $v['ProfileFiled']['code'];
+	  	}
+  	}
+  //	pr($tmp);
+   		$newdatas = array();
+          $newdatas[] =  $tmp;
+          //查询所有表里面所有信息 
+          $Operator_info = $this->Operator->find('all', array('fields'=>array('Operator.name','Operator.password','Operator.session','Operator.email','Operator.mobile','Operator.type','Operator.role_id','Operator.actions','Operator.default_lang','Operator.template_code','Operator.status','Operator.time_zone'),'order' => 'Operator.id desc','limit'=>10));
+	//	pr($OperatorRole_info);die();
+         
+            
+              //循环数组
+              foreach($Operator_info as $k=>$v){
+              	  $user_tmp = array();
+              	  if($v['Operator']['actions']!='all'){
+	              foreach ($fields_array as $ks => $vs) {
+	                    //分解字符串为数组
+	                  $fields_ks = explode('.', $vs);
+	                  if($fields_ks[1]=='actions'){
+	                   
+		                  	$action_array=explode(';',$v['Operator']['actions']);
+		                  	foreach($action_array as $ac_val){
+		                  		$OperatorAction_code_array[]=$this->OperatorAction->find('first',array('fields'=>array('OperatorAction.code'),'conditions'=>array('OperatorAction.id'=>$ac_val)));
+		                  	}
+		                  	$code_str='';
+		                  	foreach($OperatorAction_code_array as $code_key=>$code_val){
+		                  		$code_str.=$code_val['OperatorAction']['code'].";";
+		                  	}
+		                  	$user_tmp[] =$code_str;
+		                
+	                  }else{
+	                 	 	$user_tmp[] = isset($v[$fields_ks[0]][$fields_ks[1]]) ? $v[$fields_ks[0]][$fields_ks[1]] : '';
+	                  }
+	                   }
+	                 // pr($OperatorAction_code_array);die();
+	                 // pr($action_array);die();
+	              }
+	              //pr($user_tmp);die();
+	              $newdatas[] = $user_tmp;
+          }
+          //定义文件名称
+         //pr($newdatas);die();
+           $this->Phpcsv->output($out_type.date('YmdHis').'.csv', $newdatas);
+        	exit;
+      
+}
+//全部导出xls
+public function all_export_csv($out_type = 'Operator'){
+	Configure::write('debug',0);
+     $this->layout="ajax";
+     $this->Operator->set_locale($this->backend_locale);
+     //定义一个数组
+     $this->Profile->hasOne = array();
+       $profile_id = $this->Profile->find('first', array('fields' => array('Profile.id'), 'conditions' => array('Profile.code' =>'operator_export', 'Profile.status' => 1)));
+      if (isset($profile_id) && !empty($profile_id)) {
+       $profilefiled_info = $this->ProfileFiled->find('all', array('fields' => array('ProfileFiled.code', 'ProfilesFieldI18n.description'), 'conditions' => array('ProfilesFieldI18n.locale' => $this->backend_locale, 'ProfileFiled.profile_id' => $profile_id['Profile']['id'], 'ProfileFiled.status' => 1), 'order' => 'ProfileFiled.orderby asc,ProfileFiled.id'));
+  	$fields_array=array();
+	  	foreach($profilefiled_info as $k=>$v){
+	  	//描述：注释
+	  	 $tmp[] = $v['ProfilesFieldI18n']['description'];
+	  	 //project_list(样式modal.field)
+	       $fields_array[] = $v['ProfileFiled']['code'];
+	  	}
+  	}
+  	$keys1 = array_search('操作员密码', $tmp);
+    	array_splice($tmp, $keys1, 1);
+  	$keys2 = array_search('Operator.password', $fields_array);
+    	array_splice($fields_array, $keys2, 1);
+    	//	pr($tmp);die();
+   		$newdatas = array();
+          $newdatas[] =  $tmp;
+          //查询所有表里面所有信息 
+          $Operator_info = $this->Operator->find('all', array('fields'=>array('Operator.name','Operator.session','Operator.email','Operator.mobile','Operator.type','Operator.role_id','Operator.actions','Operator.default_lang','Operator.template_code','Operator.status','Operator.time_zone'),'order' => 'Operator.id desc'));
+		//pr($Operator_info);die();
+         
+            
+              //循环数组
+              foreach($Operator_info as $k=>$v){
+              	  $user_tmp = array();
+              	  if($v['Operator']['actions']!='all'){
+	              foreach ($fields_array as $ks => $vs) {
+	                    //分解字符串为数组
+	                  $fields_ks = explode('.', $vs);
+	                  if($fields_ks[1]=='actions'){
+	                   
+		                  	$action_array=explode(';',$v['Operator']['actions']);
+		                  	foreach($action_array as $ac_val){
+		                  		$OperatorAction_code_array[]=$this->OperatorAction->find('first',array('fields'=>array('OperatorAction.code'),'conditions'=>array('OperatorAction.id'=>$ac_val)));
+		                  	}
+		                  	$code_str='';
+		                  	foreach($OperatorAction_code_array as $code_key=>$code_val){
+		                  		$code_str.=$code_val['OperatorAction']['code'].";";
+		                  	}
+		                  	$user_tmp[] =$code_str;
+		                
+	                  }else{
+	                  	  
+	                  
+	                 	 	$user_tmp[] = isset($v[$fields_ks[0]][$fields_ks[1]]) ? $v[$fields_ks[0]][$fields_ks[1]] : '';
+	                  }
+	                   }
+	                 // pr($OperatorAction_code_array);die();
+	                 // pr($action_array);die();
+	              }
+	              //pr($user_tmp);die();
+	              $newdatas[] = $user_tmp;
+          }
+          //定义文件名称
+         //pr($newdatas);die();
+           $this->Phpexcel->output($out_type.date('YmdHis').'.xls', $newdatas);
+        	exit;
+
+}  
+
+//选择导出xls
+public function choice_export($out_type = 'Operator'){
+Configure::write('debug', 0);
+        $this->layout = 'ajax';
+        $this->Operator->set_locale($this->backend_locale);
+$user_checkboxes = $_REQUEST['checkboxes'];
+//pr($user_checkboxes);die();
+     
+ 
+       $this->Profile->hasOne = array();
+       $profile_id = $this->Profile->find('first', array('fields' => array('Profile.id'), 'conditions' => array('Profile.code' =>'operator_export', 'Profile.status' => 1)));
+      if (isset($profile_id) && !empty($profile_id)) {
+       $profilefiled_info = $this->ProfileFiled->find('all', array('fields' => array('ProfileFiled.code', 'ProfilesFieldI18n.description'), 'conditions' => array('ProfilesFieldI18n.locale' => $this->backend_locale, 'ProfileFiled.profile_id' => $profile_id['Profile']['id'], 'ProfileFiled.status' => 1), 'order' => 'ProfileFiled.orderby asc,ProfileFiled.id'));
+  	$fields_array=array();
+	  	foreach($profilefiled_info as $k=>$v){
+	  	//描述：注释
+	  	 $tmp[] = $v['ProfilesFieldI18n']['description'];
+	  	 //project_list(样式modal.field)
+	       $fields_array[] = $v['ProfileFiled']['code'];
+	  	}
+  	}
+  		$keys1 = array_search('操作员密码', $tmp);
+    	array_splice($tmp, $keys1, 1);
+  	$keys2 = array_search('Operator.password', $fields_array);
+    	array_splice($fields_array, $keys2, 1);
+  //	pr($tmp);
+   		$newdatas = array();
+          $newdatas[] =  $tmp;
+          //查询所有表里面所有信息 
+          
+          $Operator_info = $this->Operator->find('all', array('fields'=>array('Operator.name','Operator.password','Operator.session','Operator.email','Operator.mobile','Operator.type','Operator.role_id','Operator.actions','Operator.default_lang','Operator.template_code','Operator.status','Operator.time_zone'),'order' => 'Operator.id desc','conditions'=>array('Operator.id'=>$user_checkboxes)));
+	//	pr($Operator_info);die();
+         
+            
+              //循环数组
+              foreach($Operator_info as $k=>$v){
+              	  $user_tmp = array();
+	              foreach ($fields_array as $ks => $vs) {
+	                    //分解字符串为数组
+	                  $fields_ks = explode('.', $vs);
+	                  if($fields_ks[1]=='actions'){
+	                   
+		                  	$action_array=explode(';',$v['Operator']['actions']);
+		                  	foreach($action_array as $ac_val){
+		                  		$OperatorAction_code_array[]=$this->OperatorAction->find('first',array('fields'=>array('OperatorAction.code'),'conditions'=>array('OperatorAction.id'=>$ac_val)));
+		                  	}
+		                  	$code_str='';
+		                  	foreach($OperatorAction_code_array as $code_key=>$code_val){
+		                  		$code_str.=$code_val['OperatorAction']['code'].";";
+		                  	}
+		                  	$user_tmp[] =$code_str;
+		                
+	                  }else{
+	                 	 	$user_tmp[] = isset($v[$fields_ks[0]][$fields_ks[1]]) ? $v[$fields_ks[0]][$fields_ks[1]] : '';
+	                  }
+	                   }
+	                 // pr($OperatorAction_code_array);die();
+	                 // pr($action_array);die();
+	              //pr($user_tmp);die();
+	              $newdatas[] = $user_tmp;
+          }
+          //定义文件名称
+         //pr($newdatas);die();
+           $this->Phpexcel->output($out_type.date('YmdHis').'.xls', $newdatas);
+        	exit;
+
+
+
+
+}
+    
+  
+    
+    
 }

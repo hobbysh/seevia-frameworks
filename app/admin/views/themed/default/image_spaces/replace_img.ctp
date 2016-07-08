@@ -2,9 +2,9 @@
 $timestamp = time();//时间标示
 echo $javascript->link('/skins/default/js/image_space');
 if((isset($configs['image-watermake-upload'])&&$configs['image-watermake-upload']==0)||(!isset($configs['image-watermake-upload']))){ ?>
-<script src="/plugins/uploadify/jquery.uploadify.js" type="text/javascript"></script>
+<script src="<?php echo $webroot; ?>plugins/uploadify/jquery.uploadify.js" type="text/javascript"></script>
 <?php }else if(isset($configs['image-watermake-upload'])&&$configs['image-watermake-upload']==1){ ?>
-<script src="/plugins/ajaxfileupload.js" type="text/javascript"></script>
+<script src="<?php echo $webroot; ?>plugins/ajaxfileupload.js" type="text/javascript"></script>
 <?php }?>
 <style type="text/css">
 .c_size{width:50px;}
@@ -25,10 +25,10 @@ label{font-weight:normal;}
 .am-radio input[type="radio"], .am-radio-inline input[type="radio"], .am-checkbox input[type="checkbox"], .am-checkbox-inline input[type="checkbox"]{margin-left:0px;}
 </style>
 <?php if((isset($configs['image-watermake-upload'])&&$configs['image-watermake-upload']==0)||(!isset($configs['image-watermake-upload']))){ ?>
-<script src="/plugins/uploadify/jquery.uploadify.js" type="text/javascript"></script>
-<script src="/plugins/uploadify/jquery.uploadify.js" type="text/javascript"></script>
+<script src="<?php echo $webroot; ?>plugins/uploadify/jquery.uploadify.js" type="text/javascript"></script>
+<script src="<?php echo $webroot; ?>plugins/uploadify/jquery.uploadify.js" type="text/javascript"></script>
 <?php }else if(isset($configs['image-watermake-upload'])&&$configs['image-watermake-upload']==1){ ?>
-<script src="/plugins/ajaxfileupload.js" type="text/javascript"></script>
+<script src="<?php echo $webroot; ?>plugins/ajaxfileupload.js" type="text/javascript"></script>
 <?php }?>
 <style type="text/css">
 .c_size{width:50px;}
@@ -123,7 +123,7 @@ $(function(){
                     'formData'     : formData,
                     'auto'     : true,//自动上传
                     'removeTimeout' : 1,//文件队列上传完成1秒后删除
-                    'swf'      : '/plugins/uploadify/uploadify.swf',
+                    'swf'      : webroot+'plugins/uploadify/uploadify.swf',
                     'uploader' : admin_webroot+"photo_category_gallery/photo_replace",
                     'method'   : 'post',//方法，服务端可以用$_POST数组获取数据
                     'buttonText' : '选择图片',//设置按钮文本

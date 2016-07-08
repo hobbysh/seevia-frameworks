@@ -14,7 +14,7 @@ kuzhan = function(id, _top, _right) {
     me.style.top = _top ? _top + 'px' : 0; 
     me.style.right = '0px' ; 
     //me.style.right = _right + "px"; 
-    $(me).find('div.services').hide();
+    $(me).find('div.services').show();
     me.style.position = 'absolute';
     me.style.display = 'block';
 //    if(navigator.userAgent.indexOf("iPad") != -1){  
@@ -44,7 +44,7 @@ $(document).ready(function() {
     o = document.getElementById("kuzhan");
     i = parseInt(o.style.left);
 
-    kuzhan('kuzhan', 390, -128);
+    kuzhan('kuzhan', 300, -128);
 });
 
 function Big() {

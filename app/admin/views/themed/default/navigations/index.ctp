@@ -1,7 +1,6 @@
 <style type="text/css">
  .am-yes{color:#5eb95e;}
  .am-no{color:#dd514c;}
- #accordion div .am-panel-body .am-panel-bd div a{color:#333;}
 </style>
 <div id="tablelist" class="tablelist tablebang">
 <?php	$arr = array(
@@ -73,7 +72,7 @@
 						</div>
 						<div class="am-u-lg-3 am--u-md-3 am-u-sm-3 am-btn-group-xs am-action">
 							<?php if($svshow->operator_privilege('navigations_edit')){  ?>
-								<a class="am-btn am-btn-default am-btn-xs  am-seevia-btn-edit" href="<?php echo $html->url('/navigations/view/'.$v['Navigation']['id']); ?>">
+								<a class="am-btn am-btn-default am-btn-xs am-text-secondary am-seevia-btn-edit" href="<?php echo $html->url('/navigations/view/'.$v['Navigation']['id']); ?>">
                         <span class="am-icon-pencil-square-o"></span> <?php echo $ld['edit']; ?>
                     </a>
 								
@@ -144,7 +143,7 @@
 <script type="text/javascript">
 function changeOrder(updown,id,next,thisbtn,position){
 	$.ajax({
-		url:"/admin/navigations/changeorder/"+updown+"/"+id+"/"+next+"/"+position,
+		url:admin_webroot+"navigations/changeorder/"+updown+"/"+id+"/"+next+"/"+position,
 		type:"POST",
 		data:{ },
 		dataType:"html",
@@ -180,7 +179,6 @@ function change_state(obj,func,id){
 					$(obj).addClass("am-icon-check am-yes");
 				}
 			}
-		
 		}	
 	});
 }

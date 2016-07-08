@@ -15,8 +15,6 @@
 <style>
  .am-yes{color:#5eb95e;}
  .am-no{color:#dd514c;}
- .am-panel-information-resources{padding-top:.4rem;padding-bottom:.4rem;}
-
 </style>
 <div class="content">
 <!--Main Start-->
@@ -36,6 +34,8 @@
 	
 	<?php if($svshow->operator_privilege("resources_add")){?>
 		<div class="am-text-right" style="margin-bottom:10px;">
+		<a class="am-btn am-btn-xs am-btn-default" href="<?php echo $html->url('/information_resources/information_resource_upload'); ?>"><?php echo $ld['bulk_upload']?></a>
+
 			<a class="am-btn am-btn-warning am-btn-sm am-radius" href="<?php echo $html->url('view/'); ?>" >
 			<span class="am-icon-plus"></span><?php echo $ld['add'] ?></a>
 		</div>
@@ -48,7 +48,13 @@
 			<div class="am-panel am-panel-default am-panel-header">
 				<div class="am-panel-hd">
 					<div class="am-panel-title">
-						<div class="am-u-lg-3 am-u-md-3 am-u-sm-3">资源名称</div>
+						<div class="am-u-lg-3 am-u-md-3 am-u-sm-3">
+								<label class="am-checkbox am-success" style="display: inline;">
+						            <input onclick='listTable.selectAll(this,"checkboxes[]")' type="checkbox"
+									value="checkbox" data-am-ucheck>
+									资源名称
+								</label>
+						</div>
 						<div class="am-u-lg-2 am-u-md-3 am-u-sm-3">资源代码</div>
 						<div class="am-u-lg-2 am-u-md-3 am-u-sm-3">资源值</div>
 						<div class="am-u-lg-1 am-show-lg-only"><?php echo $ld['status'];?></div>
@@ -62,10 +68,13 @@
 			<?php if(isset($resource) && sizeof($resource)>0){?><?php foreach($resource as $k => $v){ ?>
 				<div>
 					<div class="am-panel am-panel-default am-panel-body">
-						<div class="am-panel-bd ">
+						<div class="am-panel-bd">
 							<div class="am-u-lg-3 am-u-md-3 am-u-sm-3">
-								<span data-am-collapse="{parent: '#accordion', target: '#Resource_<?php echo $v['InformationResource']['id']?>'}" class="<?php echo (isset($v['SubMenu']) && !empty($v['SubMenu']))?"am-icon-plus":"am-icon-minus";?>">&nbsp;
-								<?php echo $v['InformationResourceI18n']['name'];?></span>&nbsp;
+								<label class="am-checkbox am-success">
+									<input type="checkbox" name="checkboxes[]" data-am-ucheck value="<?php echo $v['InformationResource']['id']?>" />
+									<span data-am-collapse="{parent: '#accordion', target: '#Resource_<?php echo $v['InformationResource']['id']?>'}" class="<?php echo (isset($v['SubMenu']) && !empty($v['SubMenu']))?"am-icon-plus":"am-icon-minus";?>">&nbsp;
+									<?php echo $v['InformationResourceI18n']['name'];?></span>&nbsp;
+								</label>
 							</div>
 							<div class="am-u-lg-2 am-u-md-3 am-u-sm-3"><?php echo $v['InformationResource']['code']?>&nbsp;</div>
 							<div class="am-u-lg-2 am-u-md-3 am-u-sm-3"><?php echo $v['InformationResource']['information_value']?>&nbsp;</div>					
@@ -74,17 +83,17 @@
 							</div>
 							<div class="am-u-lg-1 am-show-lg-only"><?php echo $v['InformationResource']['orderby']?>&nbsp;</div>
 							<div class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-text-right" style="margin-top:5px;">
-								<a class="am-btn am-btn-default  am-btn-sm am-radius" href="<?php echo $html->url('/information_resources/view/'.$v['InformationResource']['id']); ?>" >
+								<a class="am-btn am-btn-default am-btn-sm am-radius" href="<?php echo $html->url('/information_resources/view/'.$v['InformationResource']['id']); ?>" >
 									<?php echo $ld['edit']; ?>
 								</a>&nbsp;
-								<a class="am-btn am-btn-default am-text-danger am-source am-btn-sm am-radius" href="javascript:void(0);" onclick="list_delete_submit('<?php echo $admin_webroot; ?>information_resources/remove/<?php echo $v['InformationResource']['id']; ?>')"><?php echo $ld['delete']; ?></a>
+								<a class="am-btn am-btn-default am-text-danger am-btn-sm am-radius" href="javascript:void(0);" onclick="list_delete_submit('<?php echo $admin_webroot; ?>information_resources/remove/<?php echo $v['InformationResource']['id']; ?>')"><?php echo $ld['delete']; ?></a>
 							</div>
 							<div style="clear:both;"></div>
 						</div>
 						<?php if(isset($v['SubMenu']) && !empty($v['SubMenu'])){?>
 						    <div class="am-panel-collapse am-collapse am-panel-child" id="Resource_<?php echo $v['InformationResource']['id']?>">
 						    	<?php foreach($v['SubMenu'] as $kk=>$vv){ ?>
-									<div class="am-panel-bd am-panel-childbd am-panel-information-resources">
+									<div class="am-panel-bd am-panel-childbd">
 										<div class="am-u-lg-3 am-u-md-3 am-u-sm-3">&nbsp;&nbsp;&nbsp;
 											<?php echo $html->link($vv['InformationResourceI18n']['name'],"view/{$vv['InformationResource']['id']}",array("style"=>"margin-left:20px;"),false,false);?>
 										</div>	
@@ -94,13 +103,13 @@
 											<span class="<?php echo(!empty($vv['InformationResource']['status'])&&$vv['InformationResource']['status'])?'am-icon-check am-yes':'am-icon-close am-no';?>"></span>&nbsp;
 										</div>
 										<div class="am-u-lg-1 am-show-lg-only"><?php echo $vv['InformationResource']['orderby']?>&nbsp;</div>
-										<div class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-text-right" >
+										<div class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-text-right">
 											<a class="am-btn am-btn-default  am-btn-sm am-radius" href="<?php echo $html->url('/information_resources/view/'.$vv['InformationResource']['id']); ?>">
 												<?php echo $ld['edit']; ?>
 											</a>&nbsp;
-											<a class="am-btn am-btn-default am-text-danger am-source am-btn-sm am-radius" href="javascript:void(0);" onclick="list_delete_submit('<?php echo $admin_webroot; ?>information_resources/remove/<?php echo $vv['InformationResource']['id']; ?>')">
+											<a class="am-btn am-btn-default am-text-danger  am-btn-sm am-radius" href="javascript:void(0);" onclick="list_delete_submit('<?php echo $admin_webroot; ?>information_resources/remove/<?php echo $vv['InformationResource']['id']; ?>')">
 												<?php echo $ld['delete']; ?>
-											</a>
+											</a>&nbsp;
 										</div>
 										<div style="clear:both;"></div>
 									</div>
@@ -113,13 +122,126 @@
 				<div style="text-align:center;margin:50px;"><?php echo $ld['no_page_data']?></div>
 			<?php }?>
 		</div>
-		<div id="btnouterlist" class="btnouterlist"><?php echo $this->element('pagers')?></div>
+		<div id="btnouterlist" class="btnouterlist">
+		<div class="am-u-lg-6 am-u-md-6 am-u-sm-6 am-hide-sm-down" style="left:6px;">
+						<div class="am-fl">
+					          <label class="am-checkbox am-success" style="display: inline;">
+					            <input onclick='listTable.selectAll(this,"checkboxes[]")' type="checkbox"
+								value="checkbox" data-am-ucheck><span><?php echo $ld['select_all']?></span>
+					          </label>
+			            	</div>
+						<div class="am-fl" style="margin-left:3px;">
+					            <select name="barch_opration_select" id="barch_opration_select" data-am-selected  onchange="barchinfors_opration_select_onchange(this)">
+					              <option value="0"><?php echo $ld['batch_operate']?></option>
+					              <option value="delete"><?php echo $ld['batch_delete']?></option>
+					    		  <option value="export_csv"><?php echo $ld['batch_export']?></option>
+					            </select>
+			            	</div> 
+						<div class="am-fl" style="display:none;margin-left:3px;">
+			                    <select id="export_csv" data-am-selected name="barch_opration_select_onchange" >
+			                        <option value=""><?php echo $ld['click_select']?></option>
+			                        <option value="all_export_csv"><?php echo  $ld['all_export']?></option>
+			                        <option value="choice_export"><?php echo $ld['choice_export']?></option>
+			                       
+			                    </select>&nbsp;
+			              	</div>
+						<div class="am-fl" style="margin-left:3px;">
+			               	   <button type="button" class="am-btn am-radius am-btn-danger am-btn-sm" onclick="select_batch_operations()"><?php echo $ld['submit']?></button>
+			              	</div>
+				</div>
+					<div class="am-u-lg-6 am-u-md-6 am-u-sm-6"><?php echo $this->element('pagers')?></div>
+		</div>
 	</div>
 <?php echo $form->end();?>
 
 <!--Main Start End-->
 
 <script type="text/javascript">
+function select_batch_operations(){
+	var barch_opration_select = document.getElementById("barch_opration_select");
+      var export_csv = document.getElementById("export_csv");
+      if(barch_opration_select.value==0){
+      	  	alert(j_select_operation_type);
+			return;
+      }
+      if(barch_opration_select.value=='delete'){
+		batch_operations();
+	}
+	if(barch_opration_select.value=='export_csv'){
+		if(export_csv.value=='all_export_csv'){
+			window.location.href=admin_webroot+"/information_resources/all_export_csv";
+		
+		}
+		if(export_csv.value=='choice_export'){
+			choice_upload();
+		}
+	}
+}
+
+//批量删除
+function batch_operations(){
+	var bratch_operat_check = document.getElementsByName("checkboxes[]");
+	var postData = "";
+	for(var i=0;i<bratch_operat_check.length;i++){
+		if(bratch_operat_check[i].checked){
+			postData+="&checkboxes[]="+bratch_operat_check[i].value;
+		}
+	}
+	if( postData=="" ){
+		alert("<?php echo $ld['please_select'] ?>");
+		return;
+	}
+	if(confirm("<?php echo $ld['confirm_delete']?>")){
+		$.ajax({ 
+			url:admin_webroot+"information_resources/batch_operations/",
+			type:"GET",
+			dataType:"json",
+			data: postData,
+			success:function(data){
+				window.location.href = window.location.href;
+			}
+		});
+	}
+}	
+
+//选择导出
+function choice_upload(){
+	var bratch_operat_check = document.getElementsByName("checkboxes[]");
+	var postData = "";
+	for(var i=0;i<bratch_operat_check.length;i++){
+		if(bratch_operat_check[i].checked){
+			postData+="&checkboxes[]="+bratch_operat_check[i].value;
+		}
+	}
+	if( postData=="" ){
+		alert("<?php echo $ld['please_select'] ?>");
+		return;
+	}else{
+	window.location.href=admin_webroot+"information_resources/choice_export/"+postData;
+	
+	}
+}	
+
+//触发子下拉
+function barchinfors_opration_select_onchange(obj){
+	if(obj.value!="export_csv"){
+		$("#export_csv").parent().hide();		
+	}
+	$("select[name='barch_opration_select_onchange[]']").parent().hide();
+	
+	var export_csv=document.getElementById("export_csv").value;
+	
+	if(obj.value=="export_csv"){
+		if(export_csv=="all_export_csv"){
+			$("#export_csv").parent().show();
+		}else{
+			$("#export_csv").parent().show();
+		}
+	}
+
+}	
+	
+	
 $(function(){
 	var $collapse =  $('.am-panel-child');
 	$collapse.on('opened.collapse.amui', function() {
@@ -163,6 +285,7 @@ function list_delete_submit1(sUrl){
 }
 
 </script>
+
 
 
 

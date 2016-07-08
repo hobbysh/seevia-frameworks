@@ -17,7 +17,7 @@ class ThemesController extends AppController
     public $name = 'Themes';
     public $components = array('Pagination','RequestHandler');
     public $helpers = array('Pagination','Html','Form','Javascript','Tinymce','fck','Ckeditor');
-    public $uses = array('Advertisement','AdvertisementPosition','AdvertisementPosition','Advertisement','Config','Template','ConfigI18n','Application','OperatorLog','PageType');
+    public $uses = array('Advertisement','AdvertisementPosition','AdvertisementPosition','Advertisement','Config','Template','ConfigI18n','Application','OperatorLog','PageType','PageModule','PageModuleI18n','PageAction');
 
     public function index()
     {
@@ -210,29 +210,94 @@ class ThemesController extends AppController
         /*判断权限*/
         $this->operator_privilege('themes_remove');
         /*end*/
+        Configure::write('debug', 1);
+        $this->layout = 'ajax';
+        $templateInfo = $this->Template->find('first', array('conditions' => array('Template.id' => $id)));
+        if(!empty($templateInfo)){
+        	$template_name=$templateInfo['Template']['name'];
+        	$pagetype_ids=$this->PageType->find('list',array('fields'=>"PageType.id",'conditions'=>array("PageType.code"=>$template_name)));
+        	if(!empty($pagetype_ids)){
+        		$pageaction_ids=$this->PageAction->find('list',array('fields'=>"PageAction.id","conditions"=>array("PageAction.page_type_id"=>$pagetype_ids)));
+        		if(!empty($pageaction_ids)){
+        			$page_module_ids=$this->PageModule->find('list',array('fields'=>"PageModule.id",'conditions'=>array('PageModule.page_action_id'=>$pageaction_ids)));
+        			$this->PageModule->deleteAll(array('PageModule.id' => $page_module_ids));
+        			$this->PageModuleI18n->deleteAll(array('PageModuleI18n.module_id' => $page_module_ids));
+        			$this->PageAction->deleteAll(array('PageAction.id' => $pageaction_ids));
+        		}
+        		$this->PageType->deleteAll(array('PageType.id' => $pagetype_ids));
+        	}
+        }
         $this->Template->deleteAll(array('Template.id' => $id));
         if (isset($this->configs['operactions-log']) && $this->configs['operactions-log'] == 1) {
             $this->OperatorLog->log(date('H:i:s').' '.$this->ld['operator'].' '.$this->admin['name'].' '.$this->ld['remove'].' '.$this->ld['templates'].':id '.$id, $this->admin['id']);
         }
         $result['flag'] = 1;
         $result['message'] = $this->ld['delete_the_ad_list_success'];
-        Configure::write('debug', 0);
-        $this->layout = 'ajax';
         die(json_encode($result));
     }
 
-    public function templatecopy($id, $name)
-    {
+    public function templatecopy($id='0', $name=''){
+    	 Configure::write('debug',1);
+        $this->layout = 'ajax';
         $templateInfo = $this->Template->find('first', array('conditions' => array('Template.id' => $id)));
-        if (!empty($templateInfo)) {
-            unset($templateInfo['Template']['id']);
-            $templateInfo_copy = $templateInfo;
-            $templateInfo_copy['Template']['name'] = $name;
-            $templateInfo_copy['Template']['description'] = $name;
-            $templateInfo_copy['Template']['is_default'] = '0';
-            $templateInfo_copy['Template']['created'] = date('Y-m-d H:i:s', time());
-            $templateInfo_copy['Template']['modified'] = date('Y-m-d H:i:s', time());
-            $this->Template->save($templateInfo_copy);
+        $templateInfo_copy=$this->Template->find('first', array('conditions' => array('Template.name' => $name)));
+        if (!empty($templateInfo)&&empty($templateInfo_copy)) {
+		$this->PageModule->set_locale($this->backend_locale);
+		unset($templateInfo['Template']['created']);unset($templateInfo['Template']['modified']);
+		$templateInfo_copy = $templateInfo;
+		$templateInfo_copy['Template']['id'] = 0;
+		$templateInfo_copy['Template']['name'] = $name;
+		$templateInfo_copy['Template']['description'] = $name;
+		$templateInfo_copy['Template']['is_default'] = '0';
+		$this->Template->save($templateInfo_copy);
+            $pagetype_info=$this->PageType->find('all',array('conditions'=>array("PageType.code"=>$templateInfo['Template']['name'],"PageType.status"=>'1')));
+            foreach($pagetype_info as $pagetype_data){
+            		$page_type_id=$pagetype_data['PageType']['id'];
+            		unset($pagetype_data['PageType']['created']);unset($pagetype_data['PageType']['modified']);
+            		$pagetype_data['PageType']['id']=0;
+            		$pagetype_data['PageType']['code']=$name;
+            		$this->PageType->save($pagetype_data['PageType']);
+            		$new_page_type_id=$this->PageType->id;
+            		$pageaction_info=$this->PageAction->find('all',array("conditions"=>array("PageAction.page_type_id"=>$page_type_id,"PageAction.status"=>'1')));
+            		foreach($pageaction_info as $pageaction_data){
+            			$page_action_id=$pageaction_data['PageAction']['id'];
+            			unset($pageaction_data['PageAction']['created']);unset($pageaction_data['PageAction']['modified']);
+            			$pageaction_data['PageAction']['id']=0;
+            			$pageaction_data['PageAction']['page_type_id']=$new_page_type_id;
+            			$this->PageAction->save($pageaction_data['PageAction']);
+            			$new_page_action_id=$this->PageAction->id;
+            			$page_module_info=$this->PageModule->find('all',array('conditions'=>array('PageModule.page_action_id'=>$page_action_id,"PageModule.parent_id"=>0)));
+				foreach($page_module_info as $page_module_data){
+					$page_module_id=$page_module_data['PageModule']['id'];
+					unset($page_module_data['PageModule']['created']);unset($page_module_data['PageModule']['modified']);
+					unset($page_module_data['PageModuleI18n']['created']);unset($page_module_data['PageModuleI18n']['modified']);
+            				$page_module_data['PageModule']['id']=0;
+            				$page_module_data['PageModule']['page_action_id']=$new_page_action_id;
+            				$page_module_data['PageModule']['code']=$name.$page_module_data['PageModule']['code'];
+					$this->PageModule->save($page_module_data['PageModule']);
+					$new_page_module_id=$this->PageModule->id;
+					
+					$page_module_data['PageModuleI18n']['id']=0;
+					$page_module_data['PageModuleI18n']['module_id']=$new_page_module_id;
+					$this->PageModuleI18n->save($page_module_data['PageModuleI18n']);
+					$child_page_module_info=$this->PageModule->find('all',array('conditions'=>array('PageModule.page_action_id'=>$page_action_id,"PageModule.parent_id"=>$page_module_id)));
+					foreach($child_page_module_info as $child_page_module_data){
+						unset($child_page_module_data['PageModule']['created']);unset($child_page_module_data['PageModule']['modified']);
+						unset($child_page_module_data['PageModuleI18n']['created']);unset($child_page_module_data['PageModuleI18n']['modified']);
+            					$child_page_module_data['PageModule']['id']=0;
+            					$child_page_module_data['PageModule']['page_action_id']=$new_page_action_id;
+            					$child_page_module_data['PageModule']['parent_id']=$new_page_module_id;
+            					$child_page_module_data['PageModule']['code']=$name.$child_page_module_data['PageModule']['code'];
+            					$this->PageModule->save($child_page_module_data['PageModule']);
+            					$child_page_module_id=$this->PageModule->id;
+            					
+            					$child_page_module_data['PageModuleI18n']['id']=0;
+						$child_page_module_data['PageModuleI18n']['module_id']=$child_page_module_id;
+						$this->PageModuleI18n->save($child_page_module_data['PageModuleI18n']);
+					}
+				}
+            		}
+            }
         }
         $this->redirect('/themes/');
     }

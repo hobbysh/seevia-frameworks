@@ -3,7 +3,7 @@
 class ProfilesFieldI18n extends AppModel
 {
     /*
-    * @var $useDbConfig Êı¾İ¿âÅäÖÃ
+    * @var $useDbConfig æ•°æ®åº“é…ç½®
     */
     public $useDbConfig = 'default';
     public $name = 'ProfilesFieldI18n';

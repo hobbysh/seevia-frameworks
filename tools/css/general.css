@@ -83,10 +83,11 @@ h4 {
 #check_lock{display:none;height:60px;}
 #check_lock h3{width:660px;color:red;}
 #wrapper,#check_lock{
-  width:660px;
+  width:620px;
   background:#f4fafb;
   margin:0px auto;
   border:1px solid #ccc;
+  padding-left:40px;
 }
 
 #copyright {
@@ -199,10 +200,18 @@ input[type=checkbox]{margin:1px 5px 0 0;}
 #installing,#install_end{display:none;}
 #error_info{position:relative;left:300px;top:108px;display:none;width:60px;}
 .check_system{margin:20px 0 0;}
-.custom_install{border:none;cursor:pointer;position:relative;left:250px;top:105px;background:none;}
+.custom_install{border:none;cursor:pointer;position:relative;left:250px;top:85px;background:none;}
 #js-recheck{display:none;}
 .finish,.admin_info{font-size:14px;}
 .e_msg1{float:left;width:480px;height:20px;}
 .e_img1{float:left;width:20px;height:20px;}
 .green{color:green;}
 .red{color:red;}
+.account ul li{margin-bottom:5px;}
+.master_account ul li{margin-bottom:2px;}
+.error_msg1 div,.error_msg2 div{margin-bottom:5px;}
+.end_link a.button:first-child{font-size:1em;background:#5eb95e;border-color:#5eb95e;color:#fff;}
+.end_link a.button{font-size:1em;background:#F37B1D;border-color:#F37B1D;color:#fff;font-weight:800;padding:8px 30px;text-decoration:none;}
+.error_msg3 div{text-indent:182px;}
+.end_link a:hover{opacity:0.7;}
+.end_link a#seevia_user_id{font-size: 1em;padding:0;}

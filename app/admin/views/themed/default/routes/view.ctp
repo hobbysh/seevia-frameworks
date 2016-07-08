@@ -82,18 +82,18 @@
     function checkrouteurl(){
         var route_url = document.getElementById("Route_url").value;
         if(route_url!=""){
-        	var rUrl = "/admin/routes/select_route_url/";//访问的URL地址
+        	var rUrl = admin_webroot+"routes/select_route_url/";//访问的URL地址
         	$.ajax({
 	            type: "POST",
 	            url: rUrl,
 	            dataType: 'json',
 	            data: {route_url:route_url},
 	            success: function (result) {
-	                if(result.type==1){
-                        document.getElementById("route_url_h").value=1;
-                    }else{
-                        document.getElementById("route_url_h").value=0;
-                    }
+				if(result.type==1){
+					document.getElementById("route_url_h").value=1;
+				}else{
+					document.getElementById("route_url_h").value=0;
+				}
 	            }
 	        });
         }

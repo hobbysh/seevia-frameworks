@@ -26,6 +26,36 @@ class PagesController extends AppController
         $this->pageTitle = $this->configs['shop_title'];
     }
 
+    
+    function view($id = 0){
+	 $this->layout = 'default_full';
+        if (!is_numeric($id) || $id < 1) {
+            $this->pageTitle = $this->ld['invalid_id'].' - '.$this->configs['shop_title'];
+            $this->flash($this->ld['invalid_id'], '/', 5);
+            return;
+        }
+        $conditions = array('Page.id' => $id,'Page.status' => '1');
+        $this->Page->set_locale($this->locale);
+        $page = $this->Page->find('first', array('conditions' => $conditions));
+        if (empty($page)) {
+            $this->pageTitle = $this->ld['page'].' - '.$this->configs['shop_title'];
+            $this->flash($this->ld['page'].$this->ld['not_exist'], '/', 5);
+            return;
+        } elseif (!empty($page)) {
+            $this->pageTitle = $page['PageI18n']['title'].' - '.$this->configs['shop_title'];
+        }
+        $this->set('page', $page);
+        $this->set('meta_description', $page['PageI18n']['meta_description'].' '.$this->configs['seo-des']);
+        $this->set('meta_keywords', $page['PageI18n']['meta_keywords'].' '.$this->configs['seo-key']);
+        $this->ur_heres[] = array('name' => $page['PageI18n']['title'],'url' => '');
+        $this->pageTitle = $page['PageI18n']['title'].' - '.$this->configs['shop_title'];
+    }
+    
+    public function ajax_header(){
+    		Configure::write('debug', 0);
+        	$this->layout = 'ajax';
+    }
+    
     /**
      *关闭.
      */
@@ -43,37 +73,7 @@ class PagesController extends AppController
             $this->set('closed_reason', $this->configs['closed_reason']);
         }
     }
-	
-	/**
-     *显示静态页面.
-     */
-    public function view($id = 0)
-    {
-        $this->layout = 'default';
-        if (!is_numeric($id) || $id < 1) {
-            $this->pageTitle = $this->ld['invalid_id'].' - '.$this->configs['shop_title'];
-            $this->flash($this->ld['invalid_id'], '/', 5);
-            return;
-        }
-        $conditions = array('Page.id' => $id,'Page.status' => '1');
-        $this->Page->set_locale($this->locale);
-        $page = $this->Page->find('first', array('conditions' => $conditions));
-        //pr($page);
-        if (empty($page)) {
-            $this->pageTitle = $this->ld['page'].' - '.$this->configs['shop_title'];
-            $this->flash($this->ld['page'].$this->ld['not_exist'], '/', 5);
-
-            return;
-        } elseif (!empty($topic)) {
-            $this->pageTitle = $page['PageI18n']['title'].' - '.$this->configs['shop_title'];
-        }
-        $this->set('page', $page);
-        $this->set('meta_description', $page['PageI18n']['meta_description'].' '.$this->configs['seo-des']);
-        $this->set('meta_keywords', $page['PageI18n']['meta_keywords'].' '.$this->configs['seo-key']);
-        $this->ur_heres[] = array('name' => $page['PageI18n']['title'],'url' => '');
-        $this->pageTitle = $page['PageI18n']['title'].' - '.$this->configs['shop_title'];
-    }
-
+    
     /**
      *关闭.
      */

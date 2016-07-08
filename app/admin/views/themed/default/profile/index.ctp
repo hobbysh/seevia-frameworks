@@ -7,7 +7,7 @@
     <?php echo $form->create('Profile',array('action'=>'/','name'=>"SearchForm","type"=>"get",'class'=>'am-form am-form-inline am-form-horizontal'));?>
     <ul class="am-avg-sm-1 am-avg-md-2 am-avg-lg-4" style="margin:10px 0 0 0">
         <?php if(!empty($group_tree)){?>
-          <li style="margin:0 0 10px 0;padding-top:2px">
+          <li style="margin:0 0 10px 0">
             <label class="am-u-lg-2 am-u-md-2 am-u-sm-2 am-form-label  "><?php echo $ld['classification'];?></label>
             <div class="am-u-lg-9 am-u-md-8 am-u-sm-8">
             <select class="all" name="profile_group" id="profile_group" data-am-selected="{noSelectedText:'<?php echo $ld['all_data'] ?> '}">
@@ -20,9 +20,9 @@
           </li>
         <?php }?>
         <li style="margin:0 0 10px 0">
-            <label class="am-u-lg-3 am-u-md-2 am-u-sm-2 am-form-label" style="top:0px;"><?php echo $ld['keyword'];?></label>
+            <label class="am-u-lg-3 am-u-md-2 am-u-sm-2 am-form-label  "><?php echo $ld['keyword'];?></label>
             <div class="am-u-lg-8 am-u-md-8 am-u-sm-8" style="padding:0 0.5rem;">
-                <input placeholder="<?php echo $ld['name'];?>/<?php echo $ld['code'];?>" type="text" name="profiles_keywords" id="profiles_keywords" value="<?php if(isset($profiles_keywords)){echo $profiles_keywords;}?>" />
+                <input style="padding-top:5px;padding-bottom:5px;" placeholder="<?php echo $ld['name'];?>/<?php echo $ld['code'];?>" type="text" name="profiles_keywords" id="profiles_keywords" value="<?php if(isset($profiles_keywords)){echo $profiles_keywords;}?>" />
             </div>
         </li>
         		
@@ -77,7 +77,7 @@
                 <td class="am-action">
                     <?php
                     if($svshow->operator_privilege("profiles_edit")){?> 
-                         <a class="am-btn am-btn-default am-btn-xs  am-seevia-btn-edit" href="<?php echo $html->url('/profiles/view/'.$t['Profile']['id']); ?>">
+                         <a class="am-btn am-btn-default am-btn-xs am-text-secondary am-seevia-btn-edit" href="<?php echo $html->url('/profiles/view/'.$t['Profile']['id']); ?>">
                         <span class="am-icon-pencil-square-o"></span> <?php echo $ld['edit']; ?>
                     </a>
                    <?php  }
@@ -156,7 +156,11 @@
                         postData+="&checkboxes[]="+bratch_operat_check[i].value;
                     }
                 }
-                if(postData!=""){
+                if( postData=="" ){
+				alert("<?php echo $ld['please_select'] ?>");
+				return;
+		
+                	}else{
                     linkurl+= "?"+postData;
                     window.location.href=encodeURI(linkurl);
                 }

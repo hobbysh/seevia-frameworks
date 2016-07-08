@@ -68,7 +68,7 @@
 				<td><?php if($v['PageModule']['status']==1){?>
 					<?php echo $html->image('/admin/skins/default/img/yes.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_modules/toggle_on_status", '.$v["PageModule"]["id"].')')) ?>
 					<?php }elseif($v['PageModule']['status'] == 0){?>
-					<?php echo $html->image('no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_modules/toggle_on_status", '.$v["PageModule"]["id"].')'))?>
+					<?php echo $html->image('/admin/skins/default/img/no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_modules/toggle_on_status", '.$v["PageModule"]["id"].')'))?>
 					<?php }?>
 				</td>
 				<td>
@@ -108,7 +108,7 @@
 				<td><?php if($vv['PageModule']['status']==1){?>
 					<?php echo $html->image('/admin/skins/default/img/yes.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_modules/toggle_on_status", '.$vv["PageModule"]["id"].')')) ?>
 					<?php }elseif($vv['PageModule']['status'] == 0){?>
-					<?php echo $html->image('no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_modules/toggle_on_status", '.$vv["PageModule"]["id"].')'))?>
+					<?php echo $html->image('/admin/skins/default/img/no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_modules/toggle_on_status", '.$vv["PageModule"]["id"].')'))?>
 					<?php }?>
 				</td>
 				<td>
@@ -146,7 +146,7 @@
 				<td><?php if($vvv['PageModule']['status']==1){?>
 					<?php echo $html->image('/admin/skins/default/img/yes.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_modules/toggle_on_status", '.$vvv["PageModule"]["id"].')')) ?>
 					<?php }elseif($vvv['PageModule']['status'] == 0){?>
-					<?php echo $html->image('no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_modules/toggle_on_status", '.$vvv["PageModule"]["id"].')'))?>
+					<?php echo $html->image('/admin/skins/default/img/no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_modules/toggle_on_status", '.$vvv["PageModule"]["id"].')'))?>
 					<?php }?>
 				</td>
 				<td>
@@ -244,11 +244,11 @@ function changeOrder(updown,id,next,thisbtn){
 	var code = document.getElementById("code").value;
 	changeHtml(thisbtn);
  	YUI().use("io",function(Y) {
-		var sUrl = "/admin/page_modules/changeorder/"+updown+"/"+id+"/"+next+"/"+code;//访问的URL地址
+		var sUrl = admin_webroot+"page_modules/changeorder/"+updown+"/"+id+"/"+next+"/"+code;//访问的URL地址
 		var cfg = {
 				method: 'POST'
 		};
-		var request = Y.io(sUrl, cfg);//开始请求
+		var request = Y.io(sUrl, cfg);//开始请�?
 		var handleSuccess = function(ioId, o){
 			try{
 				var node = Y.one('#tablelist');

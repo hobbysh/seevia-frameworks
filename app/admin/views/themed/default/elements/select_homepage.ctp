@@ -1,6 +1,7 @@
 <select id="homepage" name="homepage" onChange="changeHome()" data-am-selected="{maxHeight:280}">
     <option value=""><?php echo $ld['please_choose']?></option>
     <option value="home"><?php echo $ld['default']?></option>
+    <option value="PAGE"><?php echo $ld['static_page']?></option>
     <option value="homeone"><?php echo $ld['page_layout1']?></option>
     <option value="hometwo"><?php echo $ld['page_layout2']?></option>
     <option value="homethree"><?php echo $ld['page_layout3']?></option>
@@ -27,10 +28,10 @@ function changeHome(){
  	document.getElementById("action").readOnly=true;
  	document.getElementById("controller").readOnly=true;
  	document.getElementById("modelID").readOnly=true;
-    if(route==""){
-        $("#home_div").html("").hide();
-        return;
-    }
+	if(route==""){
+		$("#home_div").html("").hide();
+		return;
+	}
 	if(route =='home'||route=='homeone'||route=='hometwo'||route=='homethree'||route=='hometopics'||route=='homepage'||route=='custom_made'){
 		document.getElementById("action").value=route;
  		document.getElementById("controller").value='pages';
@@ -38,6 +39,10 @@ function changeHome(){
  		document.getElementById("home_div").innerHTML="";
  		document.getElementById("home_div").style.display = "none";
  		return;
+	}
+	if(route=='PAGE'){
+		document.getElementById("controller").value='pages';
+ 		document.getElementById("action").value='view';
 	}
 	if(route =='CMS'){
  		document.getElementById("controller").value='articles';
@@ -105,7 +110,7 @@ function changeHome(){
 	}
     $.ajax({
 	            type: "POST",
-	            url: "/admin/configvalues/changehome/"+route+'/'+key,
+	            url: admin_webroot+"configvalues/changehome/"+route+'/'+key,
 	            dataType: 'html',
 	            data: {},
 	            success: function (result) {

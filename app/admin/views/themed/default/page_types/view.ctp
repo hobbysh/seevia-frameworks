@@ -93,12 +93,12 @@
                                             <?php if($v['PageAction']['status']==1){?>
                                                 <?php echo $html->image('/admin/skins/default/img/yes.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_page_status", '.$v["PageAction"]["id"].')')) ?>
                                             <?php }elseif($v['PageAction']['status'] == 0){?>
-                                                <?php echo $html->image('no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_page_status", '.$v["PageAction"]["id"].')'))?>
+                                                <?php echo $html->image('/admin/skins/default/img/no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_page_status", '.$v["PageAction"]["id"].')'))?>
                                             <?php }?>
                                         </td>
                                         <td>
                                             <?php if(isset($pagetype_info)&&$pagetype_info['PageType']['page_type']=='1'&&$svshow->operator_privilege("page_types_edit")){?>
-                                                <a class="am-btn am-btn-default am-btn-xs  am-seevia-btn-view" target='_blank' href="<?php echo $html->url("/".$v['PageAction']['controller']."/".$v['PageAction']['action']."?is_mobile=1",array("target"=>"_blank")); ?>">
+                                                <a class="am-btn am-btn-default am-btn-xs am-text-secondary am-seevia-btn-view" target='_blank' href="<?php echo $html->url("/".$v['PageAction']['controller']."/".$v['PageAction']['action']."?is_mobile=1",array("target"=>"_blank")); ?>">
                                                     <span class="am-icon-eye"></span> <?php echo $ld['preview']; ?>
                                                 </a>
                                             <?php }else{?>

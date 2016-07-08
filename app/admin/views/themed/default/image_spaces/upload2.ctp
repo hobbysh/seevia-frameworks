@@ -2,9 +2,9 @@
 $timestamp = time();//时间标示
 echo $javascript->link('/skins/default/js/image_space');
 if((isset($configs['image-watermake-upload'])&&$configs['image-watermake-upload']==0)||(!isset($configs['image-watermake-upload']))){ ?>
-<script src="/plugins/uploadify/jquery.uploadify.js" type="text/javascript"></script>
+<script src="<?php echo $webroot; ?>plugins/uploadify/jquery.uploadify.js" type="text/javascript"></script>
 <?php }else if(isset($configs['image-watermake-upload'])&&$configs['image-watermake-upload']==1){ ?>
-<script src="/plugins/ajaxfileupload.js" type="text/javascript"></script>
+<script src="<?php echo $webroot; ?>plugins/ajaxfileupload.js" type="text/javascript"></script>
 <?php } ?>
 <style type="text/css">
 /*
@@ -61,7 +61,7 @@ if((isset($configs['image-watermake-upload'])&&$configs['image-watermake-upload'
                     <tr id='size' name='size' style='display:none'><th><?php echo $ld['middle_picture']?></th><td><p class="c_txt"><?php echo $ld['width']?></p><input class='c_size' type='text' id='mid_img_width'  value='<?php echo $mid_img_width;?>' onchange="swf_upload_addr()"/><p class="c_txt"> X <?php echo $ld['height']?></p><input class='c_size' type='text' id='mid_img_height' value='<?php echo $mid_img_height;?>' onchange="swf_upload_addr()"/><p class="c_txt"><?php echo $ld['pixel']?></p><td></tr>
                     <tr id='size' name='size' style='display:none'><th><?php echo $ld['small_picture']?></th><td><p class="c_txt"><?php echo $ld['width']?></p><input class='c_size' type='text' id='small_img_width'  value='<?php echo $small_img_width;?>' onchange="swf_upload_addr()"/><p class="c_txt"> X <?php echo $ld['height']?></p><input class='c_size' type='text' id='small_img_height' value='<?php echo $small_img_height;?>' onchange="swf_upload_addr()"/><p class="c_txt"><?php echo $ld['pixel']?></p><td></tr>
                     <?php if(isset($configs['enabled_watermark']) && $configs['enabled_watermark'] == 1){?>
-                        <tr><th><?php echo $ld['add_watermark']?></th><td><select data-am-selected id="watermark1" onchange="swf_upload_addr()"><option value="0"><?php echo $ld['no_add']?></option><option value="1"><?php echo $ld['image_watermark']?></option><option value="2"><?php echo $ld['text_watermark']?></option></select><a target="_blank" href="/admin/configvalues?type=1"><?php echo $ld['set_up']?></a></td></tr>
+                        <tr><th><?php echo $ld['add_watermark']?></th><td><select data-am-selected id="watermark1" onchange="swf_upload_addr()"><option value="0"><?php echo $ld['no_add']?></option><option value="1"><?php echo $ld['image_watermark']?></option><option value="2"><?php echo $ld['text_watermark']?></option></select><a target="_blank" href="<?php echo $admin_webroot; ?>configvalues?type=1"><?php echo $ld['set_up']?></a></td></tr>
                     <?php }?>
                     <tr><th><?php echo $ld['upload_picture']?></th>
                         <td>
@@ -159,7 +159,7 @@ $(function(){
 					'formData'     : formData,
 					'auto'     : true,//自动上传
 	    			'removeTimeout' : 1,//文件队列上传完成1秒后删除
-					'swf'      : '/plugins/uploadify/uploadify.swf',
+					'swf'      : webroot+'plugins/uploadify/uploadify.swf',
 					'uploader' : admin_webroot+"photo_category_gallery/photo/",
 					'method'   : 'post',//方法，服务端可以用$_POST数组获取数据
 					'buttonText' : '选择图片',//设置按钮文本
@@ -331,7 +331,7 @@ function custom_size(check){
 function get_size(cat_id){
 	$.ajax({
 	  type: 'POST',
-	  url: "/admin/image_spaces/get_cat_size/",
+	  url: admin_webroot+"image_spaces/get_cat_size/",
 	  data: {"cat_id":cat_id},
 	  dataType:"json",
   	  success: function(data){
@@ -360,6 +360,19 @@ function selected_image(obj,img_detail,img_original,img_name){
 		server_host="http://"+window.location.host;
 	}
 	img_small=img_small.replace("http://"+window.location.host,'');
+	if(id_str.indexOf("product_add_img")>=0){
+		img_small=obj.src;
+	}
+	if(id_str.indexOf("product_image")>=0){
+		img_small=img_original;
+	}
+	if(img_small==null){
+        	img_small=img_detail;//小图
+    	}
+    	img_small=img_small.replace(server_host,'');
+    	if(webroot!="/"){
+	    	img_small=img_small.replace(webroot,'');
+	}
 	if(document.getElementById("type").value=="OpenElementDescription"){//素材描述信息自动拼接上域名
         window.opener.document.getElementById(id_str).value = server_host+img_small;
     	}else if(document.getElementById("type").value=="travel"){
@@ -369,7 +382,7 @@ function selected_image(obj,img_detail,img_original,img_name){
 		var pp = window.opener.document.getElementById(id_str);
 		var li = window.opener.document.createElement("li");
 		var k = pp.getElementsByTagName('li').length;
-		li.innerHTML="<blockquote><span class='closebtn'>×</span><input type='hidden' id='data[TravelGallary][small_img][]' name='data[TravelGallary][small_img][]' value='"+img_originalz+"'><input type='hidden' id='data[TravelGallary][big_img][]' name='data[TravelGallary][big_img][]' value='"+img_detail+"'><input type='hidden' id='data[TravelGallary][orignal_img][]' name='data[TravelGallary][orignal_img][]' value='"+img_original+"'><a class='div_img'><img src='"+img_small+"'></a><p class='div_img_detail'><input type='text' id = 'data[TravelGallary][description][]' name = 'data[TravelGallary][description][]' value='"+img_name+"'/></p>"
+		li.innerHTML="<blockquote><span class='closebtn'>×</span><input type='hidden' id='data[TravelGallary][small_img][]' name='data[TravelGallary][small_img][]' value='"+img_originalz+"'><input type='hidden' id='data[TravelGallary][big_img][]' name='data[TravelGallary][big_img][]' value='"+img_detail+"'><input type='hidden' id='data[TravelGallary][orignal_img][]' name='data[TravelGallary][orignal_img][]' value='"+img_original+"'><a class='div_img'><img src='"+(webroot=="/"?"":webroot)+img_small+"'></a><p class='div_img_detail'><input type='text' id = 'data[TravelGallary][description][]' name = 'data[TravelGallary][description][]' value='"+img_name+"'/></p>"
 		+ "<p><?php echo $ld['sort']?><input style='width:50px' type='text' id = 'data[TravelGallary][orderby][]' name = 'data[TravelGallary][orderby][]' value='50'; /></p><p class='div_img_label_tag'><input type='button' name='data[TravelGallary][tags]["+(k-1)+"][]' class='dishow' value='+添加' /><input type='text' /></p></blockquote>";
 		var p =  window.opener.document.getElementById(id_str).getElementsByTagName('li')[k-1];
 		var pclone = p.cloneNode(true);
@@ -388,7 +401,7 @@ function selected_image(obj,img_detail,img_original,img_name){
 			input += "<p class='div_img_detail'><input type='text' name = 'data[ArticleGalleryI18n]["+k+"][<?php echo $k;?>][description]' value='"+img_name+"'/><?php if(sizeof($backend_locales)>1){?><span class='lang'><?php echo $ld[$v['Language']['locale']]?></span><?php }?></p>";
 		<?php }}?>
 		//
-		li.innerHTML="<blockquote><span class='closebtn'>×</span><input type='hidden'  name='data[ArticleGallery]["+k+"][img_original]' value='"+img_original+"'><a class='div_img'><img src='"+img_original+"'></a>"+input
+		li.innerHTML="<blockquote><span class='closebtn'>×</span><input type='hidden'  name='data[ArticleGallery]["+k+"][img_original]' value='"+img_original+"'><a class='div_img'><img src='"+(webroot=="/"?"":webroot)+img_original+"'></a>"+input
 		+ "<p><?php echo $ld['sort']?><input style='width:50px' type='text'  name = 'data[ArticleGallery]["+k+"][orderby]' value='50'; /></p></blockquote>";
 		var p =  window.opener.document.getElementById(id_str).getElementsByTagName('li')[k-1];
 		var pclone = p.cloneNode(true);
@@ -399,18 +412,18 @@ function selected_image(obj,img_detail,img_original,img_name){
 		var i=0;
 		window.opener.document.getElementById(id_str).value = img_original;
 		if(window.opener.document.getElementById("show_"+id_str)){
-			window.opener.document.getElementById("show_"+id_str).src= img_original;
+			window.opener.document.getElementById("show_"+id_str).src= (webroot=="/"?"":webroot)+img_original;
 			window.opener.document.getElementById("show_"+id_str).parentNode.className += " img_exist";
 			//window.opener.document.getElementById("show_"+id_str).parentNode.style.width = window.opener.document.getElementById(id_str).width;
 		}
 		if(window.opener.document.getElementById("show1_"+id_str)){
-			window.opener.document.getElementById("show1_"+id_str).src= img_original;
+			window.opener.document.getElementById("show1_"+id_str).src= (webroot=="/"?"":webroot)+img_original;
 			window.opener.document.getElementById("show1_"+id_str).parentNode.className += " img_exist";
 			window.opener.document.getElementById("show1_"+id_str).parentNode.parentNode.style.display="block";
 			//window.opener.document.getElementById("show_"+id_str).parentNode.style.width = window.opener.document.getElementById(id_str).width;
 		}
 		if(window.opener.document.getElementById("show_img_detail_"+id_str)){
-			window.opener.document.getElementById("show_img_detail_"+id_str).src = img_detail;
+			window.opener.document.getElementById("show_img_detail_"+id_str).src = (webroot=="/"?"":webroot)+img_detail;
 			window.opener.document.getElementById("show_img_detail_"+id_str).parentNode.className += " img_exist";
 			i=1;
 		}
@@ -434,7 +447,7 @@ function selected_image(obj,img_detail,img_original,img_name){
 			i=1;
 		}
 		if(window.opener.document.getElementById("show_img_big_"+id_str)){
-			window.opener.document.getElementById("show_img_big_"+id_str).src = img_original;
+			window.opener.document.getElementById("show_img_big_"+id_str).src = webroot+img_original;
 			window.opener.document.getElementById("show_img_big_"+id_str).parentNode.className += " img_exist";
 			i=1;
 		}

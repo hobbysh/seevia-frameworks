@@ -54,7 +54,7 @@
 			<td style="text-align:center;"><?php if($v['PageType']['status']==1){?>
 				<?php echo $html->image('/admin/skins/default/img/yes.gif') ?>
 				<?php }elseif($v['PageType']['status'] == 0){?>
-				<?php echo $html->image('no.gif')?>
+				<?php echo $html->image('/admin/skins/default/img/no.gif')?>
 				<?php }?>
 			</td>
 			<td style="text-align:left;">

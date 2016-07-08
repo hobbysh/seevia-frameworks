@@ -6,7 +6,7 @@
 	.am-form-horizontal .am-radio{padding-top:0;}
 	.am-radio input[type="radio"], .am-radio-inline input[type="radio"], .am-checkbox input[type="checkbox"], .am-checkbox-inline input[type="checkbox"]{margin-left:0px;}
 </style>
-<?php echo $form->create('ProfileFiled',array('action'=>'/view/'.$id.'/'.$uid,'name'=>"ProfileFiledForm","type"=>"POST",'onsubmit'=>'return check();'));?>
+<?php echo $form->create('ProfileFiled',array('action'=>'/view/'.$id.'/'.$uid,'name'=>"ProfileFiledForm","type"=>"POST"));?>
 <div class="am-u-lg-3 am-u-md-3 am-u-sm-3  am-detail-menu" style="margin:10px 0 0 0;">
     <ul class="am-list admin-sidebar-list" data-am-scrollspy-nav="{offsetTop: 45}" style="position: fixed; z-index: 100; width: 15%;max-width:200px;">
         <li><a href="#tablemain"><?php echo $ld['export_configuration'];?></a></li>

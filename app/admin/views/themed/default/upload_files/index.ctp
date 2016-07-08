@@ -71,13 +71,10 @@
                     <td class="am-btn-group-xs am-action"> 
                      <?php
                      
-                        if($svshow->operator_privilege("upload_files_mgt")){
+                        if($svshow->operator_privilege("upload_files_add")){
                             ?><a href="javascript:;"   class="am-btn am-btn-default am-btn-xs am-seevia-btn-edit   js-modal-open" onclick="photo_copys('<?php echo $v['Document']['file_url'];?>')" ><span class="am-icon-copy"></span> <?php echo $ld['copy']?></a><?php
-                        } ?> 
-                           		
-                           		
-                           		
-                          <?php if($svshow->operator_privilege("upload_files_edit")){?><a class="am-btn am-btn-default am-btn-xs  am-seevia-btn-edit" href="<?php echo $html->url('/upload_files/edit/'.$v['Document']['id']); ?>">
+                        } ?>
+                          <?php if($svshow->operator_privilege("upload_files_edit")){?><a class="am-btn am-btn-default am-btn-xs am-text-secondary am-seevia-btn-edit" href="<?php echo $html->url('/upload_files/edit/'.$v['Document']['id']); ?>">
                         <span class="am-icon-pencil-square-o"></span> <?php echo $ld['edit']; ?>
                     </a>
                 
@@ -147,7 +144,7 @@
         }
         else{
             /*window.clipboardData.setData("Text",src);*/
-            alert('请使用IE6.0或以上版本浏览本页');
+            alert('请使用IE6.0或以上版本浏览本�?);
         }
     }
     /////////////////////////

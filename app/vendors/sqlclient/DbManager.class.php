@@ -150,7 +150,7 @@ class DBManager
 	            return false;
 	        }
 	    }else{
-	       	$sql2 = "DROP DATABASE $db_name";
+	       	$sql2 = "DROP DATABASE IF EXISTS $db_name";
 		    if (mysql_query($sql2, $conn) === false){
 		    	return false;
 		    }
@@ -158,6 +158,37 @@ class DBManager
 	        if (mysql_query($sql, $conn) === false){
 	            return false;
 	        }
+	    }
+	    @mysql_close($conn);
+	    return true;
+    }
+    
+    /**
+	 * 删除指定名字的数据库
+	 *
+	 * @access  public
+	 * @param   string      $db_host        主机
+	 * @param   string      $db_port        端口号
+	 * @param   string      $db_user        用户名
+	 * @param   string      $db_pass        密码
+	 * @param   string      $db_name        数据库名
+	 * @return  boolean     成功返回true，失败返回false
+	 */
+    function delete_database($db_host, $db_port, $db_user, $db_pass, $db_name){
+    	    $db_host = $this->construct_db_host($db_host, $db_port);
+	    $conn = @mysql_connect($db_host, $db_user, $db_pass);
+	    if ($conn === false){
+	        return false;
+	    }
+	    $mysql_version = mysql_get_server_info($conn);
+	    $this->keep_right_conn($conn, $mysql_version);
+	    if (mysql_select_db($db_name, $conn) === false){
+	        return false;
+	    }else{
+		$sql = "DROP DATABASE IF EXISTS $db_name";
+		if (mysql_query($sql, $conn) === false){
+			return false;
+		}
 	    }
 	    @mysql_close($conn);
 	    return true;

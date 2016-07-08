@@ -11,13 +11,14 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 --
--- 数据库: `o2o`
+-- 数据库: `framework`
 --
 
 --
 -- 表的结构 `svcms_advertisements`
 --
 
+DROP TABLE IF EXISTS `svcms_advertisements`;
 CREATE TABLE IF NOT EXISTS `svcms_advertisements` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID号',
   `advertisement_position_id` int(11) NOT NULL DEFAULT '0' COMMENT '0站外广告 从1开始代表的是该广告所处的广告位 同表svcart_advertisement_positions 中的字段id的值',
@@ -41,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `svcms_advertisements` (
 -- 表的结构 `svcms_advertisement_effects`
 --
 
+DROP TABLE IF EXISTS `svcms_advertisement_effects`;
 CREATE TABLE IF NOT EXISTS `svcms_advertisement_effects` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `advertisements_id` int(11) NOT NULL DEFAULT '0' COMMENT '父级id',
@@ -60,6 +62,7 @@ CREATE TABLE IF NOT EXISTS `svcms_advertisement_effects` (
 -- 表的结构 `svcms_advertisement_effects_defaults`
 --
 
+DROP TABLE IF EXISTS `svcms_advertisement_effects_defaults`;
 CREATE TABLE IF NOT EXISTS `svcms_advertisement_effects_defaults` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `locale` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言',
@@ -79,6 +82,7 @@ CREATE TABLE IF NOT EXISTS `svcms_advertisement_effects_defaults` (
 -- 表的结构 `svcms_advertisement_i18ns`
 --
 
+DROP TABLE IF EXISTS `svcms_advertisement_i18ns`;
 CREATE TABLE IF NOT EXISTS `svcms_advertisement_i18ns` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID号',
   `locale` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言编码',
@@ -102,6 +106,7 @@ CREATE TABLE IF NOT EXISTS `svcms_advertisement_i18ns` (
 -- 表的结构 `svcms_advertisement_positions`
 --
 
+DROP TABLE IF EXISTS `svcms_advertisement_positions`;
 CREATE TABLE IF NOT EXISTS `svcms_advertisement_positions` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '广告位编号',
   `name` varchar(60) COLLATE utf8_unicode_ci NOT NULL COMMENT '广告位名称',
@@ -122,6 +127,7 @@ CREATE TABLE IF NOT EXISTS `svcms_advertisement_positions` (
 -- 表的结构 `svcms_documents`
 --
 
+DROP TABLE IF EXISTS `svcms_documents`;
 CREATE TABLE IF NOT EXISTS `svcms_documents` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '文件编号',
   `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '文件名称',
@@ -143,6 +149,7 @@ CREATE TABLE IF NOT EXISTS `svcms_documents` (
 -- 表的结构 `svcms_links`
 --
 
+DROP TABLE IF EXISTS `svcms_links`;
 CREATE TABLE IF NOT EXISTS `svcms_links` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '友情链接编号',
   `type` smallint(1) NOT NULL DEFAULT '1' COMMENT '1.友情链接 2.赞助商 3.合作伙伴',
@@ -164,6 +171,7 @@ CREATE TABLE IF NOT EXISTS `svcms_links` (
 -- 表的结构 `svcms_link_i18ns`
 --
 
+DROP TABLE IF EXISTS `svcms_link_i18ns`;
 CREATE TABLE IF NOT EXISTS `svcms_link_i18ns` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '友情链接编号',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言编码',
@@ -188,6 +196,7 @@ CREATE TABLE IF NOT EXISTS `svcms_link_i18ns` (
 -- 表的结构 `svcms_navigations`
 --
 
+DROP TABLE IF EXISTS `svcms_navigations`;
 CREATE TABLE IF NOT EXISTS `svcms_navigations` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '导航编号',
   `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '上级导航',
@@ -209,6 +218,7 @@ CREATE TABLE IF NOT EXISTS `svcms_navigations` (
 -- 表的结构 `svcms_navigation_i18ns`
 --
 
+DROP TABLE IF EXISTS `svcms_navigation_i18ns`;
 CREATE TABLE IF NOT EXISTS `svcms_navigation_i18ns` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '导航多语言编号',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言编码',
@@ -231,6 +241,7 @@ CREATE TABLE IF NOT EXISTS `svcms_navigation_i18ns` (
 -- 表的结构 `svcms_pages`
 --
 
+DROP TABLE IF EXISTS `svcms_pages`;
 CREATE TABLE IF NOT EXISTS `svcms_pages` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID号',
   `orderby` tinyint(4) NOT NULL DEFAULT '50' COMMENT '排序',
@@ -248,6 +259,7 @@ CREATE TABLE IF NOT EXISTS `svcms_pages` (
 -- 表的结构 `svcms_page_i18ns`
 --
 
+DROP TABLE IF EXISTS `svcms_page_i18ns`;
 CREATE TABLE IF NOT EXISTS `svcms_page_i18ns` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '页面多语言编号',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言编码',
@@ -273,6 +285,7 @@ CREATE TABLE IF NOT EXISTS `svcms_page_i18ns` (
 -- 表的结构 `svcms_photo_categories`
 --
 
+DROP TABLE IF EXISTS `svcms_photo_categories`;
 CREATE TABLE IF NOT EXISTS `svcms_photo_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '相册分类编号',
   `orderby` tinyint(4) NOT NULL DEFAULT '50' COMMENT '排序',
@@ -296,6 +309,7 @@ CREATE TABLE IF NOT EXISTS `svcms_photo_categories` (
 -- 表的结构 `svcms_photo_category_galleries`
 --
 
+DROP TABLE IF EXISTS `svcms_photo_category_galleries`;
 CREATE TABLE IF NOT EXISTS `svcms_photo_category_galleries` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '图片编号',
   `photo_category_id` int(11) NOT NULL DEFAULT '0' COMMENT '相册分类编号',
@@ -322,6 +336,7 @@ CREATE TABLE IF NOT EXISTS `svcms_photo_category_galleries` (
 -- 表的结构 `svcms_photo_category_i18ns`
 --
 
+DROP TABLE IF EXISTS `svcms_photo_category_i18ns`;
 CREATE TABLE IF NOT EXISTS `svcms_photo_category_i18ns` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '相册分类多语言编号',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言编码',
@@ -339,6 +354,7 @@ CREATE TABLE IF NOT EXISTS `svcms_photo_category_i18ns` (
 -- 表的结构 `svcms_templates`
 --
 
+DROP TABLE IF EXISTS `svcms_templates`;
 CREATE TABLE IF NOT EXISTS `svcms_templates` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '主键自增ID',
   `name` varchar(60) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '模板名',
@@ -363,9 +379,326 @@ CREATE TABLE IF NOT EXISTS `svcms_templates` (
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `svedi_api_categories`
+--
+
+DROP TABLE IF EXISTS `svedi_api_categories`;
+CREATE TABLE IF NOT EXISTS `svedi_api_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_code` varchar(50) NOT NULL COMMENT 'API项目代码',
+  `code` varchar(50) NOT NULL COMMENT '分类代码',
+  `name` varchar(200) NOT NULL COMMENT '分类名称',
+  `description` varchar(200) NOT NULL COMMENT '描述',
+  `orderby` int(11) NOT NULL DEFAULT '50' COMMENT '排序(默认:50)',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API项目分类表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_error_code_interpretations`
+--
+
+DROP TABLE IF EXISTS `svedi_api_error_code_interpretations`;
+CREATE TABLE IF NOT EXISTS `svedi_api_error_code_interpretations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_code` varchar(50) NOT NULL COMMENT 'API项目代码',
+  `code` varchar(50) NOT NULL COMMENT '代码',
+  `description` varchar(200) NOT NULL COMMENT '描述',
+  `solution` varchar(200) NOT NULL COMMENT '解决方案',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API方法响应异常示例表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_methods`
+--
+
+DROP TABLE IF EXISTS `svedi_api_methods`;
+CREATE TABLE IF NOT EXISTS `svedi_api_methods` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_code` varchar(50) NOT NULL COMMENT 'API项目代码',
+  `api_category_code` varchar(50) NOT NULL COMMENT 'API项目分类代码',
+  `code` varchar(50) NOT NULL COMMENT '方法代码',
+  `type` char(8) NOT NULL DEFAULT '0' COMMENT '类型[0:基础,1:免费] ',
+  `name` varchar(200) NOT NULL COMMENT '分类名称',
+  `description` text NOT NULL COMMENT '描述',
+  `orderby` int(12) NOT NULL DEFAULT '50' COMMENT '默认：50',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API方法表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_method_error_codes`
+--
+
+DROP TABLE IF EXISTS `svedi_api_method_error_codes`;
+CREATE TABLE IF NOT EXISTS `svedi_api_method_error_codes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_code` varchar(50) NOT NULL COMMENT 'API项目代码',
+  `api_method_code` varchar(50) NOT NULL COMMENT 'API方法代码',
+  `error_code` varchar(50) NOT NULL COMMENT 'API错误代码',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API方法响应异常示例表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_method_faqs`
+--
+
+DROP TABLE IF EXISTS `svedi_api_method_faqs`;
+CREATE TABLE IF NOT EXISTS `svedi_api_method_faqs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_code` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'API项目代码',
+  `api_category_code` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'API项目分类代码',
+  `api_method_code` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'API方法代码',
+  `question` text COLLATE utf8_unicode_ci NOT NULL COMMENT '问题',
+  `answer` text COLLATE utf8_unicode_ci NOT NULL COMMENT '答案',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='API方法FAQ表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_method_requests`
+--
+
+DROP TABLE IF EXISTS `svedi_api_method_requests`;
+CREATE TABLE IF NOT EXISTS `svedi_api_method_requests` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_code` varchar(50) NOT NULL COMMENT 'API项目代码',
+  `api_category_code` varchar(50) NOT NULL COMMENT 'API项目分类代码',
+  `api_method_code` varchar(50) NOT NULL COMMENT 'API方法代码',
+  `name` varchar(200) NOT NULL COMMENT '分类名称',
+  `type` varchar(50) NOT NULL COMMENT '类型',
+  `required` char(1) NOT NULL COMMENT '是否必须[0:否,1:是]',
+  `defualt` varchar(50) NOT NULL COMMENT '分类名称',
+  `description` text NOT NULL COMMENT '描述',
+  `orderby` int(11) NOT NULL DEFAULT '50' COMMENT '排序(默认:50)',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API方法请求参数表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_method_request_examples`
+--
+
+DROP TABLE IF EXISTS `svedi_api_method_request_examples`;
+CREATE TABLE IF NOT EXISTS `svedi_api_method_request_examples` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_code` varchar(50) NOT NULL COMMENT 'API项目代码',
+  `api_category_code` varchar(50) NOT NULL COMMENT 'API项目分类代码',
+  `api_method_code` varchar(50) NOT NULL COMMENT 'API方法代码',
+  `type` varchar(50) NOT NULL DEFAULT '0' COMMENT '类型',
+  `description` text NOT NULL COMMENT '描述',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API方法请求示例表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_method_responses`
+--
+
+DROP TABLE IF EXISTS `svedi_api_method_responses`;
+CREATE TABLE IF NOT EXISTS `svedi_api_method_responses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_code` varchar(50) NOT NULL COMMENT 'API项目代码',
+  `api_category_code` varchar(50) NOT NULL COMMENT 'API项目分类代码',
+  `api_method_code` varchar(50) NOT NULL COMMENT 'API方法代码',
+  `name` varchar(200) NOT NULL COMMENT '名称',
+  `type` varchar(50) NOT NULL COMMENT '类型',
+  `samples` varchar(200) NOT NULL COMMENT '示例值',
+  `description` text NOT NULL COMMENT '描述',
+  `customer_case_id` int(11) NOT NULL DEFAULT '50' COMMENT '排序(默认:50)',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API方法响应参数表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_method_response_examples`
+--
+
+DROP TABLE IF EXISTS `svedi_api_method_response_examples`;
+CREATE TABLE IF NOT EXISTS `svedi_api_method_response_examples` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_code` varchar(50) NOT NULL COMMENT 'API项目代码',
+  `api_category_code` varchar(50) NOT NULL COMMENT 'API项目分类代码',
+  `api_method_code` varchar(50) NOT NULL COMMENT 'API方法代码',
+  `type` varchar(50) NOT NULL COMMENT '类型',
+  `description` text NOT NULL COMMENT '描述',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API方法响应示例表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_method_response_exceptions`
+--
+
+DROP TABLE IF EXISTS `svedi_api_method_response_exceptions`;
+CREATE TABLE IF NOT EXISTS `svedi_api_method_response_exceptions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_code` varchar(50) NOT NULL COMMENT 'API项目代码',
+  `api_category_code` varchar(50) NOT NULL COMMENT 'API项目分类代码',
+  `api_method_code` varchar(50) NOT NULL COMMENT 'API方法代码',
+  `type` varchar(50) NOT NULL COMMENT '类型',
+  `description` text NOT NULL COMMENT '描述',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API方法响应异常示例表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_objects`
+--
+
+DROP TABLE IF EXISTS `svedi_api_objects`;
+CREATE TABLE IF NOT EXISTS `svedi_api_objects` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_code` varchar(50) NOT NULL COMMENT 'API项目代码',
+  `name` varchar(200) NOT NULL COMMENT '名称',
+  `code` varchar(200) NOT NULL COMMENT '代码',
+  `type` varchar(50) NOT NULL DEFAULT '0' COMMENT '类型',
+  `description` varchar(200) NOT NULL COMMENT '描述',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API对象表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_object_fields`
+--
+
+DROP TABLE IF EXISTS `svedi_api_object_fields`;
+CREATE TABLE IF NOT EXISTS `svedi_api_object_fields` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_code` varchar(50) NOT NULL COMMENT 'API项目代码',
+  `api_object_code` varchar(50) NOT NULL COMMENT 'API项目分类代码',
+  `name` varchar(200) NOT NULL COMMENT '名称',
+  `type` varchar(50) NOT NULL DEFAULT '0' COMMENT '类型',
+  `samples` varchar(200) NOT NULL COMMENT '示例值',
+  `description` varchar(200) NOT NULL COMMENT '描述',
+  `orderby` int(11) NOT NULL DEFAULT '50' COMMENT '排序(默认:50)',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API对象字段表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_projects`
+--
+
+DROP TABLE IF EXISTS `svedi_api_projects`;
+CREATE TABLE IF NOT EXISTS `svedi_api_projects` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `code` varchar(50) NOT NULL COMMENT 'API项目代码',
+  `name` varchar(200) NOT NULL COMMENT 'API项目名称',
+  `http_address` varchar(200) NOT NULL COMMENT 'HTTP请求地址',
+  `sandbox_http_address` varchar(200) NOT NULL COMMENT '沙箱HTTP请求地址',
+  `https_address` varchar(200) NOT NULL COMMENT 'HTTPS请求地址',
+  `sandbox_https_address` varchar(200) NOT NULL COMMENT '沙箱HTTPS请求地址',
+  `status` char(4) NOT NULL DEFAULT '1' COMMENT '状态[0:无效 1:有效 2:停用 3:删除 ]',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API项目表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_project_apps`
+--
+
+DROP TABLE IF EXISTS `svedi_api_project_apps`;
+CREATE TABLE IF NOT EXISTS `svedi_api_project_apps` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_code` varchar(50) NOT NULL COMMENT 'API项目代码',
+  `app_key` varchar(200) NOT NULL COMMENT 'APP KEY',
+  `app_secret` varchar(200) NOT NULL COMMENT 'API SECRET',
+  `authority_type_code` varchar(200) NOT NULL COMMENT '权限',
+  `status` char(1) NOT NULL DEFAULT '1' COMMENT '状态[0:无效 1:有效 2:停用 3:删除 ]',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API项目应用表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_project_app_authority_types`
+--
+
+DROP TABLE IF EXISTS `svedi_api_project_app_authority_types`;
+CREATE TABLE IF NOT EXISTS `svedi_api_project_app_authority_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_app_id` int(11) NOT NULL COMMENT 'API项目应用id',
+  `code` varchar(200) NOT NULL COMMENT '授权类型代码',
+  `authority_method_codes` text NOT NULL COMMENT '权限方法代码表',
+  `status` char(1) NOT NULL DEFAULT '1' COMMENT '状态[0:无效 1:有效 2:停用 3:删除 ]',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API项目应用表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svedi_api_project_common_parameters`
+--
+
+DROP TABLE IF EXISTS `svedi_api_project_common_parameters`;
+CREATE TABLE IF NOT EXISTS `svedi_api_project_common_parameters` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_project_code` varchar(50) NOT NULL COMMENT 'API项目代码',
+  `name` varchar(50) NOT NULL COMMENT '名称',
+  `type` char(20) NOT NULL DEFAULT '' COMMENT '类型 ',
+  `required` char(1) NOT NULL COMMENT '是否必须[0:否,1:是]',
+  `description` varchar(200) NOT NULL COMMENT '描述',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='API项目公共请求参数表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `svsys_applications`
 --
 
+DROP TABLE IF EXISTS `svsys_applications`;
 CREATE TABLE IF NOT EXISTS `svsys_applications` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '应用id',
   `groupby` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '应用类别',
@@ -384,6 +717,7 @@ CREATE TABLE IF NOT EXISTS `svsys_applications` (
 -- 表的结构 `svsys_application_configs`
 --
 
+DROP TABLE IF EXISTS `svsys_application_configs`;
 CREATE TABLE IF NOT EXISTS `svsys_application_configs` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `app_id` int(11) NOT NULL COMMENT '应用ID',
@@ -403,6 +737,7 @@ CREATE TABLE IF NOT EXISTS `svsys_application_configs` (
 -- 表的结构 `svsys_application_config_i18ns`
 --
 
+DROP TABLE IF EXISTS `svsys_application_config_i18ns`;
 CREATE TABLE IF NOT EXISTS `svsys_application_config_i18ns` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `app_id` int(11) NOT NULL COMMENT '应用ID',
@@ -423,6 +758,7 @@ CREATE TABLE IF NOT EXISTS `svsys_application_config_i18ns` (
 -- 表的结构 `svsys_application_i18ns`
 --
 
+DROP TABLE IF EXISTS `svsys_application_i18ns`;
 CREATE TABLE IF NOT EXISTS `svsys_application_i18ns` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '应用id',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言编码',
@@ -443,6 +779,7 @@ CREATE TABLE IF NOT EXISTS `svsys_application_i18ns` (
 -- 表的结构 `svsys_configs`
 --
 
+DROP TABLE IF EXISTS `svsys_configs`;
 CREATE TABLE IF NOT EXISTS `svsys_configs` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT COMMENT '参数ID',
   `store_id` int(11) NOT NULL DEFAULT '0' COMMENT '商店编号[0:系统]',
@@ -468,6 +805,7 @@ CREATE TABLE IF NOT EXISTS `svsys_configs` (
 -- 表的结构 `svsys_config_i18ns`
 --
 
+DROP TABLE IF EXISTS `svsys_config_i18ns`;
 CREATE TABLE IF NOT EXISTS `svsys_config_i18ns` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '配置多语言编号',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言编码',
@@ -493,6 +831,7 @@ CREATE TABLE IF NOT EXISTS `svsys_config_i18ns` (
 -- 表的结构 `svsys_cronjobs`
 --
 
+DROP TABLE IF EXISTS `svsys_cronjobs`;
 CREATE TABLE IF NOT EXISTS `svsys_cronjobs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `task_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '任务名称',
@@ -518,6 +857,7 @@ CREATE TABLE IF NOT EXISTS `svsys_cronjobs` (
 -- 表的结构 `svsys_dictionaries`
 --
 
+DROP TABLE IF EXISTS `svsys_dictionaries`;
 CREATE TABLE IF NOT EXISTS `svsys_dictionaries` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言代码',
@@ -538,6 +878,7 @@ CREATE TABLE IF NOT EXISTS `svsys_dictionaries` (
 -- 表的结构 `svsys_information_resources`
 --
 
+DROP TABLE IF EXISTS `svsys_information_resources`;
 CREATE TABLE IF NOT EXISTS `svsys_information_resources` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '资源ID',
   `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '资源上级ID',
@@ -556,6 +897,7 @@ CREATE TABLE IF NOT EXISTS `svsys_information_resources` (
 -- 表的结构 `svsys_information_resource_i18ns`
 --
 
+DROP TABLE IF EXISTS `svsys_information_resource_i18ns`;
 CREATE TABLE IF NOT EXISTS `svsys_information_resource_i18ns` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '资源多语言编号',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '语言编码',
@@ -574,6 +916,7 @@ CREATE TABLE IF NOT EXISTS `svsys_information_resource_i18ns` (
 -- 表的结构 `svsys_languages`
 --
 
+DROP TABLE IF EXISTS `svsys_languages`;
 CREATE TABLE IF NOT EXISTS `svsys_languages` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '语言编号',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言代码',
@@ -599,6 +942,7 @@ CREATE TABLE IF NOT EXISTS `svsys_languages` (
 -- 表的结构 `svsys_mail_send_histories`
 --
 
+DROP TABLE IF EXISTS `svsys_mail_send_histories`;
 CREATE TABLE IF NOT EXISTS `svsys_mail_send_histories` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `sender_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '发送人姓名',
@@ -621,6 +965,7 @@ CREATE TABLE IF NOT EXISTS `svsys_mail_send_histories` (
 -- 表的结构 `svsys_mail_send_queues`
 --
 
+DROP TABLE IF EXISTS `svsys_mail_send_queues`;
 CREATE TABLE IF NOT EXISTS `svsys_mail_send_queues` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `sender_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '发送人姓名',
@@ -644,6 +989,7 @@ CREATE TABLE IF NOT EXISTS `svsys_mail_send_queues` (
 -- 表的结构 `svsys_mail_statistics`
 --
 
+DROP TABLE IF EXISTS `svsys_mail_statistics`;
 CREATE TABLE IF NOT EXISTS `svsys_mail_statistics` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
   `mail_date` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '产生日期',
@@ -661,6 +1007,7 @@ CREATE TABLE IF NOT EXISTS `svsys_mail_statistics` (
 -- 表的结构 `svsys_mail_templates`
 --
 
+DROP TABLE IF EXISTS `svsys_mail_templates`;
 CREATE TABLE IF NOT EXISTS `svsys_mail_templates` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '邮件模板编号',
   `code` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '编号',
@@ -680,6 +1027,7 @@ CREATE TABLE IF NOT EXISTS `svsys_mail_templates` (
 -- 表的结构 `svsys_mail_template_i18ns`
 --
 
+DROP TABLE IF EXISTS `svsys_mail_template_i18ns`;
 CREATE TABLE IF NOT EXISTS `svsys_mail_template_i18ns` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '邮件模板多语言编号',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言编码',
@@ -701,6 +1049,7 @@ CREATE TABLE IF NOT EXISTS `svsys_mail_template_i18ns` (
 -- 表的结构 `svsys_operators`
 --
 
+DROP TABLE IF EXISTS `svsys_operators`;
 CREATE TABLE IF NOT EXISTS `svsys_operators` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '管理员编号',
   `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '管理员名称',
@@ -736,6 +1085,7 @@ CREATE TABLE IF NOT EXISTS `svsys_operators` (
 -- 表的结构 `svsys_operator_actions`
 --
 
+DROP TABLE IF EXISTS `svsys_operator_actions`;
 CREATE TABLE IF NOT EXISTS `svsys_operator_actions` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '功能编号',
   `level` tinyint(4) NOT NULL DEFAULT '0' COMMENT '功能等级',
@@ -759,6 +1109,7 @@ CREATE TABLE IF NOT EXISTS `svsys_operator_actions` (
 -- 表的结构 `svsys_operator_action_i18ns`
 --
 
+DROP TABLE IF EXISTS `svsys_operator_action_i18ns`;
 CREATE TABLE IF NOT EXISTS `svsys_operator_action_i18ns` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键自增ID',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言编码',
@@ -779,6 +1130,7 @@ CREATE TABLE IF NOT EXISTS `svsys_operator_action_i18ns` (
 -- 表的结构 `svsys_operator_logs`
 --
 
+DROP TABLE IF EXISTS `svsys_operator_logs`;
 CREATE TABLE IF NOT EXISTS `svsys_operator_logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '日志编号',
   `operator_id` int(11) NOT NULL DEFAULT '0' COMMENT '管理员编号',
@@ -800,6 +1152,7 @@ CREATE TABLE IF NOT EXISTS `svsys_operator_logs` (
 -- 表的结构 `svsys_operator_menus`
 --
 
+DROP TABLE IF EXISTS `svsys_operator_menus`;
 CREATE TABLE IF NOT EXISTS `svsys_operator_menus` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '菜单编号',
   `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '上级菜单编号',
@@ -824,6 +1177,7 @@ CREATE TABLE IF NOT EXISTS `svsys_operator_menus` (
 -- 表的结构 `svsys_operator_menu_i18ns`
 --
 
+DROP TABLE IF EXISTS `svsys_operator_menu_i18ns`;
 CREATE TABLE IF NOT EXISTS `svsys_operator_menu_i18ns` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '菜单多语言编号',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言编码',
@@ -841,6 +1195,7 @@ CREATE TABLE IF NOT EXISTS `svsys_operator_menu_i18ns` (
 -- 表的结构 `svsys_operator_oauths`
 --
 
+DROP TABLE IF EXISTS `svsys_operator_oauths`;
 CREATE TABLE IF NOT EXISTS `svsys_operator_oauths` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `operator_id` int(11) NOT NULL COMMENT '关联operators表',
@@ -866,6 +1221,7 @@ CREATE TABLE IF NOT EXISTS `svsys_operator_oauths` (
 -- 表的结构 `svsys_operator_roles`
 --
 
+DROP TABLE IF EXISTS `svsys_operator_roles`;
 CREATE TABLE IF NOT EXISTS `svsys_operator_roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '管理员角色编号',
   `store_id` int(11) NOT NULL DEFAULT '0' COMMENT '商店编号',
@@ -884,6 +1240,7 @@ CREATE TABLE IF NOT EXISTS `svsys_operator_roles` (
 -- 表的结构 `svsys_operator_role_i18ns`
 --
 
+DROP TABLE IF EXISTS `svsys_operator_role_i18ns`;
 CREATE TABLE IF NOT EXISTS `svsys_operator_role_i18ns` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键自增ID',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言编码',
@@ -902,6 +1259,7 @@ CREATE TABLE IF NOT EXISTS `svsys_operator_role_i18ns` (
 -- 表的结构 `svsys_page_actions`
 --
 
+DROP TABLE IF EXISTS `svsys_page_actions`;
 CREATE TABLE IF NOT EXISTS `svsys_page_actions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `controller` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -921,6 +1279,7 @@ CREATE TABLE IF NOT EXISTS `svsys_page_actions` (
 -- 表的结构 `svsys_page_modules`
 --
 
+DROP TABLE IF EXISTS `svsys_page_modules`;
 CREATE TABLE IF NOT EXISTS `svsys_page_modules` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '模块ID',
   `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '父编号',
@@ -954,6 +1313,7 @@ CREATE TABLE IF NOT EXISTS `svsys_page_modules` (
 -- 表的结构 `svsys_page_module_i18ns`
 --
 
+DROP TABLE IF EXISTS `svsys_page_module_i18ns`;
 CREATE TABLE IF NOT EXISTS `svsys_page_module_i18ns` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `module_id` int(11) NOT NULL COMMENT '模块ID',
@@ -962,7 +1322,8 @@ CREATE TABLE IF NOT EXISTS `svsys_page_module_i18ns` (
   `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '模块标题',
   `created` datetime NOT NULL COMMENT '创建时间',
   `modified` datetime NOT NULL COMMENT '修改时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `module_id` (`module_id`,`locale`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -971,6 +1332,7 @@ CREATE TABLE IF NOT EXISTS `svsys_page_module_i18ns` (
 -- 表的结构 `svsys_page_types`
 --
 
+DROP TABLE IF EXISTS `svsys_page_types`;
 CREATE TABLE IF NOT EXISTS `svsys_page_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -990,6 +1352,7 @@ CREATE TABLE IF NOT EXISTS `svsys_page_types` (
 -- 表的结构 `svsys_profiles`
 --
 
+DROP TABLE IF EXISTS `svsys_profiles`;
 CREATE TABLE IF NOT EXISTS `svsys_profiles` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
   `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '编码',
@@ -1007,6 +1370,7 @@ CREATE TABLE IF NOT EXISTS `svsys_profiles` (
 -- 表的结构 `svsys_profiles_fields`
 --
 
+DROP TABLE IF EXISTS `svsys_profiles_fields`;
 CREATE TABLE IF NOT EXISTS `svsys_profiles_fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品编号',
   `profile_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品编号',
@@ -1025,6 +1389,7 @@ CREATE TABLE IF NOT EXISTS `svsys_profiles_fields` (
 -- 表的结构 `svsys_profiles_field_i18ns`
 --
 
+DROP TABLE IF EXISTS `svsys_profiles_field_i18ns`;
 CREATE TABLE IF NOT EXISTS `svsys_profiles_field_i18ns` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '档案配置字段多语言编号',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言编码',
@@ -1045,6 +1410,7 @@ CREATE TABLE IF NOT EXISTS `svsys_profiles_field_i18ns` (
 -- 表的结构 `svsys_profile_i18ns`
 --
 
+DROP TABLE IF EXISTS `svsys_profile_i18ns`;
 CREATE TABLE IF NOT EXISTS `svsys_profile_i18ns` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '档案配置多语言编号',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '语言编码',
@@ -1065,6 +1431,7 @@ CREATE TABLE IF NOT EXISTS `svsys_profile_i18ns` (
 -- 表的结构 `svsys_resources`
 --
 
+DROP TABLE IF EXISTS `svsys_resources`;
 CREATE TABLE IF NOT EXISTS `svsys_resources` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键自增ID',
   `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '资源上级ID',
@@ -1085,6 +1452,7 @@ CREATE TABLE IF NOT EXISTS `svsys_resources` (
 -- 表的结构 `svsys_resource_i18ns`
 --
 
+DROP TABLE IF EXISTS `svsys_resource_i18ns`;
 CREATE TABLE IF NOT EXISTS `svsys_resource_i18ns` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键自增ID',
   `locale` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '语言编码',
@@ -1103,6 +1471,7 @@ CREATE TABLE IF NOT EXISTS `svsys_resource_i18ns` (
 -- 表的结构 `svsys_routes`
 --
 
+DROP TABLE IF EXISTS `svsys_routes`;
 CREATE TABLE IF NOT EXISTS `svsys_routes` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
   `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -1122,6 +1491,7 @@ CREATE TABLE IF NOT EXISTS `svsys_routes` (
 -- 表的结构 `svsys_sessions`
 --
 
+DROP TABLE IF EXISTS `svsys_sessions`;
 CREATE TABLE IF NOT EXISTS `svsys_sessions` (
   `id` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '序列化后的sessionid',
   `data` text CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT '序列化后的session数据',
@@ -1135,6 +1505,7 @@ CREATE TABLE IF NOT EXISTS `svsys_sessions` (
 -- 表的结构 `svsys_sms_send_histories`
 --
 
+DROP TABLE IF EXISTS `svsys_sms_send_histories`;
 CREATE TABLE IF NOT EXISTS `svsys_sms_send_histories` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `phone` varchar(15) COLLATE utf8_unicode_ci NOT NULL COMMENT '手机号码',
@@ -1152,6 +1523,7 @@ CREATE TABLE IF NOT EXISTS `svsys_sms_send_histories` (
 -- 表的结构 `svsys_sms_send_queues`
 --
 
+DROP TABLE IF EXISTS `svsys_sms_send_queues`;
 CREATE TABLE IF NOT EXISTS `svsys_sms_send_queues` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `phone` varchar(15) COLLATE utf8_unicode_ci NOT NULL COMMENT '手机号码',
@@ -1169,6 +1541,7 @@ CREATE TABLE IF NOT EXISTS `svsys_sms_send_queues` (
 -- 表的结构 `svsys_sms_words`
 --
 
+DROP TABLE IF EXISTS `svsys_sms_words`;
 CREATE TABLE IF NOT EXISTS `svsys_sms_words` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `word` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '敏感字',
@@ -1176,3 +1549,19 @@ CREATE TABLE IF NOT EXISTS `svsys_sms_words` (
   `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `svsys_system_logs`
+--
+
+DROP TABLE IF EXISTS `svsys_system_logs`;
+CREATE TABLE IF NOT EXISTS `svsys_system_logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '系统日志Id',
+  `type` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'error' COMMENT '类型',
+  `log_text` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '日志描述',
+  `created` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '创建时间',
+  `modified` datetime NOT NULL DEFAULT '2008-01-01 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='系统日志表' AUTO_INCREMENT=1 ;

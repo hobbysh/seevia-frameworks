@@ -17,6 +17,6 @@ class SmsSendQueue extends AppModel
     /*
     * @var $useDbConfig  ˝æ›ø‚≈‰÷√
     */
-    public $useDbConfig = 'sys';
+    public $useDbConfig = 'default';
     public $name = 'SmsSendQueue';
 }

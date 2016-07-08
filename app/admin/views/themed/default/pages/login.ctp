@@ -1,4 +1,4 @@
-<script src="/plugins/AmazeUI/js/md5.js" type="text/javascript"></script>
+<script src="<?php echo $webroot;?>plugins/AmazeUI/js/md5.js" type="text/javascript"></script>
 <div class="am-login ">
 	<h2 style="color:#5eb95e;"><?php 
 		 if(!empty($configs['admin_detail'])){echo $configs['admin_detail'];}else{echo $configs['shop_name']."&nbsp;-&nbsp;".$ld['ecommerce_plaform'];}
@@ -54,7 +54,7 @@
 
           	
           	<input type="text" class="am-form-field" chkRules="authnum:验证码错误" maxlength="4" id="authnum" name="captcha_num" /><input type="hidden" value="" id="ck_login_authnum" /><span style="right:20px;"></span></div>
-          <div class="am-u-lg-5 am-u-md-5 am-u-sm-3 yanzhengmaimg"><img id="authnum_img" onclick="change_captcha()" align='absmiddle' src="/securimages/index/?1234" /><a style="color:#5eb95e" href="javascript:change_captcha();"><i class="am-icon-refresh"></i></a></div>
+          <div class="am-u-lg-5 am-u-md-5 am-u-sm-3 yanzhengmaimg"><img id="authnum_img" onclick="change_captcha()" align='absmiddle' src="<?php echo $admin_webroot;?>authnums/get_authnums/?1234" /><a style="color:#5eb95e" href="javascript:change_captcha();"><i class="am-icon-refresh"></i></a></div>
         </div>
 	    <div class="am-form-group" style="margin-bottom:0;display:none;">
 	    	<label class="am-u-lg-3 am-u-md-3 am-u-sm-4 am-form-label" style="padding-top:0px;">&nbsp;</label>
@@ -95,7 +95,9 @@
 .am-form-group .yanzhengmaimg{padding-top:10px;}
 </style>
 <script type="text/javascript">
+
 $(function(){
+	
 	<?php if(isset($count_login)&&$count_login>2){?>
 		get_captcha_number();
 	<?php } ?>
@@ -190,14 +192,14 @@ function show_login_captcha(){
 //点击，获取验证码
 function change_captcha(){
 	if(document.getElementById("authnum")){
-		document.getElementById("authnum_img").src = admin_webroot+"/authnums/get_authnums/?"+Math.random();
+		document.getElementById("authnum_img").src = admin_webroot+"authnums/get_authnums/?"+Math.random();
 		setTimeout("get_captcha_number();",2000);
 	}
 }
 
 //获取验证码值
 function get_captcha_number(){
-	$.ajax({ url:admin_webroot+"/authnums/get_authnumber/?"+Math.random(),
+	$.ajax({ url:admin_webroot+"authnums/get_authnumber/?"+Math.random(),
 			type:"POST",
 			dataType:"html",
 			data: {},
@@ -210,6 +212,13 @@ function get_captcha_number(){
 }
 
 function change_locale(obj){
-	window.location.href="<?php $admin_webroot;?>?backend_locale="+obj.value;
+	window.location.href=admin_webroot+"?backend_locale="+obj.value;
 }
+</script>
+<script type="text/javascript">
+$(function(){
+if($("#authnum_img").attr("src",admin_webroot+"securimages/index/?1234")){
+$("#authnum_img").trigger("click");
+}
+})
 </script>

@@ -1,3 +1,4 @@
+    
 <style type="text/css">
 	.am-checkbox {margin-top:0px; margin-bottom:0px;}
     
@@ -16,19 +17,39 @@
     transition: color 0.25s linear 0s;
 }
 </style>
+
+
 <div style="margin-top:10px;">
 					<?php echo $form->create('StaticPage',array('action'=>'/','name'=>'SPageForm','type'=>'get','class'=>'am-form-horizontal'));?>
 				 
-					<ul class="am-avg-lg-2 am-avg-md-2 am-avg-sm-1">
-						<li>
-							<label class="am-u-lg-1 am-u-md-2 am-u-sm-2 am-form-label-text "><?php echo $ld['title'];?></label> 
-								<div class="am-u-lg-6  am-u-md-6 am-u-sm-6"  >
+					<ul class=" am-avg-md-2 am-avg-lg-3 am-avg-sm-1">
+						<li  style="margin:0 0 10px 0">
+							<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label-text "><?php echo $ld['title'];?></label> 
+								<div class="am-u-lg-7  am-u-md-7 am-u-sm-7"  >
 								<input type="text" name="title" class="am-form-field am-radius"  value="<?php echo @$titles;?>" placeholder="<?php echo $ld['title']?>" />
 								</div>
-								<div class="am-u-lg-2 am-u-md-2 am-u-sm-2" >
+						</li>
+						<li style="margin:0 0 10px 0">  
+				<label class="am-u-lg-3  am-u-md-3 am-u-sm-3 am-form-label"><?php echo $ld['status'];?></label>
+				<div class="am-u-lg-7 am-u-md-7 am-u-sm-7  am-u-end">
+					<select name="status"  data-am-selected="{noSelectedText:'<?php echo $ld['all_data']; ?> '}">
+						<option value=""><?php echo $ld['all_data']?> </option>
+						<option value="1" <?php echo @$status=='1'?'selected':''; ?>><?php echo $ld['valid']?> </option>
+						<option value="0" <?php echo @$status=='0'?'selected':''; ?>><?php echo $ld['invalid']?> </option>
+					</select>
+				</div>
+			
+				
+			</li> 
+			<li style="margin:0 0 10px 0">
+								<div class="am-u-sm-3 am-hide-lg-only">&nbsp;</div>
+								<div class="am-u-lg-2 am-u-md-2 am-u-sm-6" style="padding-left:16px;" >
 									<button type="submit" class="am-btn am-btn-success am-radius am-btn-sm" value="<?php echo $ld['search']?>"  onclick="search_page()"><?php echo $ld['search'];?></button>
 								</div>
-						</li>
+			</li>
+	
+				
+        
     		</ul>
 	<?php echo $form->end();?><br/>
 	<div class="am-g am-other_action  am-text-right am-btn-group-xs" style="margin-bottom:10px;">
@@ -81,31 +102,28 @@
 				</div>
 				<div class="am-u-lg-1 am-u-md-1 am-u-sm-2">
 					<?php if( $v['Page']['status'] == 1){?>
-					&nbsp;<!--<?php echo $html->image('/admin/skins/default/img/yes.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "static_pages/toggle_on_status", '.$v["Page"]["id"].')'))?>-->
 						<span class="am-icon-check am-yes" style="cursor:pointer;" onclick="change_state(this,'static_pages/toggle_on_status',<?php echo $v['Page']['id'];?>)"></span>
 					<?php }else{ ?>&nbsp;
-						<!--<?php echo $html->image('no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "static_pages/toggle_on_status", '.$v["Page"]["id"].')')); ?>-->
 						<span class="am-icon-close am-no" style="cursor:pointer;" onclick="change_state(this,'static_pages/toggle_on_status',<?php echo $v['Page']['id'];?>)"></span>	
 					<?php }?>
 				</div>
 				<div class="am-u-lg-1 am-show-lg-only">
 					<span onclick="javascript:listTable.edit(this, 'static_pages/update_page_orderby/', <?php echo $v['Page']['id']?>)"><?php echo $v['Page']['orderby']?></span>
 				</div>
-				<!--<div class="am-u-lg-2 am-show-lg-only"><?php echo date('Y-m-d',strtotime($v['Page']['created'])) ?></div>-->
 				<div class="am-u-lg-3 am-u-md-4 am-u-sm-5 seolink am-btn-group-xs am-action">
 					<?php 
 					if(isset($v['Page']['url'])){
 						$url=$v['Page']['url']=="/"?"pages/".$v['Page']['id']:$v['Page']['url'];
-						 $preview_url=$svshow->seo_link_path(array('type'=>'SM','id'=>"/".$url,'name'=>$v['PageI18n']['title'],'sub_name'=>$ld['preview']));
+						 $preview_url=$svshow->seo_link_path(array('type'=>'SM','id'=>$url,'name'=>$v['PageI18n']['title'],'sub_name'=>$ld['preview']));
 					}else{
-					$preview_url=$svshow->seo_link_path(array('type'=>'SM','id'=>"/pages/".$v['Page']['id'],'name'=>$v['PageI18n']['title'],'sub_name'=>$ld['preview']));
+						$preview_url=$svshow->seo_link_path(array('type'=>'SM','id'=>"pages/".$v['Page']['id'],'name'=>$v['PageI18n']['title'],'sub_name'=>$ld['preview']));
 					}?>
 					
-					<a class="am-btn am-btn-default am-btn-xs  am-seevia-btn-view" target='_blank' href="<?php echo $preview_url; ?>">
+					<a class="am-btn am-btn-default am-btn-xs am-text-secondary am-seevia-btn-view" target='_blank' href="<?php echo $preview_url; ?>">
                         <span class="am-icon-eye"></span> <?php echo $ld['preview']; ?>
                     </a>
 				<?php 	if($svshow->operator_privilege("static_page_edit")){?>
-				 <a class="am-btn am-btn-default am-btn-xs  am-seevia-btn-edit" href="<?php echo $html->url('/static_pages/view/'.$v['Page']['id']); ?>">
+				 <a class="am-btn am-btn-default am-btn-xs am-text-secondary am-seevia-btn-edit" href="<?php echo $html->url('/static_pages/view/'.$v['Page']['id']); ?>">
                         <span class="am-icon-pencil-square-o"></span> <?php echo $ld['edit']; ?>
                       </a>
                      <?php ?>

@@ -254,26 +254,35 @@
 		<?php if(isset($view_type) && $view_type=="S" && isset($type) && $type!="D" || !isset($type) && $view_type=="S" || $view_type=="S" && isset($type) && $type=="D" && $view_type_id=="0"){?>
 		<div class="am-g">		
 		<div id="roles" class="am-panel-collapse am-collapse am-in">
-			<div class="am-panel-bd">	
-				<div class="am-form-group">
-					<label class="am-u-lg-2 am-u-md-2 am-u-sm-1 am-form-label" style="text-align:left;margin-left:10%;">
-						<?php echo $ld['operator_select_role']?>
-					</label>
+			<div class="am-panel-bd">
+			<div class="OperatorAction_list ">	
+				<div class="am-form-group" style="margin-left:10%;margin-bottom:15px;margin-top:15px;">
+				<label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-checkbox am-success " style="font-weight:bold;">
+						&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $ld['operator_select_role']?>
+				</label>
+				<div class="am-u-lg-10">
+					<ul class="am-avg-lg-5">
+				
 					<?php if(isset($operator_roles) && sizeof($operator_roles)>0){?>
 							<?php foreach($operator_roles as $ov){?>
-								<div class="am-u-lg-2 am-u-md-3 am-u-sm-2">
-								<label class="am-checkbox am-success am-u-lg-5">
-									<input type="checkbox" name="operator_role[]" data-am-ucheck value="<?php echo $ov['OperatorRole']['id']?>" onclick="getOperatorActionByRole()" <?php if(in_array($ov['OperatorRole']['id'],$this->data['Operator']['role_arr'])) echo 'checked';?>   />
-									&nbsp;&nbsp;&nbsp;<?php echo $ov['OperatorRole']['name']?>&nbsp;
+								<li>
+								<label class="am-u-lg-12 am-u-md-3 am-u-sm-3 am-checkbox am-success " style="font-weight:normal;">
+									<input type="checkbox"  name="operator_role[]" data-am-ucheck value="<?php echo $ov['OperatorRole']['id']?>" onclick="getOperatorActionByRole()" <?php if(in_array($ov['OperatorRole']['id'],$this->data['Operator']['role_arr'])) echo 'checked'; ?>   />
+									&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $ov['OperatorRole']['name']?>
 								</label>
-								</div>
+								</li>
 							<?php }?>
 					<?php }?>
-					<div class="am-u-lg-2 am-u-md-2 am-u-sm-2">	
-						<label class="am-from-label am-success">
-							<?php echo $html->link($ld['operator_roles'],"/roles",array('target'=>"_blank",'class'=>'taobtn '));?>
-						</label>
+					</ul>
 					</div>
+				</div>
+				<div class="am-form-group" style="margin-left:10%;margin-bottom:15px;margin-top:15px;">
+					<label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-checkbox am-success " style="font-weight:bold;">
+							&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $html->link($ld['operator_roles'],"/roles",array('target'=>"_blank",'class'=>'taobtn '));?>
+					</label>
+					<div class="am-u-lg-10">&nbsp;</div>
+				</div>
+				
 				</div>
 					<div  style="clear:both;"></div>		
 
@@ -568,7 +577,7 @@ function operator_change(){
 	if(operator_role_ids!=""){
 		operator_role_ids=operator_role_ids.substring(0,operator_role_ids.length-1);
 		$.ajax({ 
-			url: "/admin/roles/getOperatorActionByRole",
+			url: admin_webroot+"roles/getOperatorActionByRole",
 			type:"POST", 
 			data: {operator_role_ids:operator_role_ids},
 			dataType:"json",

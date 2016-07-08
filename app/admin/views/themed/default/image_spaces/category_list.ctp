@@ -26,7 +26,7 @@
                        <span onclick="javascript:listTable.edit(this, 'photo_categories/update_photo_categories_name/', <?php echo $v['PhotoCategory']['id']?>)"><?php echo $v["PhotoCategoryI18n"]["name"];?></span> </label></td>
                 <td><span onclick="javascript:listTable.edit(this, 'photo_categories/update_photo_categories_orderby/', <?php echo $v['PhotoCategory']['id']?>)"><?php echo $v["PhotoCategory"]["orderby"];?></span></td>
                 <td class="am-action"><?php echo $html->link($ld['view_category_image'],"/image_spaces/index/0/0/0/{$v['PhotoCategory']['id']}/",array("class"=>"am-btn am-btn-default  am-btn-xs am-radius"));?>
-                    <a class="am-btn am-btn-default am-btn-xs  am-seevia-btn-edit" href="<?php echo $html->url('/image_spaces/category_view/'.$v['PhotoCategory']['id']); ?>">
+                    <a class="am-btn am-btn-default am-btn-xs am-text-secondary am-seevia-btn-edit" href="<?php echo $html->url('/image_spaces/category_view/'.$v['PhotoCategory']['id']); ?>">
                         <span class="am-icon-pencil-square-o"></span> <?php echo $ld['edit']; ?>
                     </a>
                     <a class="am-btn am-btn-default am-btn-xs am-text-danger am-seevia-btn-delete" href="javascript:;" onclick="list_delete_submit(admin_webroot+'image_spaces/category_remove/<?php echo$v['PhotoCategory']['id']; ?>')">

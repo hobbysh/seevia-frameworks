@@ -273,8 +273,7 @@ class JavascriptHelper extends AppHelper
                     $url .= '.js';
                 }
             }
-            $url = $this->assetTimestamp($this->webroot($url));
-            $url = Configure::read('themes_host').$url;
+            $url = $this->assetTimestamp($this->webroot(Configure::read('themes_host').$url));
             if (Configure::read('Asset.filter.js')) {
                 $pos = strpos($url, JS_URL);
                 if ($pos !== false) {

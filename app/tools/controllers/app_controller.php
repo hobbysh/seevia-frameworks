@@ -7,7 +7,7 @@
  * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和使用；
  * 不允许对程序代码以任何形式任何目的的再发布。
  * $开发: 上海实玮$
- * $Id: app_controller.php 1372 2016-01-14 05:24:38Z zhaoyincheng $
+ * $Id: app_controller.php 1610 2016-03-23 10:02:46Z zhaoyincheng $
 *****************************************************************************/
 
 class AppController extends Controller {
@@ -24,6 +24,14 @@ class AppController extends Controller {
 		$host = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
 		$this->server_host = "http://".$host;
 		$this->set('server_host',$this->server_host);
+		$this->webroot = isset($_SERVER['PHP_SELF'])?dirname($_SERVER['PHP_SELF']).'/':'/';
+        $this->webroot = str_replace('cn','',$this->webroot);
+        $this->webroot = str_replace('en','',$this->webroot);
+        $this->webroot = str_replace('jpn','',$this->webroot);
+        $this->webroot = str_replace('///','/',$this->webroot);
+        $this->webroot = str_replace('//','/',$this->webroot);
+        $this->set('webroot', $this->webroot);
+        $this->set('web_base', $this->base);
 		if (!defined('IN_ECS')){
 			define('IN_ECS', true);
 		}

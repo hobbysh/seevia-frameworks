@@ -23,7 +23,7 @@
 			<td>
 				<label class="am-checkbox am-success">
 					<input type="checkbox" name="checkbox[]" value="<?php echo $k?>" checked  checked data-am-ucheck /> 
-					<?php if(isset($discount[$k])&&$discount[$k]=="discount"){echo "<img src='/img/unfound.png'/>";} ?>
+					<?php if(isset($discount[$k])&&$discount[$k]=="discount"){ echo $html->image('/admin/skins/default/img/unfound.png');} ?>
 				</label>
 			</td>
 					

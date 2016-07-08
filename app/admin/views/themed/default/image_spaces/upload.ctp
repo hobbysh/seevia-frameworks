@@ -2,9 +2,9 @@
 $timestamp = time();//时间标示
 echo $javascript->link('/skins/default/js/image_space');
 if((isset($configs['image-watermake-upload'])&&$configs['image-watermake-upload']==0)||(!isset($configs['image-watermake-upload']))){ ?>
-<script src="/plugins/uploadify/jquery.uploadify.js" type="text/javascript"></script>
+<script src="<?php echo $webroot; ?>plugins/uploadify/jquery.uploadify.js" type="text/javascript"></script>
 <?php }else if(isset($configs['image-watermake-upload'])&&$configs['image-watermake-upload']==1){ ?>
-<script src="/plugins/ajaxfileupload.js" type="text/javascript"></script>
+<script src="<?php echo $webroot; ?>plugins/ajaxfileupload.js" type="text/javascript"></script>
 <?php }?>
 <style type="text/css">
 	a{color:#444;}
@@ -70,7 +70,7 @@ label{font-weight:normal;}
                     <tr id='size' name='size' style='display:none'><th><?php echo $ld['middle_picture']?></th><td><p class="c_txt"><?php echo $ld['width']?></p><input class='c_size' type='text' id='mid_img_width'  value='<?php echo $mid_img_width;?>' onchange="swf_upload_addr()"/><p class="c_txt"> X <?php echo $ld['height']?></p><input class='c_size' type='text' id='mid_img_height' value='<?php echo $mid_img_height;?>' onchange="swf_upload_addr()"/><p class="c_txt"><?php echo $ld['pixel']?></p><td></tr>
                     <tr id='size' name='size' style='display:none'><th><?php echo $ld['small_picture']?></th><td><p class="c_txt"><?php echo $ld['width']?></p><input class='c_size' type='text' id='small_img_width'  value='<?php echo $small_img_width;?>' onchange="swf_upload_addr()"/><p class="c_txt"> X <?php echo $ld['height']?></p><input class='c_size' type='text' id='small_img_height' value='<?php echo $small_img_height;?>' onchange="swf_upload_addr()"/><p class="c_txt"><?php echo $ld['pixel']?></p><td></tr>
                     <?php if(isset($configs['enabled_watermark']) && $configs['enabled_watermark'] == 1){?>
-                        <tr><th><?php echo $ld['add_watermark']?></th><td><select data-am-selected id="watermark1" onchange="swf_upload_addr()"><option value="0"><?php echo $ld['no_add']?></option><option value="1"><?php echo $ld['image_watermark']?></option><option value="2"><?php echo $ld['text_watermark']?></option></select> <a class="am-btn am-btn-default am-btn-sm" target="_blank" href="/admin/configvalues#configvalue_image"><?php echo $ld['set_up']?></a></td></tr>
+                        <tr><th><?php echo $ld['add_watermark']?></th><td><select data-am-selected id="watermark1" onchange="swf_upload_addr()"><option value="0"><?php echo $ld['no_add']?></option><option value="1"><?php echo $ld['image_watermark']?></option><option value="2"><?php echo $ld['text_watermark']?></option></select> <a class="am-btn am-btn-default am-btn-sm" target="_blank" href="<?php echo $admin_webroot; ?>configvalues#configvalue_image"><?php echo $ld['set_up']?></a></td></tr>
                     <?php }?>
                     <tr><th ><?php echo $ld['upload_picture']?></th>
                         <td>
@@ -110,29 +110,57 @@ label{font-weight:normal;}
     </style>
 </div>
 -->
-
+<!-- 快速添加分类 -->
 <div class="am-modal am-modal-no-btn" tabindex="-1" name="photocat" id="photocat">
 	<div class="am-modal-dialog">
-        <div class="am-modal-hd"><?php echo $ld['add_category']?>
+        <div class="am-modal-hd" style="border-bottom:1px solid #ddd"><?php echo $ld['add_category']?>
             <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
         </div>
         <div class="am-modal-bd">
-    		<form id='catform1' method="POST">
-            <table class="am-table" style="text-align:left;">
+    		<form id='catform1' class="am-form" method="POST">
+
                 <?php if(isset($backend_locales) && sizeof($backend_locales)>0){foreach ($backend_locales as $k => $v){?>
                 <input name="data[PhotoCategoryI18n][<?php echo $k;?>][locale]" type="hidden" value="<?php echo $v['Language']['locale'];?>">
 	            <?php }}?>
-	            <tr><th rowspan="<?php echo count($backend_locales)+1;?>"><?php echo $ld['picture_category_name']?></th></tr>
-	            <?php if(isset($backend_locales)&&sizeof($backend_locales)>0){foreach ($backend_locales as $k => $v){?>
-	                <tr><td><input id="name_<?php echo $v['Language']['locale'];?>" name="data[PhotoCategoryI18n][<?php echo $k;?>][name]" type="text" value=""><?php if(sizeof($backend_locales)>1){?><span class="lang"><?php echo $ld[$v['Language']['locale']]?></span><?php }?><em>*</em></td></tr>
-	            <?php }}?>
-	            <tr><th><?php echo $ld['sort']?></th><td><input type="text" name="data[PhotoCategory][orderby]" value="<?php echo isset($photo_categories_info['PhotoCategory'])?$photo_categories_info['PhotoCategory']['orderby']:'';?>" /></td></tr>
-            </table>
+	            <div class="am-g">
+                    <div class="am-u-lg-4 am-u-md-5 am-u-sm-5 div_lineheight am-margin-top-xs am-text-right"><?php echo $ld['picture_category_name']?>:</div>
+                    <div class="am-u-lg-8 am-u-md-7 am-u-sm-7">
+                             <?php if(isset($backend_locales)&&sizeof($backend_locales)>0){foreach ($backend_locales as $k => $v){?>
+                        <div class="am-u-sm-12 am-margin-top-xs">
+                             <div class="am-u-sm-9">
+                                <input id="name_<?php echo $v['Language']['locale'];?>" name="data[PhotoCategoryI18n][<?php echo $k;?>][name]" type="text" value=""><?php if(sizeof($backend_locales)>1){?>
+                              </div>  
+                              <div class="am-u-sm-1" style="line-height:37px;">
+                                <span class="lang"><?php echo $ld[$v['Language']['locale']]?></span><?php }?>
+                               </div>
+                               <div class="am-u-sm-1">
+                                <em class="color_red">*</em>
+                               </div>
+                        </div>
+                                <?php }}?>
+                        </div>
+                    </div>
+	           
+	            <div class="am-g am-margin-top-xs am-margin-bottom-sm">
+                    <div class="am-u-lg-4 am-u-md-5 am-u-sm-5 div_lineheight am-text-right"><?php echo $ld['sort']?>:</div>
+
+                    <div class="am-u-lg-8 am-u-md-7 am-u-sm-7">
+                        <div class="am-u-sm-12">
+                        <div class="am-u-sm-9">
+                        <input type="text" name="data[PhotoCategory][orderby]" value="<?php echo isset($photo_categories_info['PhotoCategory'])?$photo_categories_info['PhotoCategory']['orderby']:'';?>" />
+                        </div>
+                        </div>
+                    </div>
+
+                </div>
+
             <input type="button" class="am-btn am-btn-success am-radius am-btn-sm" name="changeDomainRankButton" value="<?php echo $ld['confirm']?>" onclick="javascript:doinsertphotocat();">
             </form>
 		</div>
     </div>
 </div>
+
+
 <script type="text/javascript">
 var img_addr = "/"+document.getElementById("photos_cat_id").value+"/"+document.getElementById("session_id").value;//图片保存路径
 var image_watermake_upload=document.getElementById("image-watermake-upload").value;//图片上传方式
@@ -175,7 +203,7 @@ $(function(){
                     'formData'     : formData,
                     'auto'     : true,//自动上传
                     'removeTimeout' : 1,//文件队列上传完成1秒后删除
-                    'swf'      : '/plugins/uploadify/uploadify.swf',
+                    'swf'      : webroot+'plugins/uploadify/uploadify.swf',
                     'uploader' : admin_webroot+"photo_category_gallery/photo/",
                     'method'   : 'post',//方法，服务端可以用$_POST数组获取数据
                     'buttonText' : '选择图片',//设置按钮文本
@@ -348,7 +376,7 @@ function custom_size(check){
 function get_size(cat_id){
     $.ajax({
         type: 'POST',
-        url: "/admin/image_spaces/get_cat_size/",
+        url: admin_webroot+"image_spaces/get_cat_size/",
         data: {"cat_id":cat_id},
         dataType:"json",
         success: function(data){
@@ -356,7 +384,7 @@ function get_size(cat_id){
                 $('#small_img_height').val(data.content.small_img_height);
                 $('#small_img_width').val(data.content.small_img_width);
                 $('#mid_img_height').val(data.content.mid_img_height);
-                $('#small_img_width').val(data.content.small_img_width);
+                $('#mid_img_width').val(data.content.mid_img_height);
                 $('#big_img_height').val(data.content.big_img_height);
                 $('#big_img_width').val(data.content.big_img_width);
             }catch (e){

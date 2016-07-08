@@ -33,7 +33,7 @@ class installsController extends AppController{
 	    if ($dir_checking['result'] === 'ERROR'
 	            || !empty($template_checking)
 	            || !empty($rename_priv)
-	            || !function_exists('mysql_connect'))
+	            || !function_exists('mysqli_connect'))
 	    {
 	        $disabled = 'disabled="true"';
 	    }
@@ -161,7 +161,7 @@ class installsController extends AppController{
 		if(constant("Product")=="AllInOne"){
 			$sql_files[] = WWW_ROOT . '/data/tools/o2o-allinone.sql';
 	    }
-           $sql_files[] = WWW_ROOT . '/data/tools/o2o_dictionaries.sql';
+        $sql_files[] = WWW_ROOT . '/data/tools/o2o_dictionaries.sql';
 	    $db_host    = isset($_POST['db_host'])      ?   trim($_POST['db_host']) : '';
 	    $db_user    = isset($_POST['db_user'])      ?   trim($_POST['db_user']) : '';
 	    $db_pass    = isset($_POST['db_pass'])      ?   trim($_POST['db_pass']) : '';

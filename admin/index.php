@@ -38,7 +38,7 @@
 	}
 
 	if (!defined('WWW_ROOT')) {
-		define('WWW_ROOT', dirname(dirname(__FILE__))."/");
+		define('WWW_ROOT', dirname(dirname(__FILE__)).DS);
 	}
 
 	if (!defined('CORE_PATH')) {
@@ -46,11 +46,14 @@
 			define('CORE_PATH', CAKE_CORE_INCLUDE_PATH  . DS );
 	}
 	
-	$path = dirname(ROOT). DS ."data". DS .'/database.php';
+	$path = dirname(ROOT). DS ."data". DS .'database.php';
 	if(!file_exists($path)){
 		$host = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
-        $host = "http://".$host;
-		header("Location:".$host."/tools/installs");
+        	$webroot = dirname(dirname(isset($_SERVER['PHP_SELF'])?$_SERVER['PHP_SELF']:'/'));
+        	$webroot = str_replace('\\','/',$webroot);
+	 	$webroot = str_replace('//','/',$webroot);
+        	$host = 'http://'.$host;
+        	header('Location:'.$host.$webroot.'/tools/installs');
 		exit();
 	}
 	

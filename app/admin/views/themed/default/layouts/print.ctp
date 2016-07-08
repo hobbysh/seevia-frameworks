@@ -4,15 +4,15 @@
 <meta http-equiv="X-UA-Compatible" content="chrome=1;IE=7" />
 <?php echo $html->charset(); ?>
 <title><?php echo $title_for_layout; ?></title>
-<script type="text/javascript" src="/admin/js/selectlang/<?php echo $backend_locale;?>"></script>
-<link href="/plugins/AmazeUI/css/amazeui.min.css" type="text/css" rel="stylesheet">
-<link href="/plugins/AmazeUI/css/app.css" type="text/css" rel="stylesheet">
-<link href="/plugins/AmazeUI/css/admin.css" type="text/css" rel="stylesheet">
-<script src="/plugins/AmazeUI/js/jquery.min.js" type="text/javascript"></script>
-<script src="/plugins/AmazeUI/js/amazeui.js" type="text/javascript"></script>
-<script src="/plugins/AmazeUI/js/utils.js" type="text/javascript"></script>
-<script src="/plugins/AmazeUI/js/listtable.js" type="text/javascript"></script>
-<script src="/plugins/AmazeUI/js/common.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo $admin_webroot;?>js/selectlang/<?php echo $backend_locale;?>"></script>
+<link href="<?php echo $webroot;?>plugins/AmazeUI/css/amazeui.min.css" type="text/css" rel="stylesheet">
+<link href="<?php echo $webroot;?>plugins/AmazeUI/css/app.css" type="text/css" rel="stylesheet">
+<link href="<?php echo $webroot;?>plugins/AmazeUI/css/admin.css" type="text/css" rel="stylesheet">
+<script src="<?php echo $webroot;?>plugins/AmazeUI/js/jquery.min.js" type="text/javascript"></script>
+<script src="<?php echo $webroot;?>plugins/AmazeUI/js/amazeui.js" type="text/javascript"></script>
+<script src="<?php echo $webroot;?>plugins/AmazeUI/js/utils.js" type="text/javascript"></script>
+<script src="<?php echo $webroot;?>plugins/AmazeUI/js/listtable.js" type="text/javascript"></script>
+<script src="<?php echo $webroot;?>plugins/AmazeUI/js/common.js" type="text/javascript"></script>
 <style>
 #SearchForm{display:none;}
 #tablelist{display:block;}

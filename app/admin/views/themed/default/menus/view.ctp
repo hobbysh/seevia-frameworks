@@ -15,7 +15,6 @@
 <style type="text/css">
 .am-radio, .am-checkbox{display:inline;}
 .am-form-horizontal .am-form-label, .am-form-horizontal .am-radio, .am-form-horizontal .am-checkbox, .am-form-horizontal .am-radio-inline, .am-form-horizontal .am-checkbox-inline {padding-top:0px;}
-.am-menus-align{top:18px;}
 </style>
 <div class="am-g">
 	<div class="am-u-lg-2 am-u-md-3 am-u-sm-4">
@@ -34,8 +33,8 @@
 		      <div class="am-panel-bd am-form-detail am-form am-form-horizontal">
 		        <input type="hidden" name="data[OperatorMenu][id]" value="<?php echo isset($this->data['OperatorMenu']['id'])?$this->data['OperatorMenu']['id']:'0'; ?>"/>
 		        	<div class="am-form-group">
-			          <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label a" style="top:15px;"><?php echo $ld['previous_menu'] ?></label>
-			          <div class="am-u-lg-6 am-u-md-7 am-u-sm-8">
+			          <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:15px"><?php echo $ld['previous_menu'] ?></label>
+			          <div class="am-u-lg-6 am-u-md-7 am-u-sm-9">
 			            <select name="data[OperatorMenu][parent_id]" data-am-selected>
 							<option value="0"><?php echo $ld['top_menu'] ?></option>
 							<?php if(isset($parentmenu) && sizeof($parentmenu)>0){?>
@@ -46,10 +45,10 @@
 			        </div>
 			        
 			        <div class="am-form-group">
-                        <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label am-menus-align"><?php echo $ld['menu_name']; ?></label>
-                        <div class="am-u-lg-6 am-u-md-7 am-u-sm-8">
+                        <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:17px;"><?php echo $ld['menu_name']; ?></label>
+                        <div class="am-u-lg-6 am-u-md-7 am-u-sm-9">
 			        	<?php if(isset($backend_locales)&&sizeof($backend_locales)>0){foreach ($backend_locales as $k => $v){?>
-				          <div style="margin-bottom:5px;">
+				          <div class="am-u-lg-12 am-u-md-12 am-u-sm-12 am-padding-left-0 am-padding-right-0" style="margin-bottom:5px;">
 				            <input type="text" id="menu_name_<?php echo $v['Language']['locale']?>" maxlength="60" name="data[OperatorMenuI18n][<?php echo $v['Language']['locale'];?>][name]" value="<?php echo isset($this->data['OperatorMenuI18n'][$v['Language']['locale']])?$this->data['OperatorMenuI18n'][$v['Language']['locale']]['name']:'';?>" />
 						  </div>
 					  	<?php }} ?>
@@ -57,50 +56,50 @@
 			        </div>
 					
 			        
-			        <div class="am-form-group">
-			          <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label am-menus-align"><?php echo $ld['code'] ?></label>
-			          <div class="am-u-lg-6 am-u-md-7 am-u-sm-8">
-			           <div> <input type="text" name="data[OperatorMenu][operator_action_code]" value="<?php echo isset($this->data['OperatorMenu']['operator_action_code'])?$this->data['OperatorMenu']['operator_action_code']:''; ?>"/>
-					  </div></div>
+			        <div class="am-form-group" style="margin-bottom:10px" >
+			          <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:8px;" ><?php echo $ld['code'] ?></label>
+			          <div class="am-u-lg-6 am-u-md-7 am-u-sm-9">
+			            <input type="text" name="data[OperatorMenu][operator_action_code]" value="<?php echo isset($this->data['OperatorMenu']['operator_action_code'])?$this->data['OperatorMenu']['operator_action_code']:''; ?>"/>
+					  </div>
 			        </div>
 			        	
-			        <div class="am-form-group">
-			          <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label am-menus-align"><?php echo $ld['type'] ?></label>
-			          <div class="am-u-lg-6 am-u-md-7 am-u-sm-8">
-			            <div><input type="text" name="data[OperatorMenu][type]" value="<?php echo isset($this->data['OperatorMenu']['type'])?$this->data['OperatorMenu']['type']:''; ?>"/>
-					  </div></div>
+			        <div class="am-form-group" style="margin-bottom:10px">
+			          <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:8px;"><?php echo $ld['type'] ?></label>
+			          <div class="am-u-lg-6 am-u-md-7 am-u-sm-9">
+			            <input type="text" name="data[OperatorMenu][type]" value="<?php echo isset($this->data['OperatorMenu']['type'])?$this->data['OperatorMenu']['type']:''; ?>"/>
+					  </div>
 			        </div>
 					
-					<div class="am-form-group">
-			          <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label am-menus-align"><?php echo $ld['link_address'] ?></label>
-			          <div class="am-u-lg-6 am-u-md-7 am-u-sm-8">
-			           <div> <input type="text" name="data[OperatorMenu][link]" value="<?php echo isset($this->data['OperatorMenu']['link'])?$this->data['OperatorMenu']['link']:''; ?>"/>
-					  </div></div>
+					<div class="am-form-group" style="margin-bottom:10px">
+			          <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:8px;"><?php echo $ld['link_address'] ?></label>
+			          <div class="am-u-lg-6 am-u-md-7 am-u-sm-9">
+			            <input type="text" name="data[OperatorMenu][link]" value="<?php echo isset($this->data['OperatorMenu']['link'])?$this->data['OperatorMenu']['link']:''; ?>"/>
+					  </div>
 			        </div>
 			        
-			        <div class="am-form-group">
-			          <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label am-menus-align"><?php echo $ld['versions'] ?></label>
-			          <div class="am-u-lg-6 am-u-md-7 am-u-sm-8">
-			            <div><input type="text" name="data[OperatorMenu][section]" value="<?php echo isset($this->data['OperatorMenu']['section'])?$this->data['OperatorMenu']['section']:''; ?>"/>
-					  </div></div>
+			        <div class="am-form-group" style="margin-bottom:10px">
+			          <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:8px;"><?php echo $ld['versions'] ?></label>
+			          <div class="am-u-lg-6 am-u-md-7 am-u-sm-9">
+			            <input type="text" name="data[OperatorMenu][section]" value="<?php echo isset($this->data['OperatorMenu']['section'])?$this->data['OperatorMenu']['section']:''; ?>"/>
+					  </div>
 			        </div>
 			        
-			        <div class="am-form-group">
-			          <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:3px;"><?php echo $ld['status'] ?></label>
-			          <div class="am-u-lg-6 am-u-md-7 am-u-sm-8">
+			        <div class="am-form-group" style="margin-bottom:10px">
+			          <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:8px;"><?php echo $ld['status'] ?></label>
+			          <div class="am-u-lg-6 am-u-md-7 am-u-sm-9">
 			            <label class="am-radio am-success"><input type="radio" name="data[OperatorMenu][status]" data-am-ucheck <?php if(isset($this->data['OperatorMenu']['status'])&&$this->data['OperatorMenu']['status'] == 1){?>checked="checked"<?php }?> value="1"/><?php echo $ld['yes']?></label>
 						<label class="am-radio am-success"><input type="radio" name="data[OperatorMenu][status]" data-am-ucheck <?php if((isset($this->data['OperatorMenu']['status'])&&$this->data['OperatorMenu']['status'] == 0)||!isset($this->data['OperatorMenu']['status'])){?>checked="checked"<?php }?> value="0"/><?php echo $ld['no']?></label>
 					  </div>
 			        </div>
 			        
-			        <div class="am-form-group">
-			          <div><label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label am-menus-align"><?php echo $ld['orderby'] ?></label>
+			        <div class="am-form-group" style="margin-bottom:10px">
+			          <label class="am-u-lg-2 am-u-md-3 am-u-sm-3 am-form-label" style="top:8px;"><?php echo $ld['orderby'] ?></label>
 			          <div class="am-u-lg-1 am-u-md-2 am-u-sm-3">
-			            <div><input type="text" name="data[OperatorMenu][orderby]" value="<?php echo isset($this->data['OperatorMenu']['orderby'])?$this->data['OperatorMenu']['orderby']:'50'; ?>"/>
-					  </div></div>
+			            <input type="text" name="data[OperatorMenu][orderby]" value="<?php echo isset($this->data['OperatorMenu']['orderby'])?$this->data['OperatorMenu']['orderby']:'50'; ?>"/>
+					  </div>
 			        </div>
 		      </div>
-		      <div class="btnouter" style="margin-top:5px;">
+		      <div class="btnouter">
 					<button type="submit" class="am-btn am-btn-success am-radius am-btn-sm am-btn-bottom"><?php echo $ld['d_submit'] ?></button><button type="reset" class="am-btn am-btn-default am-radius am-btn-sm am-btn-bottom"><?php echo $ld['d_reset'] ?></button>
 			  </div>
 		    </div>

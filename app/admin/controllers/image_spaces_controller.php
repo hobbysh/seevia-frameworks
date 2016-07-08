@@ -123,6 +123,7 @@ class ImageSpacesController extends AppController
         $this->set('search_key_word', $search_key_word);
         $photo_category_data = $this->PhotoCategory->tree($this->locale);
         $this->set('photo_category_data', $photo_category_data);
+        //$photo_category_infos=$this->PhotoCategory->find('all',array('order'=>''));
         $this->set('title_for_layout', $this->ld['image_space'].' - '.$this->ld['page'].' '.$page.' - '.$this->configs['shop_name']);
     }
 
@@ -927,18 +928,27 @@ class ImageSpacesController extends AppController
 
     public function get_cat_size()
     {
+    	 Configure::write('debug', 0);
+        $this->layout = 'ajax';
         $id = $_POST['cat_id'];
         $this->PhotoCategory->set_locale($this->locale);
         $photo_category = $this->PhotoCategory->find('first', array('conditions' => array('PhotoCategory.id' => $id), 'order' => 'orderby'));
-        $result['content']['small_img_height'] = $photo_category['PhotoCategory']['cat_small_img_height'];
-        $result['content']['small_img_width'] = $photo_category['PhotoCategory']['cat_small_img_width'];
-        $result['content']['mid_img_height'] = $photo_category['PhotoCategory']['cat_mid_img_height'];
-        $result['content']['mid_img_width'] = $photo_category['PhotoCategory']['cat_mid_img_width'];
-        $result['content']['big_img_height'] = $photo_category['PhotoCategory']['cat_big_img_height'];
-        $result['content']['big_img_width'] = $photo_category['PhotoCategory']['cat_big_img_width'];
+        if(isset($photo_category['PhotoCategory'])){
+        	$result['content']['small_img_height'] = $photo_category['PhotoCategory']['cat_small_img_height'];
+        	$result['content']['small_img_width'] = $photo_category['PhotoCategory']['cat_small_img_width'];
+        	$result['content']['mid_img_height'] = $photo_category['PhotoCategory']['cat_mid_img_height'];
+        	$result['content']['mid_img_width'] = $photo_category['PhotoCategory']['cat_mid_img_width'];
+        	$result['content']['big_img_height'] = $photo_category['PhotoCategory']['cat_big_img_height'];
+        	$result['content']['big_img_width'] = $photo_category['PhotoCategory']['cat_big_img_width'];
+        }else{
+        	$result['content']['small_img_height'] = $this->configs['small_img_height'];
+        	$result['content']['small_img_width'] = $this->configs['small_img_width'];
+        	$result['content']['mid_img_height'] = $this->configs['mid_img_height'];
+        	$result['content']['mid_img_width'] = $this->configs['mid_img_width'];
+        	$result['content']['big_img_height'] = $this->configs['big_img_height'];
+        	$result['content']['big_img_width'] = $this->configs['big_img_width'];
+        }
         $result['flag'] = 1;
-        Configure::write('debug', 0);
-        $this->layout = 'ajax';
         die(json_encode($result));
     }
 }

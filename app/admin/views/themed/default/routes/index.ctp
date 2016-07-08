@@ -4,9 +4,9 @@
 	
          <ul class="am-avg-sm-1 am-avg-md-2 am-avg-lg-3" style="margin:10px 0 0 0">
 		                 <li  style="margin:0 0 10px 0">
-			                  <label class="am-u-lg-2 am-u-md-2  am-u-sm-3  am-form-label" style="top:0px" ><?php echo $ld['keyword'];?></label>
+			                  <label class="am-u-lg-2 am-u-md-2  am-u-sm-3  am-form-label" style="margin-top:8px;"><?php echo $ld['keyword'];?></label>
 				            <div class="am-u-lg-8 am-u-md-8  am-u-sm-7 ">
-				            <input style=" height:33px;padding:.5em" placeholder="<?php echo $ld['controller']?>/<?php echo $ld['method']?>/<?php echo $ld['url']?>" type="text" name="route_keywords" id="route_keywords" value="<?php echo @$route_keywords;?>" onkeypress="sv_search_action_onkeypress(this,event)" />
+				            <input style=" height:33px;" placeholder="<?php echo $ld['controller']?>/<?php echo $ld['method']?>/<?php echo $ld['url']?>" type="text" name="route_keywords" id="route_keywords" value="<?php echo @$route_keywords;?>" onkeypress="sv_search_action_onkeypress(this,event)" />
 				           </div>
 			                       <div class="am-u-lg-1  am-u-md-1 am-u-sm-3 am-hide-sm-only">    
 	                               <input type="submit"  class="am-btn am-btn-success am-radius am-btn-sm  " value="<?php echo $ld['search'];?>" onclick="formsubmit()" />
@@ -74,7 +74,7 @@
                     </a>
                    <?php } ?>
                     <?php if($svshow->operator_privilege("routes_edit")){?>
-                         <a class="am-btn am-btn-default  am-btn-xs  am-seevia-btn-edit" href="<?php echo $html->url('/routes/view/'.$v['Route']['id']); ?>">
+                         <a class="am-btn am-btn-default  am-btn-xs am-text-secondary am-seevia-btn-edit" href="<?php echo $html->url('/routes/view/'.$v['Route']['id']); ?>">
                         <span class="am-icon-pencil-square-o"></span> <?php echo $ld['edit']; ?>
                     </a>
                    <?php  }

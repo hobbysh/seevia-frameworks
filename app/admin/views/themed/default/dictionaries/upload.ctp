@@ -30,7 +30,7 @@
 				    			<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label"><?php echo $ld['csv_file_bulk_upload']?></label>
 				    			<div class="am-u-lg-6 am-u-md-6 am-u-sm-6">
 				    				<div class="am-u-lg-9 am-u-md-9 am-u-sm-9"  style="margin-bottom:10px;">
-										<p style="margin:10px 0px;"><input name="file" id="file" size="40" type="file" style="height:22px;;" onchange="checkFile()"/></p>
+										<p style="margin:10px 0px;"><input name="file" id="file" size="40" type="file" style="height:22px;" onchange="checkFile()"/></p>
 										<p style="padding:6px 0px;"><?php echo $ld['articles_upload_file_encod']?></p>
 				    				</div>
 				    			</div>

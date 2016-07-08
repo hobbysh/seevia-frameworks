@@ -147,7 +147,7 @@
     
     .am-img-responsive {
     display: inline-block;
-    max-height: 100px;
+    max-height: 150px;
     max-width: 100%;
 }
 </style>
@@ -165,7 +165,7 @@
 </div>
 <div class="am-panel-group admin-content am-u-lg-9 am-u-md-9 am-u-sm-9 am-detail-view" id="accordion"  >
     <div class="am-panel am-panel-default">
-        <div class="am-panel-collapse am-collapse am-in " style="min-height:550px;">
+        <div class="am-panel-collapse am-collapse am-in ">
         	
             <div class="am-u-md-12 am-btn-group-xs am-text-right ">
              <?php if($svshow->operator_privilege("image_spaces_upload")){echo $html->link($ld['upload_picture'],"/image_spaces/upload/",array("class"=>"am-btn am-btn-warning am-btn-sm "),'',false,false);}?>&nbsp;&nbsp;
@@ -211,24 +211,26 @@
                 <?php if(empty($photo_category_gallery_list)){ ?>
                     <div class="infotips"><?php echo $html->link($ld['no_picture']." ".$ld['click_upload_now'],"/image_spaces/upload/".$photo_category_id,false,false);?></div></div>
                 <?php }else{?>
-                 
+                    <?php //pr($photo_category_data) ?>
                       <ul class="am-avg-lg-4"><?php foreach($photo_category_gallery_list as $k=>$v){      ?>
-                      
+                        
                         <li style="margin-top:20px;"> 
                           <?php if(isset($v['PhotoCategoryGallery']['img_small'])) $a= explode("http://",$v['PhotoCategoryGallery']['img_small']); ?>
                             
-                                <a class="div_img" href="/admin/image_spaces/view/<?php echo $v['PhotoCategoryGallery']['id'];?>" target="_blank">	<div style="max-height:200px;"><img  class="am-img-responsive" src="<?php if(isset($a)&&count($a)==1){ echo $v['PhotoCategoryGallery']['img_small'];}else{echo $v['PhotoCategoryGallery']['img_small'];}?>" id="img<?php echo $v['PhotoCategoryGallery']['id'];?>" /></div>
+                                <a class="div_img" title=""  href="<?php echo $admin_webroot; ?>image_spaces/view/<?php echo $v['PhotoCategoryGallery']['id'];?>" target="_blank">	<div style="max-height:200px;"><?php echo $html->image((isset($a)&&count($a)==1?$v['PhotoCategoryGallery']['img_small']:$v['PhotoCategoryGallery']['img_small']),array('class'=>'am-img-responsive','id'=>"img".$v['PhotoCategoryGallery']['id'])); ?></div>
                               </a>
-                              
-                            <div class="am-g"><label class="am-checkbox am-success"><input type="checkbox" name="checkboxes[]" data-am-ucheck value="<?php echo $v['PhotoCategoryGallery']['id'];?>" class="input_checkbox" /></label><div style="width:88%;text-overflow:ellipsis; white-space:nowrap; overflow:hidden;float: right;"  onclick="javascript:listTable.edit(this, 'image_spaces/update_photo_name/', <?php echo $v['PhotoCategoryGallery']['id']?>)"><?php echo $v['PhotoCategoryGallery']['name'];?></div></div>
-						<a class="mt  am-btn am-btn-default am-btn-xs am-seevia-btn" href="javascript:;" data-am-modal="{target: '#tip-copy1', closeViaDimmer: 0, width: 400, height: 225}" onclick="photo_copy(event,'<?php echo $server_host.$v['PhotoCategoryGallery']['img_original'];?>')"><?php echo $ld['copy']?>
+                            <div class="am-g">
+                                <?php if (isset($photo_category_data)&&sizeof($photo_category_data)>0) { foreach($photo_category_data as $kk=>$vv){?>
+                                <div style="margin-left:33px;" ><?php if($vv["PhotoCategory"]["id"]==$v["PhotoCategoryGallery"]['photo_category_id']) {$strs=$vv["PhotoCategoryI18n"]["name"]; }else{$strs= '未分类';} 	echo   $html->link($strs,"/image_spaces/category_change/".$v['PhotoCategoryGallery']['id'],array("style"=>"color:gray")).'&nbsp;';?></div>
+                                <?php }} ?>
+                                <label class="am-checkbox am-success"><input type="checkbox" name="checkboxes[]" data-am-ucheck value="<?php echo $v['PhotoCategoryGallery']['id'];?>" class="input_checkbox" /></label><div style="width:88%;text-overflow:ellipsis; white-space:nowrap; overflow:hidden;float: right;"  onclick="javascript:listTable.edit(this, 'image_spaces/update_photo_name/', <?php echo $v['PhotoCategoryGallery']['id']?>)"><?php echo $v['PhotoCategoryGallery']['name'];?></div></div>
+					<div align="center">	<a class="mt  am-btn am-btn-default am-btn-xs am-seevia-btn" href="javascript:;" data-am-modal="{target: '#tip-copy1', closeViaDimmer: 0, width: 400, height: 225}" onclick="photo_copy(event,'<?php echo $server_host.$v['PhotoCategoryGallery']['img_original'];?>')"><?php echo $ld['copy']?>
 						</a>
                                  <?php
 						echo   $html->link($ld['replace'],"/image_spaces/replace_img/".$v['PhotoCategoryGallery']['id'],array("class"=>"mt am-seevia-btn am-btn am-btn-default am-btn-xs"),false,false).'&nbsp;';
-						echo   $html->link($ld['transfer_category'],"/image_spaces/category_change/".$v['PhotoCategoryGallery']['id'],array("class"=>"mt am-seevia-btn am-btn am-btn-default am-btn-xs"),false,false).'&nbsp;';
 						if($svshow->operator_privilege("image_spaces_remove")){
 						echo $html->link($ld['delete'],"javascript:;",array("class"=>"mt am-seevia-btn am-btn am-btn-default am-btn-xs  ","onclick"=>"if(confirm('{$ld['confirm_delete']}')){remove_shop_image('{$admin_webroot}image_spaces/remove/{$v['PhotoCategoryGallery']['id']}');}")).'&nbsp;'; };?>
-                   
+                   			</div>
                             </li>
                            	   <?php } ?>
                            	    </ul>

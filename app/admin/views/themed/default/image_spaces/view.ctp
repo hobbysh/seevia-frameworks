@@ -106,8 +106,8 @@
  
 			<h2 onclick="javascript:listTable.edit(this, 'image_spaces/update_photo_name/', <?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['id']?>)"><?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['name'];?></h2>
 			<div class="am-text-center">
-				<img   style="max-width:100%;" src="<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_detail'];?>" />
-		      </div><?php  //pr( $phpoto_category_gallery_info);?>
+				<?php echo $html->image($phpoto_category_gallery_info['PhotoCategoryGallery']['img_detail'],array('style'=>'max-width:100%;')); ?>
+		      </div>
  </div>
 	
 <div class="am-u-lg-3 am-u-md-3 am-u-lg-3 " style="margin-top:10px;padding-left:5px;">
@@ -132,13 +132,13 @@
 		<li><label><span><?php echo $ld['pictures_category']?></span><?php echo $cat?></label></li>
 		<li><h2><?php echo $ld['image_size']?></h2></li>
 		<li><label><span><?php echo $ld['original_image'];?></span></label>
-		<a href="javascript:;" onclick="photo_copy1(event,'<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_original'];?>')"><?php echo $ld['copy_link'];?></a><a href="<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_original'];?>" target="_blank"><?php echo $ld['view'];?></a></li>
+		<a href="javascript:;" data-am-modal="{target: '#tip-copy1', closeViaDimmer: 0, width: 400, height: 225}" onclick="photo_copy(event,'<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_original'];?>')"><?php echo $ld['copy_link'];?></a><a href="<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_original'];?>" target="_blank"><?php echo $ld['view'];?></a></li>
 		<li><label><span><?php echo $ld['big_image'];?></span></label>
-		<a href="javascript:;" onclick="photo_copy1(event,'<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_big'];?>')"><?php echo $ld['copy_link'];?></a><a href="<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_big'];?>" target="_blank"><?php echo $ld['view']?></a></li>
+		<a href="javascript:;" data-am-modal="{target: '#tip-copy1', closeViaDimmer: 0, width: 400, height: 225}" onclick="photo_copy(event,'<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_big'];?>')"><?php echo $ld['copy_link'];?></a><a href="<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_big'];?>" target="_blank"><?php echo $ld['view']?></a></li>
 		<li><label><span><?php echo $ld['middle_image'];?></span></label>
-		<a href="javascript:;" onclick="photo_copy1(event,'<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_detail'];?>')"><?php echo $ld['copy_link'];?></a><a href="<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_detail'];?>" target="_blank"><?php echo $ld['view']?></a></li>
+		<a href="javascript:;" data-am-modal="{target: '#tip-copy1', closeViaDimmer: 0, width: 400, height: 225}" onclick="photo_copy(event,'<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_detail'];?>')"><?php echo $ld['copy_link'];?></a><a href="<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_detail'];?>" target="_blank"><?php echo $ld['view']?></a></li>
 		<li><label><span><?php echo $ld['thumb_image'];?></span></label>
-		<a href="javascript:;" onclick="photo_copy1(event,'<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_small'];?>')"><?php echo $ld['copy_link'];?></a><a href="<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_small'];?>" target="_blank"><?php echo $ld['view']?></a></li>
+		<a href="javascript:;" data-am-modal="{target: '#tip-copy1', closeViaDimmer: 0, width: 400, height: 225}" onclick="photo_copy(event,'<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_small'];?>')"><?php echo $ld['copy_link'];?></a><a href="<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_small'];?>" target="_blank"><?php echo $ld['view']?></a></li>
 		</ul>
 </div>
 			
@@ -147,17 +147,19 @@
 	 <div>
 			<h2 onclick="javascript:listTable.edit(this, 'image_spaces/update_photo_name/', <?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['id']?>)"><?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['name'];?></h2>
 			<div style="width:100%;" class="am-text-center">
-				<img   style="max-width:100%;" src="<?php echo $phpoto_category_gallery_info['PhotoCategoryGallery']['img_original'];?>" />
+				<?php echo $html->image($phpoto_category_gallery_info['PhotoCategoryGallery']['img_original'],array('style'=>'max-width:100%;')); ?>
 		      </div>
 	 </div>
 </div>
-<!--
-<div id="tip-copy1" class="tip-copy-show tip-height-h0">
-	<div class="tip-main">
-		<div class="tip-title">
-			<p><?php echo $ld['do_not_copy']?></p>
-		</div>
-		<input type="text" id="tip-copy1-text" style="width:330px;"><a title="<?php echo $ld['close_the_window']?>" class="close" onclick="var div=document.getElementById(&quot;tip-copy1&quot;);div.className+=&quot; hidden&quot;;" href="javascript:void(0);">×</a>
-	</div>
+
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="tip-copy1">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">
+            <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd">
+            <input type="text" id="tip-copy1-text">
+            <p><?php echo $ld['do_not_copy']?></p>
+        </div>
+    </div>
 </div>
--->

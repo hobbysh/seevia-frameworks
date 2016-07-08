@@ -90,7 +90,7 @@ class SVshowHelper extends HTMLHelper
     public function image_path($path)
     {
         if (empty($path)) {
-            $path = '/themed/default/img/default.jpg';
+            $path = '/theme/default/img/default.jpg';
         }
         if (strpos($path, '://') === false) {
             if ($path[0] !== '/') {
@@ -137,28 +137,28 @@ class SVshowHelper extends HTMLHelper
             }
             switch ($options['type']) {
                 case 'T': //商品详细页
-                    $path = '/topics/'.$options['id'].'';
+                    $path = 'topics/'.$options['id'].'';
                     break;
                 case 'P': //商品详细页
-                    $path = '/products/'.$options['id'].'';
+                    $path = 'products/'.$options['id'].'';
                     break;
                 case 'PC': //商品分类页
-                    $path = '/categories/'.$options['id'].'';
+                    $path = 'categories/'.$options['id'].'';
                     break;
                 case 'A': //文章详细页
-                    $path = '/articles/'.$options['id'].'';
+                    $path = 'articles/'.$options['id'].'';
                     break;
                 case 'V'://视频页
-                    $path = '/articles/video/'.$options['id'].'';
+                    $path = 'articles/video/'.$options['id'].'';
                     break;
                 case 'AC': //文章分类页
-                    $path = '/articles/category/'.$options['id'].'';
+                    $path = 'articles/category/'.$options['id'].'';
                     break;
                 case 'TP': //文章分类页
-                    $path = '/topics/'.$options['id'].'';
+                    $path = 'topics/'.$options['id'].'';
                     break;
                 case 'BV': //品牌页
-                    $path = '/brands/'.$options['id'].'';
+                    $path = 'brands/'.$options['id'].'';
                     break;
                 case 'SM': //前台
                     $path = $options['id'].'';
@@ -168,8 +168,8 @@ class SVshowHelper extends HTMLHelper
             }
         }
         $server_host = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
-
-        return 'http://'.$server_host.$path;
+        $webroot=$this->webroot;
+        return 'http://'.$server_host.$webroot.$path;
     }
     //seo 取链接地址
     public function seo_link_url($options = array())
@@ -178,32 +178,32 @@ class SVshowHelper extends HTMLHelper
         if (!empty($options['type'])) {
             switch ($options['type']) {
                     case 'P': //商品详细页
-                        $path = '/products/'.$options['id'].'';
+                        $path = 'products/'.$options['id'].'';
                         break;
                     case 'PC': //商品分类页
-                        $path = '/categories/'.$options['id'].'';
+                        $path = 'categories/'.$options['id'].'';
                         break;
                     case 'A': //文章详细页
-                        $path = '/articles/'.$options['id'].'';
+                        $path = 'articles/'.$options['id'].'';
                         break;
                     case 'V': //视频页
-                        $path = '/articles/video/'.$options['id'].'';
+                        $path = 'articles/video/'.$options['id'].'';
                         break;
                     case 'AC': //文章分类页
-                        $path = '/articles/category/'.$options['id'].'';
+                        $path = 'articles/category/'.$options['id'].'';
                         break;
                     case 'TP': //文章分类页
-                        $path = '/topics/'.$options['id'].'';
+                        $path = 'topics/'.$options['id'].'';
                         break;
                     case 'BV': //品牌页
-                        $path = '/brands/'.$options['id'].'';
+                        $path = 'brands/'.$options['id'].'';
                         break;
                     default :
                         $path = '';
                 }
         }
-
-        return $this->url($path);
+	$webroot=$this->webroot;
+        return $this->url($webroot.$path);
     }
     //seo 取链接
     public function seo_link($options = array())

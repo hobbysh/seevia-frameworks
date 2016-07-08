@@ -1,5 +1,5 @@
 <?php
-    include dirname(ROOT).DS.'data/database.php';
+    include dirname(ROOT).DS.'data'.DS.'database.php';
 
     class DATABASE_CONFIG
     {

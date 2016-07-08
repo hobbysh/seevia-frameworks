@@ -1,4 +1,4 @@
-<style>
+<style type="text/css">
 	.action-span {margin-top: -25px;}
 </style>
 <?php echo $html->css('/skins/default/css/warehouse');?>
@@ -53,7 +53,7 @@
 				<?php if($v['PageAction']['status']==1){?>
 					<?php echo $html->image('/admin/skins/default/img/yes.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_page_status", '.$v["PageAction"]["id"].')')) ?>
 					<?php }elseif($v['PageAction']['status'] == 0){?>
-					<?php echo $html->image('no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_page_status", '.$v["PageAction"]["id"].')'))?>
+					<?php echo $html->image('/admin/skins/default/img/no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_page_status", '.$v["PageAction"]["id"].')'))?>
 					<?php }?>
 				</td>
 				<td>

@@ -35,14 +35,15 @@
     }
 
     if (!defined('WWW_ROOT')) {
-        define('WWW_ROOT', dirname(__FILE__).'/');
+        define('WWW_ROOT', dirname(__FILE__).DS);
     }
 
-    $path = dirname(ROOT).DS.'data'.DS.'/database.php';
+    $path = dirname(ROOT).DS.'data'.DS.'database.php';
     if (!file_exists($path)) {
         $host = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
+        $webroot = isset($_SERVER['PHP_SELF'])?dirname($_SERVER['PHP_SELF']):'/';
         $host = 'http://'.$host;
-        header('Location:'.$host.'/tools/installs');
+        header('Location:'.$host.$webroot.'/tools/installs');
         exit();
     }
 

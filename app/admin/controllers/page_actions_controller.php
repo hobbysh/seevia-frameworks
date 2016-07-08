@@ -446,7 +446,6 @@ class PageActionsController extends AppController
         $this->PageModule->delete($id);
         $result['flag'] = 1;
         $result['message'] = $this->ld['delete_the_ad_list_success'];
-
         $pageactionInfo = $this->PageAction->find('first', array('conditions' => array('id' => $type_id)));
         $this->redirect('/page_actions/page_action_view/'.$type_id.'?type_id='.$pageactionInfo['PageAction']['page_type_id']);
     }

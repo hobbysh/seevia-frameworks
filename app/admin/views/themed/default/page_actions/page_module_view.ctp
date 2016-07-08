@@ -1,4 +1,10 @@
-<style>
+<?php
+	echo $html->css('/skins/default/css/docs');
+	echo $html->css('/skins/default/css/codemirror');
+	echo $javascript->link('/skins/default/js/codemirror');
+	echo $javascript->link('/skins/default/js/css');
+?>
+<style type="text/css">
     .am-radio, .am-checkbox{display:inline;}
     em{color:red;}
     .am-checkbox {margin-top:0px; margin-bottom:0px;}
@@ -6,7 +12,6 @@
     .am-form-horizontal .am-radio{padding-top:0;position:relative;top:5px;}
     .am-radio input[type="radio"], .am-radio-inline input[type="radio"], .am-checkbox input[type="checkbox"], .am-checkbox-inline input[type="checkbox"]{margin-left:0px;}
 </style>
-<?php echo $javascript->link('/skins/default/js/calendar/language/'.$backend_locale);?>
 <?php echo $form->create('PageAction',array('action'=>'page_module_view','onsubmit'=>'return modules_check();'));?>
 <div class="am-u-lg-3 am-u-md-3 am-u-sm-3" >
     <ul class="am-list admin-sidebar-list" data-am-scrollspy-nav="{offsetTop: 45}" style="position: fixed; z-index: 100; width: 15%;max-width:200px;">

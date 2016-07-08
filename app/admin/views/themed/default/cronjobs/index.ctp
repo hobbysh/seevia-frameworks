@@ -8,12 +8,12 @@
 	<div class="listsearch">
 		<?php echo $form->create('Cronjob',array('action'=>'/','name'=>"SearchForm",'id'=>"SearchForm","type"=>"get",'onsubmit'=>'return formsubmit();',"class"=>"am-form am-form-horizontal"));?>
 		<input type="hidden" name="export_act_flag" id="export_act_flag" value=""/>
-			<ul class="am-avg-lg-4 am-avg-md-3 am-avg-sm-1">
+			<ul class="am-avg-lg-3 am-avg-md-2 am-avg-sm-1">
 				<li style="margin-bottom:10px;">
-					<label class="am-u-lg-3 am-u-md-4 am-u-sm-3 am-form-label"></label>
+					<label class="am-u-lg-3 am-u-md-4 am-u-sm-3 am-form-label"> </label>
 					<div class="am-u-lg-8 am-u-md-7 am-u-sm-7">
 						<select class="all" name="cronjob_app" id="cronjob_app" data-am-selected="{noSelectedText:''}">
-							<option value="<?php echo $ld['select_app_code']?>"><?php echo $ld['select_app_code']?></option>
+							<option value=""><?php echo $ld['select_app_code']?></option>
 							<?php if(isset($appcode_tree) && sizeof($appcode_tree)>0){?><?php foreach($appcode_tree as $k=>$v){?>
 					  		<option value="<?php echo $v['Application']['code']?>" <?php if($cronjob_app == $v['Application']['code'] && $cronjob_app!=""){?>selected<?php }?>><?php echo $v['Application']['code']?></option>
 							<?php }}?>
@@ -21,16 +21,20 @@
 					</div>
 				</li>
 						
-				<li>
-					<label class="am-u-lg-3 am-u-md-4 am-u-sm-3 am-form-label" style="top:0px;"><?php echo $ld['keyword'];?></label>
-					<div class="am-u-lg-7 am-u-md-7 am-u-sm-7">
+				<li style="margin-bottom:10px">
+					<label class="am-u-lg-3 am-u-md-4 am-u-sm-3 am-form-label am-margin-left-0"><?php echo $ld['keyword'];?></label>
+					<div class="am-u-lg-8 am-u-md-7 am-u-sm-7" style="padding-left:16px;'">
 						<input type="text" class="am-form-field am-radius" name="cronjob_keywords" id="cronjob_keywords" value="<?php echo $cronjob_keywords?>"  placeholder="<?php echo $ld['task_name']?>"/>
 					</div>
-					<div class="am-u-lg-1 am-u-md-1 am-u-sm-4">
+					
+				</li>
+				<li>
+					<label class=" am-u-md-4 am-u-sm-3 am-form-label am-margin-left-0 am-hide-lg-only">&nbsp;</label>
+					<div class="am-u-lg-8 am-u-md-7 am-u-sm-7">
 					<button type="button" class="am-btn am-btn-success am-radius am-btn-sm" value="<?php echo $ld['search']?>"  onclick="formsubmit()">
 						<?php echo $ld['search'];?>
 					</button>
-					</div>
+				</div>
 				</li>
 			</ul>
 			<div class="action-span add am-text-right" style="margin:0px 0px 10px 0px;">
@@ -87,10 +91,10 @@
 						<?php }?>
 					</div>
 					<div class="am-u-lg-3 am-u-md-2 am-u-sm-3">
-						<?php echo 	$html->link($ld['run'],"javascript:;",array("onclick"=>"addexec('{$v['Cronjob']['task_name']}','{$shop_name}')","class"=>"am-btn am-radius am-btn-success am-btn-sm ")).'&nbsp'; ?>
+						<?php echo 	$html->link($ld['run'],"javascript:;",array("onclick"=>"addexec('{$v['Cronjob']['task_name']}','{$shop_name}')","class"=>"am-btn am-radius am-btn-default  am-btn-sm ")).'&nbsp'; ?>
 						<?php
-							if($svshow->operator_privilege("cronjob_edit")){echo $html->link($ld['edit'],"/cronjobs/view/{$v['Cronjob']['id']}",array("class"=>"am-btn am-radius am-btn-success am-btn-sm ")).'&nbsp;';}
-							if($svshow->operator_privilege("cronjob_remove")){echo $html->link($ld['delete'],"javascript:;",array("class"=>"am-btn am-radius am-btn-danger am-btn-sm ","onclick"=>"list_delete_submit('{$admin_webroot}cronjobs/remove/{$v['Cronjob']['id']}');"));}?> 
+							if($svshow->operator_privilege("cronjob_edit")){echo $html->link($ld['edit'],"/cronjobs/view/{$v['Cronjob']['id']}",array("class"=>"am-btn am-radius am-btn-default  am-btn-sm ")).'&nbsp;';}
+							if($svshow->operator_privilege("cronjob_remove")){echo $html->link($ld['delete'],"javascript:;",array("class"=>"am-btn am-radius am-btn-default am-text-danger am-btn-sm ","onclick"=>"list_delete_submit('{$admin_webroot}cronjobs/remove/{$v['Cronjob']['id']}');"));}?> 
 					</div>
 					<div style="clear:both;"></div>
 				</div>

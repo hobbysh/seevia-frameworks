@@ -4,9 +4,10 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="chrome=1;IE=7" />
 <?php echo $html->charset(); ?>
-<title><?php echo $title_for_layout; ?></title>
+<title>实玮网络开源展示版</title>
 </head>
 <body>
+	<script type="text/javascript">var web_base="<?php echo $web_base; ?>";</script>
 	<?php echo $content_for_layout;?>
 </body>
 </html>

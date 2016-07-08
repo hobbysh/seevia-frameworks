@@ -11,7 +11,7 @@ label{font-weight:normal}
 	<ul class="am-avg-lg-3 am-avg-md-2 am-avg-sm-1 am-thumbnails">
 	
 		<li style="margin-top:10px;">
-			<label class="am-u-lg-3 am-u-md-3 am-u-sm-3  am-form-label  "><?php echo $ld['operation_time']?></label>
+			<label class="am-u-lg-3 am-u-md-3 am-u-sm-3  am-form-label  " style="margin-top:4px"><?php echo $ld['operation_time']?></label>
 			<div class="am-u-lg-4 am-u-md-4 am-u-sm-4">
 				<input type="text" name="date1"  class="am-form-field"  data-am-datepicker="{theme:'success',locale:'<?php echo $backend_locale; ?>'}"  value="<?php echo @$date1;?>" placeholder="start" readonly>
 			</div>
@@ -21,7 +21,7 @@ label{font-weight:normal}
 		</li>
 				
 		<li style="margin-top:10px;">
-		<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label  "><?php echo $ld['operator']?></label>
+		<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label" style="margin-top:2px;"><?php echo $ld['operator']?></label>
 		<div class="am-u-lg-8 am-u-md-8 am-u-sm-8">
 			<select name="operator_id" data-am-selected="{placeholder:'',maxHeight: 300}">
 				<option value="0"><?php echo $ld['please_select']?></option>
@@ -34,7 +34,7 @@ label{font-weight:normal}
 		</li>
 				
 		<li style="margin-top:10px;">
-		<label class="am-u-lg-3 am-u-md-3 am-u-sm-3  am-form-label  "><?php echo $ld['keyword']?></label>
+		<label class="am-u-lg-3 am-u-md-3 am-u-sm-3  am-form-label" style="margin-top:4px"><?php echo $ld['keyword']?></label>
 		<div class="am-u-lg-8 am-u-md-8 am-u-sm-8">
 			<input type="text" class="am-form-field am-radius" name="keywords" id="keywords" value="<?php echo @$keywords?>" placeholder="<?php echo $ld['ip_address']?>/<?php echo $ld['operation_records']?>" />
 		</div>

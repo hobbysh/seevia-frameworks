@@ -5,7 +5,7 @@
     .am-form-horizontal .am-radio{padding-top:0;position:relative;top:5px;}
     .am-radio input[type="radio"], .am-radio-inline input[type="radio"], .am-checkbox input[type="checkbox"], .am-checkbox-inline input[type="checkbox"]{margin-left:0px;}
 </style>
-<script src="/plugins/kindeditor/kindeditor-min.js" type="text/javascript"></script>
+<script src="<?php echo $webroot; ?>plugins/kindeditor/kindeditor-min.js" type="text/javascript"></script>
 <?php echo $form->create('mailtemplates',array('action'=>'view/'.(isset($this->data['MailTemplate'])?$this->data['MailTemplate']['id']:''),'onsubmit'=>'return mail_input_checks()'));?> <input name="data[MailTemplate][id]" type="hidden" value="<?php echo isset($this->data['MailTemplate']['id'])?$this->data['MailTemplate']['id']:'';?>">
 <?php if(isset($backend_locales) && sizeof($backend_locales)>0){foreach ($backend_locales as $k => $v){?>
     <input name="data[MailTemplateI18n][<?php echo $k;?>][locale]" type="hidden" value="<?php echo $v['Language']['locale'];?>">
@@ -13,8 +13,6 @@
 <div class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-detail-menu" style="margin:10px 0 0 0">
     <ul class="am-list admin-sidebar-list" data-am-scrollspy-nav="{offsetTop: 45}" style="position: fixed; z-index: 100; width: 15%;max-width:200px;">
         <li><a href="#basic_info"><?php echo $ld['basic_information']?></a></li>
-        <li><a href="#plain_text"><?php echo $ld['plain_text_message_content']?></a></li>
-        <li><a href="#html_email"><?php echo $ld['html_email_content']?></a></li>
     </ul>
 </div>
 	<div class="am-panel-group admin-content am-u-lg-9 am-u-md-9 am-u-sm-9 am-detail-view" id="accordion"  >
@@ -87,10 +85,22 @@
                             </tr>
                         <?php }?>
                         <?php }}?>	
+                        	
+			<!--短信内容-->
+			<tr>
+				<th rowspan="<?php echo count($backend_locales)+1;?>"><?php echo $ld['sms_content']?></th>
+			</tr>	
+			<?php if(isset($backend_locales)&&sizeof($backend_locales)>0){foreach ($backend_locales as $k => $v){?>
+                            <tr>
+                              <td>
+                                    <textarea cols="40" id="elm1<?php echo $v['Language']['locale'];?>" name="data[MailTemplateI18n][<?php echo $k;?>][sms_body]" rows="10"><?php echo isset($this->data['MailTemplateI18n'][$v['Language']['locale']]['sms_body'])?$this->data['MailTemplateI18n'][$v['Language']['locale']]['sms_body']:"";?></textarea>
+                                </td>
+                            </tr>
+                        <?php }}?>
+			<!--短信内容-->
 			                </table>
-	 
-                 
                  <!---/编辑器--->
+                 
                   <div class="btnouter">
 				                    <input type="submit" class="am-btn am-btn-success am-radius am-btn-sm" value="<?php echo $ld['d_submit']?>" /> <input class="am-btn am-btn-success  am-radius am-btn-sm" type="reset" value="<?php echo $ld['d_reset']?>" />
 				                </div>

@@ -329,12 +329,12 @@ label{font-weight:normal;}
 											<span id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;">
 												<em><?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?></em>
 											</span>
-											<p>
-												<?php if(isset($sub_group_info['ConfigI18n'][$v['Language']['locale']]['value'])){?>
-													<?php if (!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['value'])){?>
-														<img src="<?php echo 'http://'.$_SERVER['HTTP_HOST'].'/favicon.ico'?>" width="20" height="20" />
-												<?php }}?>
-											</p>
+							<p>
+							<?php if(isset($sub_group_info['ConfigI18n'][$v['Language']['locale']]['value'])){ ?>
+							<?php if (!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['value'])){
+							echo $html->image('favicon.ico',array('width'=>'20','height'=>'20'));
+							 }}?>
+							</p>
 					    				</div>
 					    				<?php if(sizeof($backend_locales)>1){?>
 					    					<label class="am-u-lg-1 am-u-md-1 am-u-sm-1 am-form-label am-text-left">	

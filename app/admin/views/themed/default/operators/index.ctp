@@ -1,14 +1,14 @@
 <style type="text/css">
 .am-radio, .am-checkbox {margin-top:0px; margin-bottom:0px;}
 .am-panel-title div{font-weight:bold;}
-
+.am-dropdown-toggle{background:#fff;border:1px solid #ccc;}
 </style>
 <div class="listsearch" style="margin-top:10px;" ><?php echo $form->create('Operators',array('action'=>'/','name'=>"SearchForm","type"=>"get"));?>
 <p style="margin-left:17px;">
 <?php if($svshow->operator_privilege('dealer_list')){?>
 				<?php if($_SESSION['type']=="S"){?>
 				 
-				<select data-am-selected="{ btnSize: 'sm'}" name="type" id="type" onchange="on_hide()">
+				<select data-am-selected="{ btnSize: 'sm', btnStyle: '#CCCCCC'}" name="type" id="type" onchange="on_hide()">
 					  <option value="all_export_csv"><?php echo $ld['all_data']; ?></option>
 					<option value="S" id="check1" <?php if(isset($type)&&$type=="S"){echo "selected";}?>>
 						<?php echo $ld['system']?>
@@ -47,6 +47,11 @@
 </div>
 <div class="am-g am-other_action ">
 	<div class="am-fr am-u-lg-12 am-btn-group-xs" style="text-align:right;margin-bottom:10px;margin-right:15px;">
+	<?php if(  isset($profile_id) && !empty($profile_id)   ) {  ?>
+		<a  class="am-btn am-btn-default am-btn-sm"   href="<?php echo $html->url("/operators/operator_upload/") ?>"  >
+			<?php  echo $ld['bulk_upload'] ?>
+		</a>
+	<?php } ?>
 		<a class="am-btn am-btn-sm am-btn-default" href="<?php echo $html->url('/operator_logs'); ?>">
 			<?php echo $ld['log_operation'] ?>
 		</a>
@@ -112,7 +117,7 @@ echo $v['Operator']['id']?>" /></div>
 					{
 						if($svshow->operator_privilege("operators_edit")){ ?>
 						
-						 <a class="am-icon-pencil-square-o am-btn am-btn-default am-btn-xs  am-seevia-btn-edit" href="<?php echo $html->url('/operators/view/'.$v['Operator']['id']); ?>"> <?php echo $ld['edit']; ?>
+						 <a class="am-icon-pencil-square-o am-btn am-btn-default am-btn-xs am-text-secondary am-seevia-btn-edit" href="<?php echo $html->url('/operators/view/'.$v['Operator']['id']); ?>"> <?php echo $ld['edit']; ?>
 						</a>
 						 
 					<?php 	}
@@ -128,7 +133,7 @@ echo $v['Operator']['id']?>" /></div>
 					if($_SESSION['id']==$v['Operator']['id']){
 					if($svshow->operator_privilege("operators_edit"))
 						{?>
-				 <a class="am-icon-pencil-square-o am-btn am-btn-default am-btn-xs  am-seevia-btn-edit" href="<?php echo $html->url('/operators/view/'.$v['Operator']['id']); ?>"> <?php echo $ld['edit']; ?>
+				 <a class="am-icon-pencil-square-o am-btn am-btn-default am-btn-xs am-text-secondary am-seevia-btn-edit" href="<?php echo $html->url('/operators/view/'.$v['Operator']['id']); ?>"> <?php echo $ld['edit']; ?>
                     </a>
                     			<?php	}
 					} ?> 
@@ -145,13 +150,36 @@ echo $v['Operator']['id']?>" /></div>
 	<?php if($svshow->operator_privilege("operators_remove")){?>
 	<?php if(isset($operator_data) && sizeof($operator_data)){?>
 	<div id="btnouterlist" class="btnouterlist">
-		<div class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-hide-sm-down" style="left:6px;">
-			<label class="am-checkbox am-success" style="display: inline;">
-				<input onclick='listTable.selectAll(this,"checkboxes[]")' type="checkbox"
-value="checkbox" data-am-ucheck><span><?php echo $ld['select_all']?></span></label>&nbsp;&nbsp;
-			<button type="button" class="am-btn am-btn-danger am-btn-sm am-radius" value="" onclick="batch_operations()" ><?php echo $ld['batch_delete']?></button>
+		<div class="am-u-lg-6 am-u-md-6 am-u-sm-6 am-hide-sm-down" style="left:6px;">
+			<div class="am-fl">
+		          <label class="am-checkbox am-success" style="display: inline;">
+		            <input onclick='listTable.selectAll(this,"checkboxes[]")' type="checkbox"
+					value="checkbox" data-am-ucheck><span><?php echo $ld['select_all']?></span>
+		          </label>
+            	</div>
+			<div class="am-fl" style="margin-left:3px;">
+		            <select name="barch_opration_select" id="barch_opration_select" data-am-selected  onchange="barch_opration_select_onchange(this)">
+		              <option value="0"><?php echo $ld['batch_operate']?></option>
+		              <option value="delete"><?php echo $ld['batch_delete']?></option>
+				<?php if(  isset($profile_id) && !empty($profile_id)   ) {  ?>
+		    		  <option value="export_csv"><?php echo $ld['batch_export']?></option>
+		    		 <?php } ?>
+		            </select>
+            	</div> 
+			<div class="am-fl" style="display:none;margin-left:3px;">
+                    <select id="export_csv" data-am-selected name="barch_opration_select_onchange" >
+                        <option value=""><?php echo $ld['click_select']?></option>
+                        <option value="all_export_csv"><?php echo  $ld['all_export']?></option>
+                        <option value="choice_export"><?php echo $ld['choice_export']?></option>
+                       
+                    </select>&nbsp;
+              	</div>
+			<div class="am-fl" style="margin-left:3px;">
+               	   <button type="button" class="am-btn am-radius am-btn-danger am-btn-sm" onclick="select_batch_operations()"><?php echo $ld['submit']?></button>
+              	</div>
 		</div>
-		<div class="am-u-lg-9 am-u-md-9 am-u-sm-9">
+		
+		<div class="am-u-lg-6 am-u-md-6 am-u-sm-6">
 			<?php echo $this->element('pagers')?>
 		</div>
         <div class="am-cf"></div>
@@ -160,6 +188,28 @@ value="checkbox" data-am-ucheck><span><?php echo $ld['select_all']?></span></lab
 	<?php }?>
 
 <script type="text/javascript">
+function select_batch_operations(){
+	var barch_opration_select = document.getElementById("barch_opration_select");
+      var export_csv = document.getElementById("export_csv");
+      if(barch_opration_select.value==0){
+      	  	alert(j_select_operation_type);
+			return;
+      }
+      if(barch_opration_select.value=='delete'){
+		batch_operations();
+	}
+	if(barch_opration_select.value=='export_csv'){
+		if(export_csv.value=='all_export_csv'){
+			window.location.href=admin_webroot+"/operators/all_export_csv";
+		
+		}
+		if(export_csv.value=='choice_export'){
+			choice_upload();
+		}
+	}
+}
+
+//批量删除
 function batch_operations(){
 	var bratch_operat_check = document.getElementsByName("checkboxes[]");
 	var postData = "";
@@ -184,6 +234,47 @@ function batch_operations(){
 		});
 	}
 }	
+
+//选择导出
+function choice_upload(){
+	var bratch_operat_check = document.getElementsByName("checkboxes[]");
+	var postData = "";
+	for(var i=0;i<bratch_operat_check.length;i++){
+		if(bratch_operat_check[i].checked){
+			postData+="&checkboxes[]="+bratch_operat_check[i].value;
+		}
+	}
+	if( postData=="" ){
+		alert("<?php echo $ld['please_select'] ?>");
+		return;
+	}else{
+	window.location.href=admin_webroot+"operators/choice_export/"+postData;
+	
+	}
+}	
+
+//触发子下拉
+function barch_opration_select_onchange(obj){
+	if(obj.value!="export_csv"){
+		$("#export_csv").parent().hide();		
+	}
+	$("select[name='barch_opration_select_onchange[]']").parent().hide();
+	
+	var export_csv=document.getElementById("export_csv").value;
+	
+	if(obj.value=="export_csv"){
+		if(export_csv=="all_export_csv"||export_csv=="category_export"){
+			$("#export_csv").parent().show();
+		}else{
+			$("#export_csv").parent().show();
+		}
+	}
+
+}
+
+
+
+
 	
 function on_hide(){
   //document.getElementById("dealer_id_select").style.display = (document.getElementById("type").options[1].selected ==true) ? "inline-block" : "none";

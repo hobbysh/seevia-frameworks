@@ -10,7 +10,7 @@ function doinsertphotocat(){
 	}
 	$.ajax({
 	  type: 'POST',
-	  url: "/admin/image_spaces/doinsertphotocat/",
+	  url: admin_webroot+"image_spaces/doinsertphotocat/",
 	  data: $('#catform1').serialize(),
 	  dataType:"json",
   	  success: function(data){
@@ -74,6 +74,8 @@ function confirm_remove_img(obj,thisid){
 }
 
 function photo_copy(ev,src){
+	src=webroot+src;
+	src=src.replace("//", "/");
 	if(navigator.userAgent.search("MSIE") != -1){
 		window.clipboardData.setData("Text",src);
 		alert(j_replicate_successfully);

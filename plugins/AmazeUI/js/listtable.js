@@ -24,6 +24,8 @@ listTable.edit = function(obj,func,id){
 	obj.appendChild(txt);
 	txt.focus();
 
+
+
 	/* 编辑区输入事件处理函数 */
 	txt.onkeypress = function(e){
 	    var evt = Utils.fixEvent(e);
@@ -36,13 +38,20 @@ listTable.edit = function(obj,func,id){
 	    	obj.parentNode.innerHTML = org;
 	    }
 	 }
-
 	/* 编辑区失去焦点的处理函数 */
-	txt.onblur = function(e){
+	txt.onblur = function(e){	
+		var max=Utils.trim(txt.value).replace(/([\u0391-\uFFE5])/ig,'11');
 		if(Utils.trim(txt.value)==Utils.trim(val))
 		{
 			obj.innerHTML = org;
 			return;
+		}else if(max.length>60){
+			alert("商品名称过长，最长60字符");		
+			return;
+		}else if(max.length==0){
+			alert("名称不得为空");
+			obj.innerHTML = org;
+			return false;
 		}
 		$.ajax({
 	        type: "POST",

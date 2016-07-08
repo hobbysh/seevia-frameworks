@@ -35,7 +35,7 @@
 	}
 
 	if (!defined('WWW_ROOT')) {
-		define('WWW_ROOT', dirname(dirname(__FILE__))."/");
+		define('WWW_ROOT', dirname(dirname(__FILE__)).DS);
 	}
 
 

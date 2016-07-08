@@ -5,33 +5,43 @@ label{font-weight:normal;}
 .am-radio, .am-checkbox{display: inline-block;}
 .am-checkbox input[type="checkbox"], .am-checkbox-inline input[type="checkbox"] {padding-left:0;}
 .am-panel-group{margin-bottom: 1rem;}
-.img_select{max-width:150px;max-height:120px;}
-
+.img_select{clear:both;max-width:150px;max-height:120px;padding:5px;}
+.config_help{clear:both;color:red;float:left;width:100%;}
+.config_help em{font-style:normal;}
+.am-form-group > div > div.config_help{margin-top:0px;}
 </style>
+<?php 
+	//pr($group_codes);
+	//pr($config_group_codes);
+ ?>
 <div >
 	<div class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-detail-menu">
 	  	<ul class="am-list admin-sidebar-list" data-am-scrollspy-nav="{offsetTop: 45}" style="position: fixed; z-index: 100; width: 15%;max-width:200px;">
-			<?php $i=0; $n = 1; foreach($group_codes as $groups_k=>$groups){?>
-	    	<li><a href="#configvalue_<?php echo $groups;?>"><?php if(isset($config_group_codes) && sizeof($config_group_codes)>0){echo $config_group_codes[$groups];}?></a></li>
+			<?php foreach($group_codes as $groups_k=>$groups){
+					if(!isset($config_group_codes[$groups]))continue;
+					if(!isset($config_groups[$groups])||(isset($config_groups[$groups])&&sizeof($config_groups[$groups])==0))continue;
+			?>
+	    			<li><a href="#configvalue_<?php echo $groups;?>"><?php echo $config_group_codes[$groups]; ?></a></li>
 	    	<?php }?>
 	  	</ul>
 	</div>
 	<div class="admin-content am-u-lg-9 am-u-md-9 am-u-sm-9 am-detail-view" id="accordion" style="width:83%;float:right;">
-	<?php $i=0; $n = 1; foreach($group_codes as $groups_k=>$groups){?>
+<?php  echo $form->create('Configvalue', array('action' => 'edit/', 'enctype' => "multipart/form-data","class"=>"am-form am-form-horizontal")); ?>
+	<?php $i=0; $n = 1; foreach($group_codes as $groups_k=>$groups){
+					if(!isset($config_group_codes[$groups]))continue;
+					if(!isset($config_groups[$groups])||(isset($config_groups[$groups])&&sizeof($config_groups[$groups])==0))continue;
+	?>
  	<div id="configvalue_<?php echo $groups; ?>" class="am-panel am-panel-default" style="margin-bottom:5px;">
     		<div class="am-panel-hd">
-      			<h4 class="am-panel-title"  style="font-size:120%">
-      				<?php if(isset($config_group_codes) && sizeof($config_group_codes)>0){echo $config_group_codes[$groups];}?>
-      			</h4>
+      			<h4 class="am-panel-title" ><?php echo $config_group_codes[$groups]; ?></h4>
     		</div>
-			<?php  echo $form->create('Configvalue', array('action' => 'edit/'.$groups, 'enctype' => "multipart/form-data","class"=>"am-form am-form-horizontal")); ?>
 		    <div class="am-panel-collapse am-collapse am-in">
 		      	<div class="am-panel-bd am-form-detail am-form am-form-horizontal">
 				<?php if(isset($config_groups[$groups]) && sizeof($config_groups[$groups])>0){foreach($config_groups[$groups] as $sub_k=>$sub_group){ ?>	
 						<div class="am-panel-group" id="<?php echo $sub_k; ?>">
-							<div class="am-panel am-panel-default" style="border:0;border-bottom:1px solid #ddd">
-							<div class="am-panel-hd" style="background:none">
-								<h4 style="font-size:110%" class="am-panel-title" data-am-collapse="{parent: '#<?php echo $sub_k; ?>', target: '#<?php if(isset($config_group_codes) && sizeof($config_group_codes)>0){echo $config_group_codes[$groups];}?>_<?php echo isset($config_sub_group_codes[$sub_k])?$config_sub_group_codes[$sub_k]:$sub_k; ?>'}">
+							<div class="am-panel am-panel-default">
+							<div class="am-panel-hd">
+								<h4 class="am-panel-title" data-am-collapse="{parent: '#<?php echo $sub_k; ?>', target: '#<?php if(isset($config_group_codes) && sizeof($config_group_codes)>0){echo $config_group_codes[$groups];}?>_<?php echo isset($config_sub_group_codes[$sub_k])?$config_sub_group_codes[$sub_k]:$sub_k; ?>'}">
 									<?php echo isset($config_sub_group_codes[$sub_k])?$config_sub_group_codes[$sub_k]:$sub_k; ?>
 								</h4>
 						    </div>
@@ -59,24 +69,24 @@ label{font-weight:normal;}
 									<option value="B" <?php if(!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['value'])&&$sub_group_info['ConfigI18n'][$v['Language']['locale']]['value']=='B')echo "selected";?>><?php echo $ld['bottom']?></option>
 									<option value="M" <?php if(!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['value'])&&$sub_group_info['ConfigI18n'][$v['Language']['locale']]['value']=='M')echo "selected";?>><?php echo $ld['middle']?></option>
 								</select>
-								<?php if(sizeof($backend_locales)>1){?><span class="lang"><?php echo $ld[$v['Language']['locale']];?></span><?php }?>
+								<?php if(sizeof($backend_locales)>1){?><label class="am-u-lg-1 am-u-md-1 am-u-sm-1 am-form-label am-text-left" style="margin-top:12px;margin-left:0px;"><?php echo $ld[$v['Language']['locale']];?></label><?php }?>
 								<?php
 									if(!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) && trim($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) != ""){
 									echo $html->link(" ", "javascript:config_help(".(empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']).")",
 									array('escape'=>false,'class'=>'helpbtn'));}?>
-									<span id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;">
+									<div class="config_help" id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;">
 									<em>
 									<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?>
 										</em>
-									</span> 
+									</div> 
 							</div>
 						<?php $i++;}} ?>
 					</div>
 					<?php } ?>
 							
 				<?php if ($sub_group_info['Config']['type'] == "text") {?>
+				<?php if(($sub_group_info['Config']['code']=='water_text'||$sub_group_info['Config']['code']=='watermark_transparency')){continue;}?>
 			    <div class="am-form-group">
-					<?php if(($sub_group_info['Config']['code']=='water_text'||$sub_group_info['Config']['code']=='watermark_transparency')){continue;}?>
 					<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label" style="padding-top:20px;"><?php echo $sub_group_info['ConfigI18n'][$backend_locale]['name']?></label>
 					<div class="am-u-lg-7 am-u-md-7 am-u-sm-8">
 						<?php  foreach($backend_locales as $k=>$v){ ?>
@@ -91,14 +101,16 @@ label{font-weight:normal;}
 								<?php echo $ld[$v['Language']['locale']];?>
 							</label>
 							<?php }?>
+							<label class="am-u-lg-1 am-u-md-1 am-u-sm-1 am-form-label am-text-left" style="margin-top:12px;margin-left:0px;">
 							<?php
 								if(!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) && trim($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) !=""){
 									echo $html->link(" ","javascript:config_help(".(empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']).")",array('escape'=>false,'class'=>'helpbtn'));
 								}
 							?>
-							<span id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;">
+							</label>
+							<div class="config_help" id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;">
 								<em><?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?></em>
-							</span>
+							</div>
 						<?php $i++;} ?>
 					</div>
 				</div>	
@@ -125,14 +137,14 @@ label{font-weight:normal;}
 					<?php 	foreach ($backend_locales as $k => $v) {?>
 						<div class="am-u-lg-6 am-u-md-7 am-u-sm-8" >
 							<input name="data[<?php echo $i; ?>][locale]" type="hidden" value="<?php echo $v['Language']['locale']; ?>"><input name="data[<?php echo $i; ?>][config_id]" type="hidden" value="<?php echo $sub_group_info['Config']['id']; ?>"> <input name="data[<?php echo $i; ?>][id]" type="hidden" value="<?php if (isset($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']))echo $sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>"> <input id="webroot<?php echo $k;?>"type="text"  name="data[<?php echo $i; ?>][value]" value="<?php if (isset($sub_group_info['ConfigI18n'][$v['Language']['locale']]['value'])&&$sub_group_info['ConfigI18n'][$v['Language']['locale']]['value']!=""){echo $sub_group_info['ConfigI18n'][$v['Language']['locale']]['value'];}else{echo "HOME";} ?>"  />
-							<?php if(sizeof($backend_locales)>1){?><span class="lang"><?php echo $ld[$v['Language']['locale']];?></span><?php }?>
+							<?php if(sizeof($backend_locales)>1){?><label class="am-u-lg-1 am-u-md-1 am-u-sm-1 am-form-label am-text-left" style="margin-top:12px;margin-left:0px;"><?php echo $ld[$v['Language']['locale']];?></label><?php }?>
 							<?php
 								if(!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) && trim($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) !=""){
 									echo $html->link(" ", "javascript:config_help(".(empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']).")",array('escape'=>false,'class'=>'helpbtn'));
 								}?>
-							<span id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;">
+							<div class="config_help" id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;">
 							<em><?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?></em>
-							</span>
+							</div>
 						</div>
 					<?php $i++;}?>
 						<div><?php echo $this->element('select_homepage');?></div>
@@ -153,14 +165,16 @@ label{font-weight:normal;}
 							<?php if(sizeof($backend_locales)>1){?>
 								<label class="am-u-lg-1 am-u-md-1 am-u-sm-1" style="padding-top:20px;font-weight:bold;"><?php echo $ld[$v['Language']['locale']];?></label>
 							<?php }?>
+							<label class="am-u-lg-1 am-u-md-1 am-u-sm-1 am-form-label am-text-left" style="margin-top:12px;margin-left:0px;">
 							<?php
 								if(!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) && trim($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) !=""){
 									echo $html->link(" ", "javascript:config_help(".(empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']).")",array('escape'=>false,'class'=>'helpbtn'));
 								}
 								?>
-								<span id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;">
+							</label>
+								<div class="config_help" id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;">
 									<em><?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?></em>
-								</span>
+								</div>
 				<?php $i++;}?>
 				</div>
 			</div>	
@@ -197,11 +211,13 @@ label{font-weight:normal;}
 										<?php echo $ld[$v['Language']['locale']];?>
 									</label>
 								<?php }?>
+									<label class="am-u-lg-1 am-u-md-1 am-u-sm-1 am-form-label am-text-left" style="margin-top:12px;margin-left:0px;">
 								<?php
 								if(!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) && trim($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) !=""){
 									echo $html->link(" ", "javascript:config_help(".(empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']).")",array('escape'=>false,'class'=>'helpbtn'));
 								}
-							?><span id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;"><em><?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?></em></span>
+							?></label><div class="config_help" id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;"><em><?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?></em></div>
+								<div class="am-cf"></div>
 				<?php $i++;}?>	
 				</div>	
 					</div>			
@@ -240,18 +256,22 @@ label{font-weight:normal;}
 						<input name="data[<?php echo $i; ?>][locale]" type="hidden" value="<?php echo $v['Language']['locale']; ?>">
 						<input name="data[<?php echo $i; ?>][config_id]" type="hidden" value="<?php echo $sub_group_info['Config']['id']; ?>">
 						<input name="data[<?php echo $i; ?>][id]" type="hidden" value="<?php if (isset($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']))echo $sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>">
-							
-						<input name="data[<?php echo $i; ?>][value]" id="upload_img_text_<?php echo $v['Language']['locale'].'_'.$i;?>" type="text" value="<?php if (isset($sub_group_info['ConfigI18n'][$v['Language']['locale']]['value']))echo $sub_group_info['ConfigI18n'][$v['Language']['locale']]['value']; ?>" />
-						<input type="button" class="am-btn am-btn-xs am-btn-success am-radius" onclick="select_img('upload_img_text_<?php echo $v['Language']['locale'].'_'.$i;?>')" value="<?php echo $ld['choose_picture']?>"  style="margin-top:5px;"/>
+						<div class="am-u-lg-8 am-u-md-8 am-u-sm-8"> 
+							<input name="data[<?php echo $i; ?>][value]" id="upload_img_text_<?php echo $v['Language']['locale'].'_'.$i;?>" type="text" value="<?php if (isset($sub_group_info['ConfigI18n'][$v['Language']['locale']]['value']))echo $sub_group_info['ConfigI18n'][$v['Language']['locale']]['value']; ?>" />
+						</div>
+						<div class="am-u-lg-2 am-u-md-2 am-u-sm-2"> 
+							<input type="button" class="am-btn am-btn-xs am-btn-success am-radius" onclick="select_img('upload_img_text_<?php echo $v['Language']['locale'].'_'.$i;?>')" value="<?php echo $ld['choose_picture']?>"  style="margin-top:5px;"/>
+						</div>
 						<?php if(sizeof($backend_locales)>1){?>
-							<span class="lang" style="margin-top:5px;"><?php echo $ld[$v['Language']['locale']];?></span>
+							<label class="am-u-lg-1 am-u-md-1 am-u-sm-1 am-form-label am-text-left" style="margin-top:12px;margin-left:0px;"><?php echo $ld[$v['Language']['locale']];?></label>
 						<?php }?>
+							<label class="am-u-lg-1 am-u-md-1 am-u-sm-1 am-form-label am-text-left" style="margin-top:12px;margin-left:0px;">
 						<?php
 							if(!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) && trim($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) !=""){
 								echo $html->link(" ","javascript:config_help(".(empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']).")",array('escape'=>false,'class'=>'helpbtn'));
 							}
-						?><span id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;"><em><?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?></em></span>
-						<div class="img_select" style="margin:5px;">
+						?></label><div class="config_help" id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;"><em><?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?></em></div>
+						<div class="img_select">
 						<?php
 							echo $html->image((isset($sub_group_info['ConfigI18n'][$v['Language']['locale']]['value'])&&$sub_group_info['ConfigI18n'][$v['Language']['locale']]['value']!="")?$sub_group_info['ConfigI18n'][$v['Language']['locale']]['value']:$configs['shop_default_img'],array('id'=>'show_upload_img_text_'.$v['Language']['locale'].'_'.$i));
 						?>
@@ -294,11 +314,12 @@ label{font-weight:normal;}
 								<?php if(sizeof($backend_locales)>1){?>
 									<label class="am-u-lg-1 am-u-md-1 am-u-sm-1" style="margin-top:15px;"><?php echo $ld[$v['Language']['locale']];?></label>
 								<?php }?>
+									<label class="am-u-lg-1 am-u-md-1 am-u-sm-1 am-form-label am-text-left" style="margin-top:12px;margin-left:0px;">
 								<?php
 								if(!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) && trim($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) != ""){
 									echo $html->link(" ", "javascript:config_help(".(empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']).")",array('escape'=>false,'class'=>'helpbtn'));
 								}
-							?><span id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;"><em><?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?></em></span>
+							?></label><div class="config_help" id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;"><em><?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?></em></div>
 				<?php $i++;}?>
 				</div>
 				</div>
@@ -313,16 +334,15 @@ label{font-weight:normal;}
 							<input name="data[<?php echo $i; ?>][config_id]" type="hidden" value="<?php echo $sub_group_info['Config']['id']; ?>">
 							<input name="data[<?php echo $i; ?>][id]" type="hidden" value="<?php if (isset($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']))echo $sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>">
 							<input type="file" name="data[<?php echo $i; ?>][value]" id="data[<?php echo $i; ?>][value]" value="<?php if (isset($sub_group_info['ConfigI18n'][$v['Language']['locale']]['value']))echo $sub_group_info['ConfigI18n'][$v['Language']['locale']]['value']; ?>" onchange="checkUploadFile(this,'data[<?php echo $i; ?>][value]')"/>
-							<?php if(sizeof($backend_locales)>1){?><span class="lang"><?php echo $ld[$v['Language']['locale']];?></span><?php }?>
+							<?php if(sizeof($backend_locales)>1){?><label class="am-u-lg-1 am-u-md-1 am-u-sm-1 am-form-label am-text-left" style="margin-top:12px;margin-left:0px;"><?php echo $ld[$v['Language']['locale']];?></label><?php }?>
+							<label class="am-u-lg-1 am-u-md-1 am-u-sm-1 am-form-label am-text-left" style="margin-top:12px;margin-left:0px;">
 							<?php if(!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) && trim($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) !=""){
 									echo $html->link(" ","javascript:config_help(".(empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']).")",array('escape'=>false,'class'=>'helpbtn'));
 								}
-							?>
-							<span id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;"><em><?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?></em></span>
+							?></label>
+							<div class="config_help" id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;"><em><?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?></em></div>
 							<p><?php if(isset($sub_group_info['ConfigI18n'][$v['Language']['locale']]['value'])){?>
-								<?php if (!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['value'])){?>
-									<img src="<?php echo 'http://'.$_SERVER['HTTP_HOST'].'/favicon.ico'?>" width="20" height="20" />
-								<?php }}?>
+								<?php if (!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['value'])){echo $html->image('favicon.ico',array('style'=>'width:20px;height:20x;')); }}?>
 							</p>
 					<?php $i++;}?>
 						</div>
@@ -354,11 +374,12 @@ label{font-weight:normal;}
 						</div>
 							<?php if(sizeof($backend_locales)>1){?>
 								<label class="am-u-lg-1 am-u-md-1 am-u-sm-1" style="padding-top:20px;"><?php echo $ld[$v['Language']['locale']];?></label>
-							<?php }?> 
+							<?php }?>
+								<label class="am-u-lg-1 am-u-md-1 am-u-sm-1 am-form-label am-text-left" style="margin-top:12px;margin-left:0px;">
 							<?php if(!empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) && trim($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']) != ""){
 							echo $html->link(" ", "javascript:config_help(".(empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']).")",array('escape'=>false,'class'=>'helpbtn'));
-							}?>
-							<span id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;"><em><?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?></em></span> 
+							}?></label>
+							<div class="config_help" id="config_help_<?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['id'])?0:$sub_group_info['ConfigI18n'][$v['Language']['locale']]['id']; ?>" style="display:none;"><em><?php echo empty($sub_group_info['ConfigI18n'][$v['Language']['locale']]['description'])?'':$sub_group_info['ConfigI18n'][$v['Language']['locale']]['description']; ?></em></div> 
 							<?php if($sub_group_info['Config']['code']=="home_controller" && $sub_group_info['ConfigI18n'][$v['Language']['locale']]['locale']=="chi"){?>
 							<input id="Navigation" type="hidden" value="" />
 							<input id="NavigationUrl" name="Route[url]"  type="hidden" value="" />
@@ -434,18 +455,19 @@ label{font-weight:normal;}
 					</div>
 					</div><!--子标题end-->
 				<?php }} ?>
-				
+		
 				<?php if($svshow->operator_privilege("configvalues_edit")){?>
-				<div class="btnouter" style="margin-top:50px;">
+				<div class="btnouter" style="position: fixed;top:55px;right:60px;">
 					<button type="submit" class="am-btn am-btn-success am-btn-sm am-radius" value=""><?php echo $ld['d_submit'];?></button>
 					<button type="reset" class="am-btn am-btn-default am-btn-sm am-radius" value="" ><?php echo $ld['d_reset']?></button>
 				</div>
 				<?php }?>
 				</div>
 			</div>	
-			<?php echo $form->end(); ?>
+			
  		</div>
 	<?php }?>
+<?php echo $form->end(); ?>
 	</div>
 </div>
 

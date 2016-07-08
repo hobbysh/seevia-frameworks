@@ -20,7 +20,7 @@ label{font-weight:normal;}
 .btnouter{margin:50px;}
 .img_select{max-width:150px;max-height:120px;}
 </style>
-<script src="/plugins/kindeditor/kindeditor-min.js" type="text/javascript"></script>
+<script src="<?php echo $webroot; ?>plugins/kindeditor/kindeditor-min.js" type="text/javascript"></script>
 <div class="am-g">
 	<div class="am-u-lg-2  am-u-md-2 am-u-sm-4 am-detail-menu">
 		<ul class="am-list admin-sidebar-list" data-am-scrollspy-nav="{offsetTop: 45}" style="position: fixed; z-index: 100; width: 15%;max-width:200px;">
@@ -72,30 +72,44 @@ label{font-weight:normal;}
 
 					<div class="am-form-group">
 						<label class="am-u-lg-2 am-u-md-2 am-u-sm-3 am-view-label"><?php echo $ld['picture_01']?></label>
-						<div class="am-u-lg-9 am-u-md-10 am-u-sm-9">
+						<div class="am-u-lg-9 am-u-md-10 am-u-sm-9" style="margin-bottom:1rem">
 							<?php if(isset($backend_locales)&&sizeof($backend_locales)>0){foreach ($backend_locales as $k => $v){?>
-								<div class="am-u-lg-9 am-u-md-11 am-u-sm-11" style="margin-top:10px;">
+							<div class="am-g am-container">
+								<div class="am-u-lg-5 am-u-md-5 am-u-sm-5" style="margin-top:10px;">
+									<div style="position:realtive;min-height:120px;">
 									<input type="text" id="upload_img_text_1<?php echo $v['Language']['locale']?>" name="data[PageI18n][<?php echo $k;?>][img01]" value="<?php echo @$this->data['PageI18n'][$v['Language']['locale']]['img01']?>" />
-                                                                            <input type="button" class="am-btn am-btn-xs am-btn-success am-radius"  onclick="select_img('upload_img_text_1<?php echo $v['Language']['locale']?>')" value="<?php echo $ld['choose_picture']?>" style="margin-top:5px;"/>
-									<div class="img_select" style="margin:5px;">
-									<?php echo $html->image((isset($this->data['PageI18n'][$v['Language']['locale']]['img01'])&&$this->data['PageI18n'][$v['Language']['locale']]['img01']!="")?$this->data['PageI18n'][$v['Language']['locale']]['img01']:$configs['shop_default_img'],array('id'=>'show_upload_img_text_1'.$v['Language']['locale']))?>
+									<input type="button" class="am-btn am-btn-xs am-btn-success am-radius"  onclick="select_img('upload_img_text_1<?php echo $v['Language']['locale']?>')" value="<?php echo $ld['choose_picture']?>" style="margin-top:5px;"/>
 									</div>
+								
+								
+									<div class="img_select" style="position:absolute;right:-129px;top:0px;">
+									<?php echo $html->image((isset($this->data['PageI18n'][$v['Language']['locale']]['img01'])&&$this->data['PageI18n'][$v['Language']['locale']]['img01']!="")?$this->data['PageI18n'][$v['Language']['locale']]['img01']:$configs['shop_default_img'],array('id'=>'show_upload_img_text_1'.$v['Language']['locale']))?>
+									
 								</div>
+                                                                            
+									
+								</div>
+							</div>
 						 <?php }} ?>
 						</div>	
 					</div>
 
                                    <div class="am-form-group">
 			    			<label class="am-u-lg-2 am-u-md-2 am-u-sm-3 am-view-label"><?php echo $ld['picture_01']?>2</label>
-			    			<div class="am-u-lg-9 am-u-md-10 am-u-sm-9">
+			    			<div class="am-u-lg-9 am-u-md-10 am-u-sm-9" style="margin-bottom:1rem">
 			    			<?php if(isset($backend_locales) && sizeof($backend_locales)>0){foreach ($backend_locales as $k => $v){?>
-			    				<div class="am-u-lg-9 am-u-md-11 am-u-sm-11" style="margin-top:10px;">
-			    					<input type="text" id="upload_img_text_3<?php echo $v['Language']['locale']?>" name="data[PageI18n][<?php echo $k;?>][img02]" value="<?php echo @$this->data['PageI18n'][$v['Language']['locale']]['img02']?>" />
-			    				 	<input type="button" class="am-btn am-btn-xs am-btn-success am-radius"  onclick="select_img('upload_img_text_2<?php echo $v['Language']['locale']?>')" value="<?php echo $ld['choose_picture']?>"  style="margin-top:5px;"/>
-			    						 <div class="img_select" style="margin:5px;">
+			    			<div class="am-g am-container">
+			    				<div class="am-u-lg-5 am-u-md-5 am-u-sm-5" style="margin-top:10px;">
+			    					<div style="position:realtive;min-height:120px">
+			    					<input type="text" id="upload_img_text_2<?php echo $v['Language']['locale']?>" name="data[PageI18n][<?php echo $k;?>][img02]" value="<?php echo @$this->data['PageI18n'][$v['Language']['locale']]['img02']?>" />
+			    					<input type="button" class="am-btn am-btn-xs am-btn-success am-radius"  onclick="select_img('upload_img_text_2<?php echo $v['Language']['locale']?>')" value="<?php echo $ld['choose_picture']?>"  style="margin-top:5px;"/>
+			    				</div>
+			    				 	
+			    						 <div class="img_select" style="position:absolute;right:-129px;top:0px;">
 										<?php echo $html->image((isset($this->data['PageI18n'][$v['Language']['locale']]['img03'])&&$this->data['PageI18n'][$v['Language']['locale']]['img02']!="")?$this->data['PageI18n'][$v['Language']['locale']]['img02']:$configs['shop_default_img'],array('id'=>'show_upload_img_text_2'.$v['Language']['locale']))?>
 									</div>
 			    				</div> 
+			    			</div>
 			    			<?php }} ?>
 			    			</div>
 			    		</div>	
@@ -279,7 +293,7 @@ function checkrouteurl(){
 	var route_url = document.getElementById("Route_url").value;
 	if(route_url!=""){
 		YUI().use("io",function(Y) {
-		var rUrl = "/admin/routes/select_route_url/";//访问的URL地址
+		var rUrl = admin_webroot+"routes/select_route_url/";//访问的URL地址
 		var rfg = {
 			method: "POST",
 			data:"route_url="+route_url

@@ -21,6 +21,7 @@ class StaticPagesController extends AppController
      */
     public function index($page = 1)
     {
+    		
         /*判断权限*/
         $this->operator_privilege('static_page_view');
         $this->operation_return_url(true);//设置操作返回页面地址
@@ -35,8 +36,13 @@ class StaticPagesController extends AppController
             $condition['PageI18n.title LIKE'] = '%'.$this->params['url']['title'].'%';
             $this->set('titles', $this->params['url']['title']);
         }
+
+        if (isset($this->params['url']['status']) && $this->params['url']['status'] != ''&& $this->params['url']['status'] != '2') {
+             $condition['and']['Page.status LIKE'] = $this->params['url']['status'];
+             $this->set('status', $this->params['url']['status']);
+        }
         $sortClass = 'Page';
-        $total = $this->Page->find('count', $condition);
+        $total = $this->Page->find('count', array('conditions'=>$condition));
         $this->configs['show_count'] = $this->configs['show_count'] > $total ? $total : $this->configs['show_count'];
         if (isset($_GET['page']) && $_GET['page'] != '') {
             $page = $_GET['page'];
@@ -47,6 +53,7 @@ class StaticPagesController extends AppController
         //地址路由参数（和control,action的参数对应）
         $parameters['route'] = array('controller' => 'pages','action' => 'index','page' => $page,'limit' => $rownum);
         $options = array('page' => $page,'show' => $rownum,'total' => $total,'modelClass' => 'Page');
+
         $this->Pagination->init($condition, $parameters, $options);
         $data = $this->Page->find('all', array('conditions' => $condition, 'order' => 'Page.orderby', 'limit' => $rownum, 'page' => $page));
         $page_ids = array();

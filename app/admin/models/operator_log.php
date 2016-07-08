@@ -138,7 +138,6 @@ class OperatorLog extends AppModel
         $HTTPS = @$HTTP_SERVER_VARS['HTTPS'];
         $HTTP_HOST = $_SERVER['HTTP_HOST'];
         $SCRIPT_URL = $_SERVER['REQUEST_URI'];
-        $PATH_INFO = $_SERVER['PATH_INFO'];
         $REQUEST_URI = $_SERVER['REQUEST_URI'];
         $SCRIPT_NAME = $_SERVER['SCRIPT_NAME'];
         $QUERY_STRING = $_SERVER['HTTP_HOST'];

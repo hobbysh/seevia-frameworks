@@ -71,8 +71,16 @@ class AppController extends Controller
         $host = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
         $this->server_host = 'http://'.$host;
         $this->set('server_host', $this->server_host);
-        $this->webroot = '/';
+        $this->webroot = isset($_SERVER['PHP_SELF'])?dirname($_SERVER['PHP_SELF']).'/':'/';
+        $this->webroot = str_replace('cn','',$this->webroot);
+        $this->webroot = str_replace('en','',$this->webroot);
+        $this->webroot = str_replace('jpn','',$this->webroot);
+        $this->webroot = str_replace('///','/',$this->webroot);
+        $this->webroot = str_replace('//','/',$this->webroot);
+        $this->webroot = str_replace('.','',$this->webroot);
         $this->set('webroot', $this->webroot);
+        $this->set('web_base', $this->base);
+        
         // 订单来源
         if (isset($_SERVER['HTTP_REFERER'])) {
             $referer_arr = array();
@@ -251,7 +259,9 @@ class AppController extends Controller
           ) {
             unset($_SESSION['back_url']);
         } else {
-            $_SESSION['login_back'] = $this->here;
+		$login_back=str_replace($this->base,"",$this->here);
+		$login_back=$login_back==""?"/":$login_back;
+		$_SESSION['login_back'] = $login_back;
         }
 
         //取当前模板
@@ -522,10 +532,10 @@ class AppController extends Controller
     public function checkSessionUser()
     {
         if (!isset($_SESSION['User'])) {
-            $user_id = $_SESSION['User']['User']['id'];
-            $this->UserRankLog->checkUserRank($user_id);
-            $_SESSION['login_back'] = $this->here;
-            $this->redirect('/users/login');
+            	$login_back=str_replace($this->base,"",$this->here);
+		$login_back=$login_back==""?"/":$login_back;
+		$_SESSION['login_back'] = $this->here;
+		$this->redirect('/users/login');
         }
     }
 
@@ -709,18 +719,17 @@ class AppController extends Controller
     function clean_xss($mix){
 	    	if(is_array($mix)){
 	    		foreach($mix as $k=> $v){
-	    			
 	    			$str = $this->clean_xss($v);
 	    			$mix[$k]=$str;
 	    		}
 			return $mix;
 		}else if(is_string($mix)){
-		//	pr($mix);
 			$str = trim($mix);  //清理空格
 			$str = strip_tags($str);   //过滤html标签
 			$str = htmlspecialchars($str,ENT_QUOTES);   //过滤html标签'
-		//	pr($str);
 			return $str;
+		}else if(is_numeric($mix)){
+			return $mix;
 		}
 	}
 	

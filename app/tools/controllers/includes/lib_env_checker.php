@@ -10,7 +10,7 @@
  * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
  * $Author: liuhui $
- * $Id: lib_env_checker.php 712 2015-02-25 04:09:56Z zhaoyincheng $
+ * $Id: lib_env_checker.php 1447 2016-01-26 05:29:14Z zhaoyincheng $
  */
 
 if (!defined('IN_ECS'))

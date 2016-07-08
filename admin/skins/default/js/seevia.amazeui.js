@@ -2,9 +2,19 @@
 $(document).ready(function(){	
 	$("img").each(function(){
 		$(this).prop("onerror",function(e){
-			if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) { 
-		      	this.src = '/theme/default/images/default.png'; 
-		      } 
+			var error = false;
+			if (!this.complete) {
+				error = true;
+			}
+			if (typeof this.naturalWidth != "undefined" && this.naturalWidth == 0) {
+				error = true;
+			}
+			if(error){
+				$(this).bind('error.replaceSrc',function(){
+					this.src = (webroot=='/'?'':webroot)+"/theme/default/images/default.png";
+					$(this).unbind('error.replaceSrc');
+				}).trigger('load');
+			}
 		});
 	});
 });

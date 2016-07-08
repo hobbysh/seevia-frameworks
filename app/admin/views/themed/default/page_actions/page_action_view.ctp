@@ -110,7 +110,7 @@
                                         <td style="text-align: center;"><?php if($v['PageModule']['status']==1){?>
                                                 <?php echo $html->image('/admin/skins/default/img/yes.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$v["PageModule"]["id"].')')) ?>
                                             <?php }elseif($v['PageModule']['status'] == 0){?>
-                                                <?php echo $html->image('no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$v["PageModule"]["id"].')'))?>
+                                                <?php echo $html->image('/admin/skins/default/img/no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$v["PageModule"]["id"].')'))?>
                                             <?php }?>
                                         </td>
                                         <td>
@@ -119,8 +119,8 @@
                                                     <span class="am-icon-pencil-square-o"></span> <?php echo $ld['edit']; ?>
                                                 </a>
                                             <?php }if($svshow->operator_privilege("page_types_remove")){?>
-                                                <a class="am-btn am-btn-default am-btn-xs am-text-danger am-seevia-btn-delete" href="javascript:;" onclick="if(confirm('{$ld['confirm_delete']}')){list_delete_submit(admin_webroot+'page_actions/module_remove/<?php echo $v['PageModule']['id']."/".$id;?>');}">
-                                                    <span class="am-icon-trash-o"></span> <?php echo $ld['delete']; ?>
+                                                <a class="am-btn am-btn-default am-btn-xs am-text-danger am-seevia-btn-delete" href="javascript:;" onclick="if(confirm('<?php echo $ld['confirm_delete'] ?>')){window.location.href = admin_webroot+'page_actions/module_remove/<?php echo $v['PageModule']['id']."/".$id;?>';}">
+                                                <span class="am-icon-trash-o"></span> <?php echo $ld['delete']; ?>
                                                 </a>
                                             <?php }?>
                                         </td>
@@ -150,7 +150,7 @@
                                                 <td style="text-align: center;"><?php if($vv['PageModule']['status']==1){?>
                                                         <?php echo $html->image('/admin/skins/default/img/yes.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$vv["PageModule"]["id"].')')) ?>
                                                     <?php }elseif($vv['PageModule']['status'] == 0){?>
-                                                        <?php echo $html->image('no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$vv["PageModule"]["id"].')'))?>
+                                                        <?php echo $html->image('/admin/skins/default/img/no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$vv["PageModule"]["id"].')'))?>
                                                     <?php }?>
                                                 </td>
                                                 <td>
@@ -159,7 +159,7 @@
                                                             <span class="am-icon-pencil-square-o"></span> <?php echo $ld['edit']; ?>
                                                         </a>
                                                     <?php }if($svshow->operator_privilege("page_types_remove")){?>
-                                                        <a class="am-btn am-btn-default am-btn-xs am-text-danger am-seevia-btn-delete" href="javascript:;" onclick="if(confirm('{$ld['confirm_delete']}')){list_delete_submit(admin_webroot+'page_actions/module_remove/<?php echo $vv['PageModule']['id']."/".$id;?>');}">
+                                                        <a class="am-btn am-btn-default am-btn-xs am-text-danger am-seevia-btn-delete" href="javascript:;" onclick="if(confirm('<?php echo $ld['confirm_delete'] ?>')){window.location.href = admin_webroot+'page_actions/module_remove/<?php echo $vv['PageModule']['id']."/".$id;?>';}">
                                                             <span class="am-icon-trash-o"></span> <?php echo $ld['delete']; ?>
                                                         </a>
                                                     <?php }?>
@@ -191,7 +191,7 @@
                                                         <td style="text-align: center;"><?php if($vvv['PageModule']['status']==1){?>
                                                                 <?php echo $html->image('/admin/skins/default/img/yes.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$vvv["PageModule"]["id"].')')) ?>
                                                             <?php }elseif($vvv['PageModule']['status'] == 0){?>
-                                                                <?php echo $html->image('no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$vvv["PageModule"]["id"].')'))?>
+                                                                <?php echo $html->image('/admin/skins/default/img/no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$vvv["PageModule"]["id"].')'))?>
                                                             <?php }?>
                                                         </td>
                                                         <td>
@@ -200,7 +200,7 @@
                                                                     <span class="am-icon-pencil-square-o"></span> <?php echo $ld['edit']; ?>
                                                                 </a>
                                                             <?php }if($svshow->operator_privilege("page_types_remove")){?>
-                                                                <a class="am-btn am-btn-default am-btn-xs am-text-danger am-seevia-btn-delete" href="javascript:;" onclick="if(confirm('{$ld['confirm_delete']}')){list_delete_submit(admin_webroot+'page_actions/module_remove/<?php echo $vvv['PageModule']['id']."/".$id;?>');}">
+                                                                <a class="am-btn am-btn-default am-btn-xs am-text-danger am-seevia-btn-delete" href="javascript:;" onclick="if(confirm('<?php echo $ld['confirm_delete'] ?>')){window.location.href = admin_webroot+'page_actions/module_remove/<?php echo $vvv['PageModule']['id']."/".$id;?>';}">
                                                                     <span class="am-icon-trash-o"></span> <?php echo $ld['delete']; ?>
                                                                 </a>
                                                             <?php }?>
@@ -253,7 +253,7 @@
     function changeOrder(updown,id,next,thisbtn){
         var type_id = document.getElementById("type_id").value;
         changeHtml(thisbtn);
-        var sUrl = "/admin/page_actions/changeorder/"+updown+"/"+id+"/"+next+"/"+type_id;//访问的URL地址
+        var sUrl = admin_webroot+"page_actions/changeorder/"+updown+"/"+id+"/"+next+"/"+type_id;//访问的URL地址
         $.ajax({
             type: "POST",
             url: sUrl,

@@ -85,7 +85,7 @@ class DictionariesController extends AppController
                 $_SESSION['language_type'] = $language_type;
             }
             if (isset($_GET['keywords'])) {
-                $keywords = $_GET['keywords'];
+                $keywords = addslashes($_GET['keywords']);
                 $condition['OR'][0] = "Dictionary.name like '%$keywords%' ";
                 $condition['OR'][1] = "Dictionary.description like '%$keywords%' ";
                 $condition['OR'][2] = "Dictionary.value like '%$keywords%' ";
@@ -211,7 +211,7 @@ class DictionariesController extends AppController
                 }
             }
         }
-        $this->flash('上穿成功', '/dictionaries', '');
+        $this->flash('上传成功', '/dictionaries', '');
     }
 
     public function add()
@@ -298,6 +298,25 @@ class DictionariesController extends AppController
         $this->redirect('/dictionaries/'.$localeUrl);
         //$this->flash('删除成功',"/language_dictionaries/".$localeUrl,10 );
     }
+    
+    //批量删除
+    public function batch_operations()
+    {
+    	        $this->operator_privilege('dictionary_remove');
+
+        $user_checkboxes = $_REQUEST['checkboxes'];
+        foreach ($user_checkboxes as $k => $v) {
+            $this->Dictionary->deleteAll(array('Dictionary.id' => $v));
+        }
+      
+        $result['flag'] = 1;
+        Configure::write('debug', 0);
+        $this->layout = 'ajax';
+        die(json_encode($result));
+    }
+    
+    
+    
     /**
      *字典列表名称修改.
      */
@@ -484,7 +503,9 @@ class DictionariesController extends AppController
 
     public function uploadpreview()
     {
-        ////////////判断权限
+        Configure::write('debug', 1);
+    	$success_num=0;
+
             if ($this->operator_privilege('dictionary_add')) {
                 if (isset($_POST['sub1']) && $_POST['sub1'] == 1 && !empty($_FILES['file'])) {
                     $this->menu_path = array('root' => '/web_application/','sub' => '/dictionaries/');
@@ -505,7 +526,7 @@ class DictionariesController extends AppController
                             'Dictionary.description',
                             'Dictionary.value', );
 
-                            $fields = array($this->ld['z_language'],
+                            $fields = array($this->ld['s_language'],
                               $this->ld['z_position'],
                                 $this->ld['z_name'],
                                 $this->ld['z_type'],
@@ -526,12 +547,16 @@ class DictionariesController extends AppController
                                     $num_count = count($key_arr);
                                     ++$i;
                                 }
+                                if($row_count!=$num_count){
+                                      echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script>alert(' 标题列数与内容列数不一致');window.location.href='/admin/dictionaries/upload';</script>";
+						die();
+                                }
                                 $temp = array();
                                 foreach ($row as $k => $v) {
                                     $temp[$key_arr[$k]] = empty($v) ? '' : @iconv($csv_export_code, 'utf-8//IGNORE', $v);
                                 }
                                 if (!isset($temp) || empty($temp)) {
-                                    echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script>alert('".$this->ld['file_upload_error']."');window.location.href='/admin/users/uploadusers';</script>";
+                                    echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script>alert('".$this->ld['file_upload_error']."');window.location.href='/admin/dictionaries/upload';</script>";
                                     die();
                                 }
                                 $data[] = $temp;
@@ -544,6 +569,7 @@ class DictionariesController extends AppController
                     }
                 } elseif (isset($_REQUEST['checkbox']) && !empty($_REQUEST['checkbox'])) {
                     $checkbox_arr = $_REQUEST['checkbox'];
+                    $upload_num=count($checkbox_arr);
                     foreach ($this->data as $key => $v) {
                         if (!in_array($key, $checkbox_arr)) {
                             continue;
@@ -551,17 +577,23 @@ class DictionariesController extends AppController
                         $Dictionary_first = $this->Dictionary->find('first', array('conditions' => array('Dictionary.locale' => $v['locale'], 'Dictionary.location' => $v['location'], 'Dictionary.name' => $v['name'])));
                         $v['id']=isset($Dictionary_first['Dictionary']['id'])?$Dictionary_first['Dictionary']['id']:0;
                         $s=$this->Dictionary->save($v);
+                         if( isset($s)&&!empty($s)){
+                        	 	++$success_num;
+                        	 }
+                     	    $result['code']=1;
                     }
-                    $this->redirect('/dictionaries/');
+                     echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script type='text/javascript'>alert('".'共上传：'.$upload_num.'　条数据'.'\\r\\n'.'上传成功：'.$success_num.'　条数据'.'\\r\\n'.'上传失败：'.($upload_num-$success_num).'　条数据'."');window.location.href='/admin/dictionaries/'</script>";
+		            die();
                 } else {
-                    $this->redirect('/dictionaries/');
+		            echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script type='text/javascript'>alert('未上传任何数据');window.location.href='/admin/dictionaries/upload/'</script>";
                 }
             } ///////权限判断结束
     }
     //导出字典
       public function download_csv_example()
       {
-
+      	  Configure::write('debug', 1);
+      	  $this->layout="ajax";
               //定义一个数组
         $fields_array = array('Dictionary.locale',
                             'Dictionary.location',
@@ -569,7 +601,7 @@ class DictionariesController extends AppController
                             'Dictionary.type',
                             'Dictionary.description',
                             'Dictionary.value', );
-          $fields = array($this->ld['z_language'],
+          $fields = array($this->ld['s_language'],
                               $this->ld['z_position'],
                                 $this->ld['z_name'],
                                 $this->ld['z_type'],
@@ -578,7 +610,8 @@ class DictionariesController extends AppController
           $newdatas = array();
           $newdatas[] = $fields;
           //查询所有表里面所有信息 查询 5 条信息
-          $Dictionary_info = $this->Dictionary->find('all', array('order' => 'Dictionary.id desc', 'limit' => 5));
+          $Dictionary_info = $this->Dictionary->find('all', array('order' => 'Dictionary.id desc', 'limit' => 5,'conditions'=>array('Dictionary.locale'=>'chi')));
+          //pr($Dictionary_info);die();
           foreach ($Dictionary_info as $k => $v) {
               $user_tmp = array();
               //循环数组
@@ -590,7 +623,7 @@ class DictionariesController extends AppController
               $newdatas[] = $user_tmp;
           }
           //定义文件名称
-          $nameexl = $this->ld['dictionaries'].$this->ld['export'].date('Ymd').'.csv';
+          $nameexl = $this->ld['dictionaries'].date('Ymd').'.csv';
           $this->Phpcsv->output($nameexl, $newdatas);
           die();
       }
@@ -620,4 +653,87 @@ class DictionariesController extends AppController
 
           return empty($_line) ? false : $_csv_data;
       }
+      
+      //全部导出
+      public function all_export_csv()
+      {
+      	  Configure::write('debug', 0);
+      	  $this->layout="ajax";
+      	  $this->Dictionary->set_locale($this->backend_locale);
+              //定义一个数组
+        $fields_array = array('Dictionary.locale',
+                            'Dictionary.location',
+                            'Dictionary.name',
+                            'Dictionary.type',
+                            'Dictionary.description',
+                            'Dictionary.value', );
+          $fields = array($this->ld['s_language'],
+                              $this->ld['z_position'],
+                                $this->ld['z_name'],
+                                $this->ld['z_type'],
+                             $this->ld['z_description'],
+                                  $this->ld['z_content'], );
+          $newdatas = array();
+          $newdatas[] = $fields;
+          //查询所有表里面所有信息 
+          $Dictionary_info = $this->Dictionary->find('all', array('order' => 'Dictionary.id desc'));
+          
+          foreach ($Dictionary_info as $k => $v) {
+              $user_tmp = array();
+              //循环数组
+              foreach ($fields_array as $ks => $vs) {
+                    //分解字符串为数组
+                  $fields_ks = explode('.', $vs);
+                  $user_tmp[] = isset($v[$fields_ks[0]][$fields_ks[1]]) ? $v[$fields_ks[0]][$fields_ks[1]] : '';
+              }
+              $newdatas[] = $user_tmp;
+          }
+          //定义文件名称
+          $nameexl = $this->ld['dictionaries'].$this->ld['export'].date('Ymd').'.xls';
+          $this->Phpexcel->output($nameexl, $newdatas);
+          die();
+      }
+      
+      //选择导出
+      public function choice_export()
+      {
+      	  Configure::write('debug', 0);
+      	  $this->layout="ajax";
+      	  $this->Dictionary->set_locale($this->backend_locale);
+      	  $user_checkboxes = $_REQUEST['checkboxes'];
+              //定义一个数组
+        $fields_array = array('Dictionary.locale',
+                            'Dictionary.location',
+                            'Dictionary.name',
+                            'Dictionary.type',
+                            'Dictionary.description',
+                            'Dictionary.value', );
+          $fields = array($this->ld['s_language'],
+                              $this->ld['z_position'],
+                                $this->ld['z_name'],
+                                $this->ld['z_type'],
+                             $this->ld['z_description'],
+                                  $this->ld['z_content'], );
+          $newdatas = array();
+          $newdatas[] = $fields;
+          //查询所有表里面所有信息 查询 5 条信息
+          $Dictionary_info = $this->Dictionary->find('all', array('order' => 'Dictionary.id desc','conditions'=>array('Dictionary.id'=>$user_checkboxes)));
+          
+          foreach ($Dictionary_info as $k => $v) {
+              $user_tmp = array();
+              //循环数组
+              foreach ($fields_array as $ks => $vs) {
+                    //分解字符串为数组
+                  $fields_ks = explode('.', $vs);
+                  $user_tmp[] = isset($v[$fields_ks[0]][$fields_ks[1]]) ? $v[$fields_ks[0]][$fields_ks[1]] : '';
+              }
+              $newdatas[] = $user_tmp;
+          }
+          //定义文件名称
+          $nameexl = $this->ld['dictionaries'].$this->ld['export'].date('Ymd').'.xls';
+          $this->Phpexcel->output($nameexl, $newdatas);
+          die();
+      }
+      
+      
 }

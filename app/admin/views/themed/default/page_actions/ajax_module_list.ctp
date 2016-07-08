@@ -49,7 +49,7 @@
 		<td align="center" style="padding:10px 0px;"><?php if($v['PageModule']['status']==1){?>
 	<?php echo $html->image('/admin/skins/default/img/yes.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$v["PageModule"]["id"].')')) ?>
 	<?php }elseif($v['PageModule']['status'] == 0){?>
-	<?php echo $html->image('no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$v["PageModule"]["id"].')'))?>
+	<?php echo $html->image('/admin/skins/default/img/no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$v["PageModule"]["id"].')'))?>
 	<?php }?>
 		</td>
 		<td>
@@ -89,7 +89,7 @@
 		<td align="center" style="padding:10px 0px;"><?php if($vv['PageModule']['status']==1){?>
 	<?php echo $html->image('/admin/skins/default/img/yes.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$vv["PageModule"]["id"].')')) ?>
 	<?php }elseif($vv['PageModule']['status'] == 0){?>
-	<?php echo $html->image('no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$vv["PageModule"]["id"].')'))?>
+	<?php echo $html->image('/admin/skins/default/img/no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$vv["PageModule"]["id"].')'))?>
 	<?php }?>
 		</td>
 		<td>
@@ -129,7 +129,7 @@
 		<td align="center" style="padding:10px 0px;"><?php if($vvv['PageModule']['status']==1){?>
 	<?php echo $html->image('/admin/skins/default/img/yes.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$vvv["PageModule"]["id"].')')) ?>
 	<?php }elseif($vvv['PageModule']['status'] == 0){?>
-	<?php echo $html->image('no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$vvv["PageModule"]["id"].')'))?>
+	<?php echo $html->image('/admin/skins/default/img/no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_actions/toggle_on_status", '.$vvv["PageModule"]["id"].')'))?>
 	<?php }?>
 		</td>
 		<td>

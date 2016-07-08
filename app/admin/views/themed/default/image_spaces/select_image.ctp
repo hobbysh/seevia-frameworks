@@ -220,7 +220,7 @@
                         foreach($photo_category_gallery_list as $k=>$v){ ?>
                         <li>
                             <a class="div_img" href="javascript:void(0)">
-                                <img src="<?php echo $v['PhotoCategoryGallery']['img_small'];?>" id="img<?php echo $v['PhotoCategoryGallery']['id'];?>" onclick="img_small=null;selected_image(this,'<?php echo $v['PhotoCategoryGallery']['img_detail'];?>','<?php echo $v['PhotoCategoryGallery']['img_big'];?>','<?php echo $v['PhotoCategoryGallery']['img_original'];?>','<?php echo $v['PhotoCategoryGallery']['name'];?>');">
+                            <?php echo $html->image($v['PhotoCategoryGallery']['img_small'],array('id'=>'img'.$v['PhotoCategoryGallery']['id'],'onclick'=>"img_small=null;selected_image(this,'".$v['PhotoCategoryGallery']['img_detail']."','".$v['PhotoCategoryGallery']['img_big']."','".$v['PhotoCategoryGallery']['img_original']."','".$v['PhotoCategoryGallery']['name']."')"));  ?>
                             </a>
                             <p class="div_img_name"><?php echo $v['PhotoCategoryGallery']['name'];?></p>
                             <p class="div_img_btn">
@@ -274,7 +274,13 @@ if(backend_locale=="eng"){
     var set_img_html="<div class='set_img_size' id='set_img_size'><a href='javascript:void(0);' onclick='set_img_size_small(this)'><?php echo $ld['label_initials_img_small'] ?></a><a href='javascript:void(0);' onclick='set_img_size_middle(this)'><?php echo $ld['label_initials_img_middle'] ?></a><a href='javascript:void(0);' onclick='set_img_size_big(this)'><?php echo $ld['label_initials_img_big'] ?></a><a href='javascript:void(0);' onclick='set_img_size_original(this)'><?php echo $ld['label_initials_img_original'] ?></a></div>";
 }
 $(function(){
-    if(!(id_str.indexOf("product_add_img")>=0)){
+	var clear_img_size=true;
+	if(id_str.indexOf("product_add_img")>=0){
+		clear_img_size=false;
+	}else if(id_str.indexOf("product_image")>=0){
+		clear_img_size=false;
+	}
+    if(clear_img_size){
         $(".imagelistnew ul li a.div_img").mouseover(function(){
             img_small=null;
             var li_obj=$(this).parent();
@@ -364,12 +370,18 @@ function selected_image(obj,img_detail,img_big,img_original,img_name){
     if(id_str.indexOf("product_add_img")>=0){
         img_small=obj.src;
     }
+	if(id_str.indexOf("product_image")>=0){
+		img_small=img_original;
+	}
     if(img_small==null){
         img_small=img_detail;//小图
     }
     img_small=img_small.replace(server_host,'');
+    if(webroot!="/"){
+    	img_small=img_small.replace(webroot,'');
+    }
     if(document.getElementById("type").value=="OpenElementDescription"){//素材描述信息自动拼接上域名
-        window.opener.document.getElementById(id_str).value = server_host+img_small;
+        window.opener.document.getElementById(id_str).value = server_host+webroot+img_small;
     }else if(document.getElementById("type").value=="travel"){
         if(window.opener.document.getElementById("upload_now_div")){
             window.opener.document.getElementById("upload_now_div").style.display="none";
@@ -377,7 +389,7 @@ function selected_image(obj,img_detail,img_big,img_original,img_name){
         var pp = window.opener.document.getElementById(id_str);
         var li = window.opener.document.createElement("li");
         var k = pp.getElementsByTagName('li').length;
-        li.innerHTML="<blockquote><span class='closebtn'>×</span><input type='hidden' id='data[TravelGallary][small_img][]' name='data[TravelGallary][small_img][]' value='"+img_originalz+"'><input type='hidden' id='data[TravelGallary][big_img][]' name='data[TravelGallary][big_img][]' value='"+img_detail+"'><input type='hidden' id='data[TravelGallary][orignal_img][]' name='data[TravelGallary][orignal_img][]' value='"+img_original+"'><a class='div_img'><img src='"+img_small+"'></a><p class='div_img_detail'><input type='text' id = 'data[TravelGallary][description][]' name = 'data[TravelGallary][description][]' value='"+img_name+"'/></p>"
+        li.innerHTML="<blockquote><span class='closebtn'>×</span><input type='hidden' id='data[TravelGallary][small_img][]' name='data[TravelGallary][small_img][]' value='"+img_originalz+"'><input type='hidden' id='data[TravelGallary][big_img][]' name='data[TravelGallary][big_img][]' value='"+img_detail+"'><input type='hidden' id='data[TravelGallary][orignal_img][]' name='data[TravelGallary][orignal_img][]' value='"+img_original+"'><a class='div_img'><img src='"+(webroot=="/"?"":webroot)+img_small+"'></a><p class='div_img_detail'><input type='text' id = 'data[TravelGallary][description][]' name = 'data[TravelGallary][description][]' value='"+img_name+"'/></p>"
             + "<p><?php echo $ld['sort']?><input style='width:50px' type='text' id = 'data[TravelGallary][orderby][]' name = 'data[TravelGallary][orderby][]' value='50'; /></p><p class='div_img_label_tag'><input type='button' name='data[TravelGallary][tags]["+(k-1)+"][]' class='dishow' value='+添加' /><input type='text' /></p></blockquote>";
         //+ "<p class='div_img_btn'><a href='javascript:;' onclick='addtags(this,"+k+")'>添加标签</a></p></blockquote>";
         /*
@@ -402,7 +414,7 @@ function selected_image(obj,img_detail,img_big,img_original,img_name){
         input += "<p class='div_img_detail'><input type='text' name = 'data[ArticleGalleryI18n]["+k+"][<?php echo $k;?>][description]' value='"+img_name+"'/><?php if(sizeof($backend_locales)>1){?><span class='lang'><?php echo $ld[$v['Language']['locale']]?></span><?php }?></p>";
         <?php }}?>
         //
-        li.innerHTML="<blockquote><span class='closebtn'>×</span><input type='hidden'  name='data[ArticleGallery]["+k+"][img_original]' value='"+img_original+"'><a class='div_img'><img src='"+img_original+"'></a>"+input
+        li.innerHTML="<blockquote><span class='closebtn'>×</span><input type='hidden'  name='data[ArticleGallery]["+k+"][img_original]' value='"+img_original+"'><a class='div_img'><img src='"+(webroot=="/"?"":webroot)+img_original+"'></a>"+input
             + "<p><?php echo $ld['sort']?><input style='width:50px' type='text'  name = 'data[ArticleGallery]["+k+"][orderby]' value='50'; /></p></blockquote>";
         var p =  window.opener.document.getElementById(id_str).getElementsByTagName('li')[k-1];
         var pclone = p.cloneNode(true);
@@ -420,22 +432,22 @@ function selected_image(obj,img_detail,img_big,img_original,img_name){
         if(window.opener.document.getElementById("show_"+id_str)){
             //window.opener.document.getElementById("show_"+id_str).src= img_original;
 //			if(id_str.indexOf("product_add_img")>=0){//商品相册
-//				window.opener.document.getElementById("show_"+id_str).src = img_small;
+//				window.opener.document.getElementById("show_"+id_str).src = webroot+img_small;
 //			}else{
-//				window.opener.document.getElementById("show_"+id_str).src = img_original;
+//				window.opener.document.getElementById("show_"+id_str).src = webroot+img_original;
 //			}
-            window.opener.document.getElementById("show_"+id_str).src = img_small;
+            window.opener.document.getElementById("show_"+id_str).src = (webroot=="/"?"":webroot)+img_small;
             window.opener.document.getElementById("show_"+id_str).parentNode.className += " img_exist";
             //window.opener.document.getElementById("show_"+id_str).parentNode.style.width = window.opener.document.getElementById(id_str).width;
         }
         if(window.opener.document.getElementById("show1_"+id_str)){
-            window.opener.document.getElementById("show1_"+id_str).src= img_original;
+            window.opener.document.getElementById("show1_"+id_str).src= (webroot=="/"?"":webroot)+img_original;
             window.opener.document.getElementById("show1_"+id_str).parentNode.className += " img_exist";
             window.opener.document.getElementById("show1_"+id_str).parentNode.parentNode.style.display="block";
             //window.opener.document.getElementById("show_"+id_str).parentNode.style.width = window.opener.document.getElementById(id_str).width;
         }
         if(window.opener.document.getElementById("show_img_detail_"+id_str)){
-            window.opener.document.getElementById("show_img_detail_"+id_str).src = img_detail;
+            window.opener.document.getElementById("show_img_detail_"+id_str).src = webroot+img_detail;
             window.opener.document.getElementById("show_img_detail_"+id_str).parentNode.className += " img_exist";
             i=1;
         }
@@ -459,7 +471,7 @@ function selected_image(obj,img_detail,img_big,img_original,img_name){
             i=1;
         }
         if(window.opener.document.getElementById("show_img_big_"+id_str)){
-            window.opener.document.getElementById("show_img_big_"+id_str).src = img_big;
+            window.opener.document.getElementById("show_img_big_"+id_str).src = (webroot=="/"?"":webroot)+img_big;
             window.opener.document.getElementById("show_img_big_"+id_str).parentNode.className += " img_exist";
             i=1;
         }

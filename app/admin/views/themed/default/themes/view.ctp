@@ -1,4 +1,10 @@
-﻿<style>
+﻿<?php
+	echo $html->css('/skins/default/css/docs');
+	echo $html->css('/skins/default/css/codemirror');
+	echo $javascript->link('/skins/default/js/codemirror');
+	echo $javascript->link('/skins/default/js/css');
+?>
+<style type="text/css">
     .am-radio, .am-checkbox{display:inline;}
     em{color:red;}
     .am-checkbox {margin-top:0px; margin-bottom:0px;}
@@ -56,7 +62,7 @@
                     <th style="padding-top:15px"><?php echo $ld['thumbnail']?></th>
                     <td><input id="template_img" style="margin-right: 10px;width:550px;float:left;" type="text" name="data[Template][template_img]" value="<?php echo isset($template_list['Template']['template_img'])?$template_list['Template']['template_img']:'';?>" /><input class="am-btn am-btn-success am-radius am-btn-sm" type="button" onclick="select_img('template_img')" value="<?php echo $ld['choose_picture']?>" />&nbsp;
                         <div style="max-width: 200px;">
-                            <?php echo $html->image((isset($template_list['Template']['template_img'])&&$template_list['Template']['template_img']!="")?$template_list['Template']['template_img']:"default_no_photo.png",array('id'=>'show_template_img'))?>
+                            <?php echo $html->image((isset($template_list['Template']['template_img'])&&$template_list['Template']['template_img']!="")?$template_list['Template']['template_img']:"/admin/skins/default/img/default_no_photo.png",array('id'=>'show_template_img'))?>
                         </div>
                     </td>
                 </tr>
@@ -147,7 +153,7 @@
                             <td><?php if($v['PageType']['status']==1){?>
                                     <?php echo $html->image('/admin/skins/default/img/yes.gif') ?>
                                 <?php }elseif($v['PageType']['status'] == 0){?>
-                                    <?php echo $html->image('no.gif')?>
+                                    <?php echo $html->image('/admin/skins/default/img/no.gif')?>
                                 <?php }?>
                             </td>
                             <td>
@@ -155,7 +161,7 @@
                                     <span class="am-icon-pencil-square-o"></span> <?php echo $ld['edit']; ?>
                                 </a>
                                 <?php if($svshow->operator_privilege("page_types_reomve")){if($v['PageType']['status']==0){?>
-                                <a class="am-btn am-btn-default am-btn-xs am-text-danger am-seevia-btn-delete" href="javascript:;" onclick="if(confirm('确认删除该模块吗？（删除模块信息，页面样式，样式模块）')){list_delete_submit(admin_webroot+'page_types/remove/<?php echo $v['PageType']['id'] ?>');}">
+                                <a class="am-btn am-btn-default am-btn-xs am-text-danger am-seevia-btn-delete" href="javascript:;" onclick="window.location.href = admin_webroot+'page_types/remove/<?php echo $v['PageType']['id'] ?>'">
                                     <span class="am-icon-trash-o"></span> <?php echo $ld['delete']; ?>
                                 </a>
                                 <?php }}?>
@@ -179,7 +185,12 @@
         <div id="ad_position_list" class="am-panel-collapse am-collapse am-in">
             <div class="am-panel-bd am-form-detail am-form am-form-horizontal" style="padding-bottom:0;">
                 <?php if($svshow->operator_privilege("advertisement_positions_mgt")){?>
-                    <p class="action-span"><?php echo $html->link($ld['layout_example'],"/advertisement_positions/position/".$template_list['Template']['name'],array("target"=>'view_adsiteall',"class"=>"addbutton"));?></p>
+                    <p class="am-text-right"><?php
+                    	 //echo $html->link($ld['layout_example'],"/advertisement_positions/position/".$template_list['Template']['name'],array("target"=>'view_adsiteall'));
+                    	?>
+                    	<a class="am-btn am-btn-warning am-btn-sm am-radius" href="<?php echo $html->url('/advertisement_positions/view/0/'.$template_list['Template']['name']); ?>">
+					<span class="am-icon-plus"></span> <?php echo $ld['add']; ?>
+				</a></p>
                 <?php }?>
                 <table class="am-table">
                     <thead>
@@ -205,14 +216,14 @@
                             <td><?php
                                 if(!isset($v['AdvertisementPosition']['is_new'])){
                                     if($svshow->operator_privilege("advertisement_positions_mgt")){
-                                        echo $html->link($ld['layout'],"/advertisement_positions/position/".$template_list['Template']['name']."#".$v['AdvertisementPosition']['code'],array("target"=>'view_adsiteall'));
+                                        //echo $html->link($ld['layout'],"/advertisement_positions/position/".$template_list['Template']['name']."#".$v['AdvertisementPosition']['code'],array("target"=>'view_adsiteall'));
                                     }
                                     if($svshow->operator_privilege("advertisement_positions_edit")){?>
                                         <a class="am-btn am-btn-default am-btn-xs  am-seevia-btn-edit" href="<?php echo $html->url("/advertisement_positions/view/{$v['AdvertisementPosition']['id']}/{$template_list['Template']['name']}",array("target"=>'balank')); ?>">
                                             <span class="am-icon-pencil-square-o"></span> <?php echo $ld['edit']; ?>
                                         </a>
                                     <?php }if($svshow->operator_privilege("advertisement_positions_remove")&&!isset($v['AdvertisementPosition']['is_new'])){?>
-                                        <a class="am-btn am-btn-default am-btn-xs am-text-danger am-seevia-btn-delete" href="javascript:;" onclick="if(confirm('{$ld['confirm_delete_ad_position']}')){list_delete_submit(admin_webroot+'advertisement_positions/remove/<?php echo $v['AdvertisementPosition']['id'] ?>');}">
+                                        <a class="am-btn am-btn-default am-btn-xs am-text-danger am-seevia-btn-delete" href="javascript:;" onclick="window.location.href = admin_webroot+'advertisement_positions/remove/<?php echo $v['AdvertisementPosition']['id'] ?>'">
                                             <span class="am-icon-trash-o"></span> <?php echo $ld['delete']; ?>
                                         </a>
                                     <?php }}else if (isset($v['AdvertisementPosition']['is_new'])&&$v['AdvertisementPosition']['is_new']=='1') {
@@ -301,7 +312,7 @@ var returnflag;
 <?php } ?>
 var editor1,editor2;
 function setCodeMirror(){
-   /* if($("#show_css").parent().find(".CodeMirror").length>0){
+    if($("#show_css").parent().find(".CodeMirror").length>0){
         var _value1=editor1.getValue();
         document.getElementById("show_css").value=_value1;
         $("#show_css").parent().find(".CodeMirror").remove();
@@ -309,22 +320,23 @@ function setCodeMirror(){
     editor1 = CodeMirror.fromTextArea(document.getElementById("show_css"), {
         lineNumbers: true
     });
-
-    if($("#mobile_css").parent().find(".CodeMirror").length>0){
-        var _value2=editor2.getValue();
-        document.getElementById("mobile_css").value=_value2;
-        $("#mobile_css").parent().find(".CodeMirror").remove();
+    if(document.getElementById("mobile_css")){
+	    if($("#mobile_css").parent().find(".CodeMirror").length>0){
+	        var _value2=editor2.getValue();
+	        document.getElementById("mobile_css").value=_value2;
+	        $("#mobile_css").parent().find(".CodeMirror").remove();
+	    }
+	    editor2 = CodeMirror.fromTextArea(document.getElementById("mobile_css"), {
+	        lineNumbers: true
+	    });
     }
-    editor2 = CodeMirror.fromTextArea(document.getElementById("mobile_css"), {
-        lineNumbers: true
-    });*/
 }
 setCodeMirror();
 
-$("#tablemenu li").prop("click",function(){
+$("#tablemenu li").attr("click",function(){
     setCodeMirror();
 });
-$("#tablemain h2").prop("click",function(){
+$("#tablemain h2").attr("click",function(){
     setCodeMirror();
 });
 function ckecktemplate_name(){
@@ -454,14 +466,13 @@ var phonecolorFn = function(){
         }else {
             phonecolorstyle += phonebgimage[index] + "{ background-image:url(" + $(this).val() + ")}";
         }
-        //$("#next_product_name_color").val()
     });
-    if($.browser.msie){
+//    if($.browser.msie){
         $("#phonestyle").remove();
         $('<style type="text/css" id="phonestyle">' + phonecolorstyle + '</style>').appendTo("head");
-    } else {
-        $("#phonestyle").html(phonecolorstyle);
-    }
+//    } else {
+//        $("#phonestyle").html(phonecolorstyle);
+//    }
 }
 
 $(document).ready(function(){

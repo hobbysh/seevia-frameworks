@@ -13,9 +13,8 @@ class PhpcsvComponent extends Object
         fclose($fp);
         $fd = fopen($tmp_file, "r");
         $csv_content = fread($fd, filesize($tmp_file));
-        fclose($fd);
         @unlink($tmp_file);
-        $csv_content=@iconv("utf-8", "GBK", $csv_content);
+        $csv_content=@mb_convert_encoding($csv_content, "GBK", "utf-8"); 
         $outputFileName = $filename;
         $ua = $_SERVER['HTTP_USER_AGENT'];
         $encoded_filename = urlencode($outputFileName);

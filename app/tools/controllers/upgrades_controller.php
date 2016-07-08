@@ -39,6 +39,10 @@ class upgradesController extends AppController{
 				if(!empty($this->getUpgradeFile('v0.7'))){
 					$upgrade_sql_file[]=$this->getUpgradeFile('v0.7');
 				}
+			case "v0.8":
+				if(!empty($this->getUpgradeFile('v0.9'))){
+					$upgrade_sql_file[]=$this->getUpgradeFile('v0.9');
+				}
         	}
         	if(!empty($upgrade_sql_file)){
         		$sql_result=$this->execSQL($upgrade_sql_file);

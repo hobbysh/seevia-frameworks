@@ -17,28 +17,32 @@
 	.am-panel-title div{font-weight:bold;}
 	.am-yes{color:#5eb95e;}
 	.am-no{color:#dd514c;}	
+	.am-form-label{top:5px;}
+
 </style>
+
+<?php //pr($configs_list) ?>
 <div class="" style="margin-top:10px;">
 	<?php echo $form->create('Config',array('action'=>'/','name'=>'PointForm','id'=>"SearchForm","type"=>"get",'onsubmit'=>'return formsubmit();'));?>
 		<div>
 			<ul class="am-avg-lg-3 am-avg-md-2 am-avg-sm-1 am-thumbnails">
 				<li>
-					<label class="am-u-lg-3 am-u-md-4 am-u-sm-3 am-form-label am-text-left"  style="font-weight:normal;padding-top:8px;">
-							<?php echo $ld['group']?>:
+					<label class="am-u-lg-3 am-u-md-4 am-u-sm-4 am-form-label am-text-left">
+							<?php echo $ld['group']?>
 					</label>
 					<div class="am-u-lg-8 am-u-md-8 am-u-sm-8 ">
 						<select  id="show_name" data-am-selected>
 							<option value="all"><?php echo $ld['all']?></option>
 							<?php if(isset($config_group_code) && sizeof($config_group_code)>0){?>
 							<?php foreach( $config_group_code as $k=>$v ){?>
-								<option value="<?php echo $v['SystemResource']['code']?>" <?php if($v['SystemResource']['code'] == $show_name){echo "selected";}?>><?php echo $v['SystemResourceI18n']['name']?></option>
+								<option value="<?php echo $k; ?>" <?php if($k == $show_name){echo "selected";}?>><?php echo $v; ?></option>
 							<?php }?><?php }?>
-						</select>&nbsp;&nbsp;
+						</select>
 					</div>
 				</li>
 				<li>
-					<label class="am-u-lg-3 am-u-md-4 am-u-sm-3  am-form-label am-text-left" style="font-weight:normal;padding-top:8px;">
-							html <?php echo $ld['type']?>:
+					<label class="am-u-lg-3 am-u-md-4 am-u-sm-4  am-form-label am-text-left">
+							html <?php echo $ld['type']?>
 					</label>
 					<div class="am-u-lg-8 am-u-md-8 am-u-sm-8 ">
 						<select  id="log_type" data-am-selected>
@@ -53,47 +57,49 @@
 							<option value="map"<?php if($log_type == "map"){echo "selected";}?>>map</option>
 							<option value="send_email_test" <?php if($log_type=="send_email_test"){echo "selected";} ?> >
 								send email test</option>
-						</select>&nbsp;&nbsp;
+						</select>
 					</div>
 				</li>
 				<li>
-					<label class="am-u-lg-3 am-u-md-4 am-u-sm-3  am-form-label am-text-left" style="font-weight:normal;padding-top:8px;">
-							<?php echo $ld['versions']?>:
+					<label class="am-u-lg-3 am-u-md-4 am-u-sm-4  am-form-label am-text-left">
+							<?php echo $ld['versions']?>
 					</label>
 					<div class="am-u-lg-8 am-u-md-8 am-u-sm-8 ">
 						<select  id="version" data-am-selected>
 							<option value="all"><?php echo $ld['all']?></option>
 							<option value="O2O" <?php if($version == "O2O"){echo "selected";}?>>O2O</option>
 							<option value="AllInOne"<?php if($version == "AllInOne"){echo "selected";}?>>AllInOne</option>
-						</select>&nbsp;&nbsp;
+						</select>
 					</div>
 				</li>
 				<li>
-					<label class="am-u-lg-3 am-u-md-4 am-u-sm-3  am-form-label am-text-left" style="font-weight:normal;padding-top:8px;">
-							<?php echo $ld['subparameter'];?>: 
+					<label class="am-u-lg-3 am-u-md-4 am-u-sm-4  am-form-label am-text-left">
+							<?php echo $ld['subparameter'];?> 
 					</label>
 					<div class="am-u-lg-8 am-u-md-8 am-u-sm-8 ">
 						<input type="text" name="sub_group" id="sub_group" class="am-form-field am-radius am-input-sm" value="<?php echo $sub_group;?>" />
 					</div>
 				</li>
 				<li>
-					<label class="am-u-lg-3 am-u-md-4 am-u-sm-3  am-form-label am-text-left" style="font-weight:normal;padding-top:8px;">
-							<?php echo $ld['keyword'];?>: 
+					<label class="am-u-lg-3 am-u-md-4 am-u-sm-4  am-form-label am-text-left">
+							<?php echo $ld['keyword'];?>
 					</label>
 					<div class="am-u-lg-8 am-u-md-8 am-u-sm-8 ">
 						<input type="text" name="config_keywords" id="config_keywords" class="am-form-field am-radius am-input-sm" value="<?php echo $config_keywords;?>"  placeholder="<?php echo $ld['code']?>/<?php echo $ld['name']?>"/>
 					</div>
 				</li>
 				<li>
-					<div class="am-u-lg-3 am-u-md-4 am-u-sm-3 ">
+					<div class="am-u-lg-3 am-u-md-4 am-u-sm-4 ">
 						<button type="button" class="am-btn am-btn-success am-btn-sm am-radius search_article"  value="" onclick="search_html()"><?php echo $ld['search'];?></button>
 					</div>
 				</li>
 			</ul>
 		</div>
 	<?php echo $form->end();?>
-	<div class="am-g action-span" style="text-align:right;margin-bottom:10px;">				
-		<?php echo $html->link( isset($backend_locale)&&$backend_locale=='eng'?$ld['add'].' '.$ld['shop_configs']:$ld['add'].$ld['shop_configs'],"/configs/view/0",array("class"=>"addbutton am-btn am-btn-warning am-btn-sm am-radius"));?>				
+	<div class="am-g action-span" style="text-align:right;margin-bottom:10px;">
+		<a class="am-btn am-btn-xs am-btn-default" href="<?php echo $html->url('/configs/config_upload'); ?>"><?php echo $ld['bulk_upload']?></a>
+				
+		<?php echo $html->link( isset($backend_locale)&&$backend_locale=='eng'?$ld['add'].' '.$ld['shop_configs']:$ld['add'].$ld['shop_configs'],"/configs/view/0",array("class"=>"addbutton am-btn am-btn-warning am-btn-xs am-radius"));?>				
 	</div>
 	<?php echo $form->create('',array('action'=>'','name'=>'UserForm',"onsubmit"=>"return false","type"=>"get"));?>
 		<div class="am-panel-group am-panel-tree">
@@ -101,9 +107,15 @@
 				<div class="am-panel-hd">
 					<div class="am-panel-title">
 						<div class="am-hide"><?php echo $ld['number']?></div>
-						<div class="am-u-lg-2 am-u-md-3 am-hide-sm-only"><?php echo $ld['group']?> / <?php echo $ld['subparameter']?></div>
-						<div class="am-u-lg-3 am-show-lg-only"><?php echo $ld['code']?></div>
-						<div class="am-u-lg-2 am-u-md-4 am-u-sm-5"><?php echo $ld['name']?></div>
+						<div class="am-u-lg-2 am-u-md-3 am-hide-sm-only">
+							<label class="am-checkbox am-success" style="display: inline;">
+						            <input onclick='listTable.selectAll(this,"checkboxes[]")' type="checkbox"
+									value="checkbox" data-am-ucheck>
+							<?php echo $ld['group']?><br><?php echo $ld['subparameter']?>
+							</label>
+						</div>
+						<div class="am-u-lg-3 am-show-lg-only"><?php echo $ld['name']?><br><?php echo $ld['code']?></div>
+						<div class="am-u-lg-2 am-u-md-4 am-u-sm-5">描述</div>
 						<div class="am-hide"><?php echo $ld['default_value']?></div>
 						<div class="am-hide"><?php echo $ld['versions']?></div>
 						<div class="am-u-lg-1 am-show-lg-only"><?php echo $ld['type']?></div>
@@ -117,14 +129,20 @@
 			</div>
 			<?php if(isset($configs_list) && sizeof($configs_list)>0){?><?php foreach($configs_list as $k=>$v){ ?>
 				<div <?php if((abs($k)+2)%2!=1){?>class="tr_bgcolor"<?php }else{?>class=""<?php }?> >
-					<div class="am-panel am-panel-default am-panel-body" style="border-top-width:0px;">
+					<div class="am-panel am-panel-default am-panel-body">
 						<div class="am-panel-bd">		
 							<div class="am-hide">&nbsp;<?php echo $v['Config']['id'] ?></div>
 							<div class="am-u-lg-2 am-u-md-3 am-hide-sm-only">
-								&nbsp;<?php echo $v['Config']['group_code'] ?> / <?php echo $v['Config']['subgroup_code'] ?>
+									<label class="am-checkbox am-success">
+									<input type="checkbox" name="checkboxes[]" data-am-ucheck value="<?php echo $v['Config']['id']?>" />
+										<?php echo $v['Config']['group_code'] ?><br><?php echo $v['Config']['subgroup_code'] ?>
+									</label>
 							</div>
-							<div class="am-u-lg-3 am-show-lg-only">&nbsp;<?php echo $v['Config']['code'] ?></div>
-							<div class="am-u-lg-2 am-u-md-4 am-u-sm-5">&nbsp;<?php echo $v['ConfigI18n']['name'] ?></div>
+							<div class="am-u-lg-3 am-show-lg-only"><?php echo $v['ConfigI18n']['name'] ?><br><?php echo $v['Config']['code'] ?></div>
+							<div class="am-u-lg-2 am-u-md-4 am-u-sm-5 am-text-break">
+							 <span onclick="javascript:listTable.edit(this, '/configs/update_config_description', <?php echo $v['Config']['id']?>,'250')"><?php echo isset($v['ConfigI18n']['description'])&&$v['ConfigI18n']['description'] != ""?$v['ConfigI18n']['description']:"-"; ?></span>
+								&nbsp;
+							</div>
 							<div class="am-hide">&nbsp;<?php echo $v['ConfigI18n']['default_value'];?></div>
 							<div class="am-hide">&nbsp;<?php echo $v['Config']['section'] ?></div>
 							<div class="am-u-lg-1 am-show-lg-only">&nbsp;<?php echo $v['Config']['type'] ?></div>
@@ -133,7 +151,7 @@
 								<!--<?php echo $html->image('/admin/skins/default/img/yes.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "configs/toggle_on_readonly", '.$v["Config"]["id"].')')) ?>&nbsp;-->
 								<span class="am-icon-check am-yes" style="cursor:pointer;" onclick="change_state(this,'configs/toggle_on_readonly',<?php echo $v['Config']['id'];?>)"></span>
 								<?php }elseif($v['Config']['readonly'] == 0){?>
-								<!--<?php echo $html->image('no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "configs/toggle_on_readonly", '.$v["Config"]["id"].')'))?>&nbsp;-->
+								<!--<?php echo $html->image('/admin/skins/default/img/no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "configs/toggle_on_readonly", '.$v["Config"]["id"].')'))?>&nbsp;-->
 								<span class="am-icon-close am-no" style="cursor:pointer;" onclick="change_state(this,'configs/toggle_on_readonly',<?php echo $v['Config']['id'];?>)">&nbsp;</span>
 								<?php }?>	
 							</div>
@@ -150,8 +168,8 @@
 								<span onclick="javascript:listTable.edit(this, 'configs/update_config_orderby/', <?php echo $v['Config']['id']?>)"><?php echo $v['Config']['orderby'] ?></span>
 							</div>
 							<div class="am-u-lg-2 am-u-md-3 am-u-sm-4">
-								<?php echo $html->link($ld['edit'],"/configs/view/{$v['Config']['id']}",array("class"=>"am-btn am-btn-default am-btn-sm am-radius"));?>&nbsp;
-								<?php echo $html->link($ld['delete'],"javascript:;",array("class"=>"am-btn am-btn-default am-text-danger am-btn-sm am-radius","onclick"=>"if(confirm('{$ld['confirm_delete']}')){window.location.href='{$admin_webroot}configs/remove/{$v['Config']['id']}';}"));?>&nbsp;
+								<?php echo $html->link($ld['edit'],"/configs/view/{$v['Config']['id']}",array("class"=>"am-btn am-btn-default am-btn-xs"));?>&nbsp;
+								<?php echo $html->link($ld['delete'],"javascript:;",array("class"=>"am-btn am-btn-default am-text-danger am-btn-xs","onclick"=>"if(confirm('{$ld['confirm_delete']}')){window.location.href='{$admin_webroot}configs/remove/{$v['Config']['id']}';}"));?>&nbsp;
 							</div>
 							<div style="clear:both;"></div>
 						</div>
@@ -159,7 +177,35 @@
 				</div>	
 			<?php }} ?>
 			<div class="btnouterlist" style="position:relative">
-				<?php echo $this->element('pagers', array('cache'=>'+0 hour'));?>
+				<div class="am-u-lg-6 am-u-md-6 am-u-sm-6 am-hide-sm-down" style="left:6px;">
+						<div class="am-fl">
+					          <label class="am-checkbox am-success" style="display: inline;">
+					            <input onclick='listTable.selectAll(this,"checkboxes[]")' type="checkbox"
+								value="checkbox" data-am-ucheck><span><?php echo $ld['select_all']?></span>
+					          </label>
+			            	</div>
+						<div class="am-fl" style="margin-left:3px;">
+					            <select name="barch_opration_select" id="barch_opration_select" data-am-selected  onchange="barchconfigs_opration_select_onchange(this)">
+					              <option value="0"><?php echo $ld['batch_operate']?></option>
+					              <option value="delete"><?php echo $ld['batch_delete']?></option>
+					    		  <option value="export_csv"><?php echo $ld['batch_export']?></option>
+					            </select>
+			            	</div> 
+						<div class="am-fl" style="display:none;margin-left:3px;">
+			                    <select id="export_csv" data-am-selected name="barch_opration_select_onchange" >
+			                        <option value=""><?php echo $ld['click_select']?></option>
+			                        <option value="all_export_csv"><?php echo  $ld['all_export']?></option>
+			                        <option value="choice_export"><?php echo $ld['choice_export']?></option>
+			                       
+			                    </select>&nbsp;
+			              	</div>
+						<div class="am-fl" style="margin-left:3px;">
+			               	   <button type="button" class="am-btn am-radius am-btn-danger am-btn-sm" onclick="select_batch_operations()"><?php echo $ld['submit']?></button>
+			              	</div>
+				</div>
+				<div class="am-u-lg-6 am-u-md-6 am-u-sm-6">				
+					<?php echo $this->element('pagers', array('cache'=>'+0 hour'));?>
+				</div>
 			</div>
 		</div>
 	<?php echo $form->end();?>
@@ -179,6 +225,92 @@ function utf8Substr($str, $from, $len){
 }
 ?>
 <script type="text/javascript">
+function select_batch_operations(){
+	var barch_opration_select = document.getElementById("barch_opration_select");
+      var export_csv = document.getElementById("export_csv");
+      if(barch_opration_select.value==0){
+      	  	alert(j_select_operation_type);
+			return;
+      }
+      if(barch_opration_select.value=='delete'){
+		batch_operations();
+	}
+	if(barch_opration_select.value=='export_csv'){
+		if(export_csv.value=='all_export_csv'){
+			window.location.href=admin_webroot+"/configs/all_export_csv";
+		
+		}
+		if(export_csv.value=='choice_export'){
+			choice_upload();
+		}
+	}
+}
+
+//批量删除
+function batch_operations(){
+	var bratch_operat_check = document.getElementsByName("checkboxes[]");
+	var postData = "";
+	for(var i=0;i<bratch_operat_check.length;i++){
+		if(bratch_operat_check[i].checked){
+			postData+="&checkboxes[]="+bratch_operat_check[i].value;
+		}
+	}
+	if( postData=="" ){
+		alert("<?php echo $ld['please_select'] ?>");
+		return;
+	}
+	if(confirm("<?php echo $ld['confirm_delete']?>")){
+		$.ajax({ 
+			url:admin_webroot+"configs/batch_operations/",
+			type:"GET",
+			dataType:"json",
+			data: postData,
+			success:function(data){
+				window.location.href = window.location.href;
+			}
+		});
+	}
+}	
+
+//选择导出
+function choice_upload(){
+	var bratch_operat_check = document.getElementsByName("checkboxes[]");
+	var postData = "";
+	for(var i=0;i<bratch_operat_check.length;i++){
+		if(bratch_operat_check[i].checked){
+			postData+="&checkboxes[]="+bratch_operat_check[i].value;
+		}
+	}
+	if( postData=="" ){
+		alert("<?php echo $ld['please_select'] ?>");
+		return;
+	}else{
+	window.location.href=admin_webroot+"configs/choice_export/"+postData;
+	
+	}
+}	
+
+//触发子下拉
+function barchconfigs_opration_select_onchange(obj){
+	if(obj.value!="export_csv"){
+		$("#export_csv").parent().hide();		
+	}
+	$("select[name='barch_opration_select_onchange[]']").parent().hide();
+	
+	var export_csv=document.getElementById("export_csv").value;
+	
+	if(obj.value=="export_csv"){
+		if(export_csv=="all_export_csv"){
+			$("#export_csv").parent().show();
+		}else{
+			$("#export_csv").parent().show();
+		}
+	}
+
+}		
+	
+	
+	
 var label_obj="";
 function update_orderby(obj,config_id){
 	if(!isNaN(obj.innerHTML-0)){
@@ -237,8 +369,7 @@ function change_state(obj,func,id){
 					$(obj).addClass("am-icon-check am-yes");
 				}
 			}
-		
-		}	
+		}
 	});
 }
 </script>

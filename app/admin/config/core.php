@@ -10,10 +10,12 @@
     } else {
         Configure::write('debug', debug);
     }
+    Configure::write('log', true);
+    Configure::write('Database_log', true);//错误日志记录数据库
     Configure::write('App.encoding', 'UTF-8');
     Configure::write('Cache.disable', true);
     define('LOG_ERROR', 2);
-
+    
     define('DateTime', date('Y-m-d H:i:s'));
     define('Today', date('Y-m-d'));
     define('StartTime', '00:00:00');

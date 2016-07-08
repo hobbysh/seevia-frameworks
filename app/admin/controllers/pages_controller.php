@@ -167,7 +167,7 @@ class PagesController extends AppController
                         $result['code'] = '1';
                     }
                 } else {
-                    $msg = '品牌代码为空';
+                    $msg = $this->ld['brand_code_empty'];
                     echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><script type="text/javascript">alert("'.$msg.'");	history.go(-1);</script>';
                     die();
                 }

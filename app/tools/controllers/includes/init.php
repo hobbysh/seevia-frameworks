@@ -1,7 +1,8 @@
 <?php
 /* 报告所有错误 */
 @ini_set('display_errors', 1);
-error_reporting(E_ALL ^ E_NOTICE);
+
+error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_STRICT);
 
 /* 清除所有和文件操作相关的状态信息 */
 clearstatcache();

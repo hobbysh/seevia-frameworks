@@ -3,9 +3,6 @@ label{font-weight:normal}
 .btnouter{margin:50px;}
  .am-form-horizontal .am-checkbox{padding-top: 0em;}
  .am-checkbox input[type="checkbox"]{margin-left:0px;}
- #cronjob_info .am-panel-bd .am-form-group label{top:8px;}	
- #cronjob_info .am-panel-bd .am-form-group .am-form-label-cronjobs{top:20px;}
- #check span.am-ucheck-icons{top:-1px;}
 </style>
 <div class="">
 	<div class="am-u-lg-2 am-u-md-3 am-u-sm-4">
@@ -27,53 +24,53 @@ label{font-weight:normal}
 						<div class="am-form-group">
 							<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label"><?php echo $ld['task_name']?>:</label>
 							<div class="am-u-lg-6 am-u-md-6 am-u-sm-6">
-								<div><input type="text" id="task_name"  maxlength="60" name="data[Cronjob][task_name]" value="<?php echo isset($cronjob_info)?$cronjob_info['Cronjob']['task_name']:'';?>" /></div>
+								<input type="text" id="task_name"  maxlength="60" name="data[Cronjob][task_name]" value="<?php echo isset($cronjob_info)?$cronjob_info['Cronjob']['task_name']:'';?>" />
 							</div>
 						</div>	
 						<div class="am-form-group">
 							<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label"><?php echo $ld['task_code']?>:</label>
 							<div class="am-u-lg-6 am-u-md-6 am-u-sm-6">
-								<div><input type="text" id="task_code"  maxlength="60" name="data[Cronjob][task_code]" value="<?php echo isset($cronjob_info)?$cronjob_info['Cronjob']['task_code']:'';?>" /></div>
+								<input type="text" id="task_code"  maxlength="60" name="data[Cronjob][task_code]" value="<?php echo isset($cronjob_info)?$cronjob_info['Cronjob']['task_code']:'';?>" />
 							</div>
 						</div>	
 						<div class="am-form-group">
 							<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label"><?php echo $ld['interval_time']?>:</label>
 							<div class="am-u-lg-6 am-u-md-6 am-u-sm-6">
-								<div><input type="text" id="interval_time"  maxlength="60" name="data[Cronjob][interval_time]" value="<?php echo isset($cronjob_info)?$cronjob_info['Cronjob']['interval_time']:'';?>" /></div>
+								<input type="text" id="interval_time"  maxlength="60" name="data[Cronjob][interval_time]" value="<?php echo isset($cronjob_info)?$cronjob_info['Cronjob']['interval_time']:'';?>" />
 							</div>
 						</div>	
 						<div class="am-form-group">
 							<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label"><?php echo $ld['app_code']?>:</label>
 							<div class="am-u-lg-6 am-u-md-6 am-u-sm-6">
-								<div><select class="all" name="data[Cronjob][app_code]" id="cronjob_app" data-am-selected>
+								<select class="all" name="data[Cronjob][app_code]" id="cronjob_app" data-am-selected>
 									<option value="0"><?php echo $ld['select_app_code']?></option>
 									<?php if(isset($appcode_tree) && sizeof($appcode_tree)>0){?>
 									<?php foreach($appcode_tree as $k=>$v){?>
 									  <option value="<?php echo $v['Application']['code']?>" <?php if((isset($cronjob_info)?$cronjob_info['Cronjob']['app_code']:'') == $v['Application']['code'] && (isset($cronjob_info)?$cronjob_info['Cronjob']['app_code']:'')!=""){?>selected<?php }?>><?php echo $v['Application']['code']?></option>
-									<?php }}?></div>
+									<?php }}?>
 								</select>
 							</div>
 						</div>	
 						<div class="am-form-group">
-							<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label am-form-label-cronjobs"><?php echo $ld['param01']?>:</label>
+							<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label"><?php echo $ld['param01']?>:</label>
 							<div class="am-u-lg-6 am-u-md-6 am-u-sm-6">
-								<div><input type="text" id="param01"  maxlength="60" name="data[Cronjob][param01]" value="<?php echo isset($cronjob_info)?$cronjob_info['Cronjob']['param01']:'';?>" /></div>
+								<input type="text" id="param01"  maxlength="60" name="data[Cronjob][param01]" value="<?php echo isset($cronjob_info)?$cronjob_info['Cronjob']['param01']:'';?>" />
 							</div>
 						</div>	
 						<div class="am-form-group">
-							<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label am-form-label-cronjobs"><?php echo $ld['param02']?>:</label>
+							<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label"><?php echo $ld['param02']?>:</label>
 							<div class="am-u-lg-6 am-u-md-6 am-u-sm-6">
-								<div><input type="text" id="param02"  maxlength="60" name="data[Cronjob][param02]" value="<?php echo isset($cronjob_info)?$cronjob_info['Cronjob']['param02']:'';?>" />
-							</div></div>
+								<input type="text" id="param02"  maxlength="60" name="data[Cronjob][param02]" value="<?php echo isset($cronjob_info)?$cronjob_info['Cronjob']['param02']:'';?>" />
+							</div>
 						</div>	
 						<div class="am-form-group">
-							<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label am-form-label-cronjobs"><?php echo $ld['remark']?>:</label>
+							<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label"><?php echo $ld['remark']?>:</label>
 							<div class="am-u-lg-6 am-u-md-6 am-u-sm-6">
-								<div><input type="text" id="remark"  maxlength="60" name="data[Cronjob][remark]" value="<?php echo isset($cronjob_info)?$cronjob_info['Cronjob']['remark']:'';?>" />
-							</div></div>
+								<input type="text" id="remark"  maxlength="60" name="data[Cronjob][remark]" value="<?php echo isset($cronjob_info)?$cronjob_info['Cronjob']['remark']:'';?>" />
+							</div>
 						</div>	
 						<div class="am-form-group">
-							<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label am-form-label-cronjobs" style="padding-top:0;"><?php echo $ld['status']?>:</label>
+							<label class="am-u-lg-3 am-u-md-3 am-u-sm-3 am-form-label" style="padding-top:0;"><?php echo $ld['status']?>:</label>
 							<div class="am-u-lg-6 am-u-md-6 am-u-sm-6">
 								<label class="am-checkbox am-success">
 									<input type="checkbox"  id="check" data-am-ucheck onClick="statuschange()"  value="<?php if(isset($cronjob_info['Cronjob']['status'])){echo $cronjob_info['Cronjob']['status'];}?>"  <?php if(isset($cronjob_info['Cronjob']['status'])&&$cronjob_info['Cronjob']['status']==1){echo "checked";}?> />
@@ -103,5 +100,8 @@ function statuschange(){
  }
 }
 </script>
+<style type="text/css">
+#cronjob_info .am-form-group{margin-bottom:1rem;}
+</style>
 
 	

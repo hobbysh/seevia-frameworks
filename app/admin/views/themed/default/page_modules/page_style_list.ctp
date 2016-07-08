@@ -21,7 +21,7 @@
 			<td><?php if($v['PageStyle']['status']==1){?>
 				<?php echo $html->image('/admin/skins/default/img/yes.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_modules/toggle_on_page_style_status", '.$v["PageStyle"]["id"].')')) ?>
 				<?php }elseif($v['PageStyle']['status'] == 0){?>
-				<?php echo $html->image('no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_modules/toggle_on_page_style_status", '.$v["PageStyle"]["id"].')'))?>
+				<?php echo $html->image('/admin/skins/default/img/no.gif',array('style'=>'cursor:pointer;','onclick'=>'listTable.toggle(this, "page_modules/toggle_on_page_style_status", '.$v["PageStyle"]["id"].')'))?>
 				<?php }?>
 			</td>
 			<td>

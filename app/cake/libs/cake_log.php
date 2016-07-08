@@ -215,6 +215,17 @@ class CakeLog {
 		if (!defined('LOG_ERR')) {
 			define('LOG_ERR', LOG_ERROR);
 		}
+		
+		if (Configure::read('Database_log') === true) {
+			$settings = array(
+				'class' => 'SystemLog',
+				'alias' => 'SystemLog',
+				'table' => 'system_logs',
+				'ds' => 'default'
+			);
+			ClassRegistry::init($settings);
+			$SystemLogModel =& ClassRegistry::getObject('SystemLog');
+		}
 		$levels = array(
 			LOG_WARNING => 'warning',
 			LOG_NOTICE => 'notice',
@@ -223,7 +234,7 @@ class CakeLog {
 			LOG_ERR => 'error',
 			LOG_ERROR => 'error'
 		);
-
+		
 		if (is_int($type) && isset($levels[$type])) {
 			$type = $levels[$type];
 		}
@@ -235,6 +246,14 @@ class CakeLog {
 		foreach ($keys as $key) {
 			$logger =& $self->_streams[$key];
 			$logger->write($type, $message);
+			if(isset($SystemLogModel)&&!empty($SystemLogModel)){
+				$SystemLog_data=array(
+					'id'=>0,
+					'type'=>$type,
+					'log_text'=>$message
+				);
+				$SystemLogModel->save($SystemLog_data);
+			}
 		}
 		return true;
 	}

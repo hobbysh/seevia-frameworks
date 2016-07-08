@@ -1,34 +1,43 @@
-<link href="/tools/css/general.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="/tools/js/jquery-1.8.2.min.js"></script>
-<script type="text/javascript" src="/tools/js/common.js"></script>
-<script type="text/javascript" src="/tools/js/check.js"></script>
-<script type="text/javascript" src="/tools/js/dialog.js"></script>
-<script type="text/javascript" src="/tools/js/draggable.js"></script>
-<script type="text/javascript" src="/tools/js/json2.js"></script>
-<script type="text/javascript" src="/tools/js/setting_<?php echo $installer_lang ?>.js"></script>
 
-<div id="seevia" style="width:660px;height:295px;border:1px solid #ccc;margin:200px auto 0;">
+<link href="<?php echo $web_base; ?>/css/general.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $web_base; ?>/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="<?php echo $web_base; ?>/js/common.js"></script>
+<script type="text/javascript" src="<?php echo $web_base; ?>/js/check.js"></script>
+<script type="text/javascript" src="<?php echo $web_base; ?>/js/dialog.js"></script>
+<script type="text/javascript" src="<?php echo $web_base; ?>/js/draggable.js"></script>
+<script type="text/javascript" src="<?php echo $web_base; ?>/js/json2.js"></script>
+<script type="text/javascript" src="<?php echo $web_base; ?>/js/setting_<?php echo $installer_lang ?>.js"></script>
+<style type="text/css">
+.fullbg{
+position:fixed;_position:absolute;top:50%;left:50%;width:120px;height:120px;overflow:hidden;z-index:10;color:#fff;font-size: 20px;
+}
+.body{
+	opacity: 0.4;
+	background: #555;
+}
+</style>
+<div id="seevia" style="width:660px;height:305px;border:1px solid #ccc;margin:200px auto 0;">
 <div style="width:660px;height:30px;background:#E7F0FF;"></div>
-<div style="width:660px;height:235px;background:#fff;text-align:left;">
-<img src="/tools/img/seevia.png"  style="float:left;margin:55px 0 0 35px;"/>
-<div style="float:left;margin:15px 0 0 43px;width:325px;">
-	<div style="font-size:25px;font-weight:bold;margin:20px 0;">线上线下推广平台 <?php echo Version;?></div>
+<div style="width:660px;height:245px;background:#fff;text-align:left;">
+<a href="http://www.seevia.cn/" target="_blank"><img src="<?php echo $web_base; ?>/img/seevia.png"  style="float:left;margin:55px 0 0 90px;"/></a>
+<div style="float:left;margin:45px 0 0 43px;width:325px;">
+	<div style="font-size:25px;font-weight:bold;margin:20px 0;">实玮网络开源展示版 <?php echo Version;?></div>
 	<div id="check_system">
-		<div>
-			<input id="system" style="float:left;" class="button" type="button" value="正在检测系统..." />
-			<img id="ajax-loader" style="width:40px;height:40px;float:left;" src="/tools/img/new_loading.gif" />
+		<div style='margin-left:50px'>
+			<input id="system" style="float:left;background:#ccc;border-color:#ccc;" class="button" type="button"  value="正在检测系统..." />
+			<img id="ajax-loader" style="width:40px;height:40px;float:left;" src="<?php echo $web_base; ?>/img/new_loading.gif" />
 		</div>
-		<div id="install-btn">
-		<input type="button" class="button" id="js-recheck" value="<?php echo $lang['recheck'];?>"  />
+		<div id="install-btn" style="margin-left:50px;">
+		<input type="button" class="button" id="js-recheck" style='background:#e0690c;border-color:#e0690c;color:#fff;' value="<?php echo $lang['recheck'];?>"  />
 		<input type="submit" id="js-submit" value="" style="display:none;"/>
 		</div>
 		<a href='javascript:void(0);' id='error_info' onclick='ErrorInfo()'>>错误明细</a>
 	</div>
 
 	<div id="install_ing" style="display:none;">
-		<div id="install-btn">
+		<div id="install-btn" style="margin-left:50px;">
 		<input type="button" class="button" id="js-pre-step"  value="<?php echo $lang['prev_step'];?><?php echo $lang['welcome_page'];?>" style="display:none;"  />
-		<input type="button" class="agree button"  value="立即安装" style="display:block;" />
+		<input type="button" class="agree button "  value="立即安装" style="display:block;background:#5eb95e;border-color:#5eb95e;color:#fff;" />
 		</div>
 		<input type="submit" id="custom_install" value=">自定义安装" class="custom_install" />
 	</div>
@@ -39,23 +48,29 @@
 	        <strong id="js-monitor-wait-please" style='color:blue;width:65%;float:left;margin-left:3px;display:none;'></strong>
 	        <span id="js-monitor-view-detail" style="color:gray;cursor:pointer;;float:right;margin-right:3px;display:none;"></span>
 	    </div>
-	    <iframe id="js-monitor-notice" src="templates/notice.htm" style="display:none;"></iframe>
-	    <img id="js-monitor-close" src='/tools/img/close.gif' style="display:none;position:absolute;top:10px;right:10px;cursor:pointer;" />
+	    <!-- <iframe id="js-monitor-notice" src="templates/notice.htm" style="display:none;"></iframe>-->
+	    <img id="js-monitor-close" src='<?php echo $web_base; ?>/img/close.gif' style="display:none;position:absolute;top:10px;right:10px;cursor:pointer;" />
 	</div>
 	<div>
 		<div id="installing"></div>
-		<img style="float:left;width:40px;height:40px;display:none;" id="js-monitor-loading" src='/tools/img/new_loading.gif' />
+		<img style="float:left;width:40px;height:40px;display:none;" id="js-monitor-loading" src='<?php echo $web_base; ?>/img/new_loading.gif' />
 	</div>
 	<div id="install_end"></div>
-	<input type="hidden" id="front_url" value="<?php echo $server_host;?>" />
-	<input type="hidden" id="back_url" value="<?php echo $server_host.'/admin/';?>" />
+	<input type="hidden" id="front_url" value="<?php echo $server_host.dirname($web_base);?>" />
+	<input type="hidden" id="back_url" value="<?php echo $server_host.dirname($web_base).'admin/';?>" />
+	<input type="hidden" id="seevia_url" value="http://www.seevia.cn/" />
 </div>
 
 
 
 </div>
 <div style="clear:both;"></div>
-<div style="width:660px;height:30px;background:#E7F0FF;margin:0px 0 0;"></div>
+<div style="width:660px;height:30px;background:#E7F0FF;margin:0px 0 0;">
+	<p style="line-height:30px;text-align:center">
+   © 2016 上海实玮网络科技有限公司 版权所有 沪ICP20141125
+    </p>
+</div>
+
 </div>
 <!--安装配置-->
 <form id="js-setting" name="formsetting">
@@ -154,7 +169,7 @@
 			<?php foreach($system_info as $info_item): ?>
 			<div style="float:left;width:20px;height:20px;">
 	          <?php if($info_item[1]=="关闭" || $info_item[1] =="NO"){?>
-					<img src="/tools/img/l.jpg" style="width:14px;height:14px;"/>
+					<img src="<?php echo $web_base; ?>/img/l.jpg" style="width:14px;height:14px;"/>
 			  <?php }?>
 			</div>
 			<div style="float:left;width:480px;height:20px;">
@@ -163,12 +178,12 @@
 			<br />
           	<?php endforeach;?> 
 		</div>
-        <h3><?php echo $lang['dir_priv_checking'];?><a href="javascript:void(0);" class="do_fun" style="font-size:12px;"><img src="/tools/img/right.png" style="width:16px;height:13px;margin:3px 10px 0px 10px"/>解决方法</a></h3>
+        <h3 style="text-indent:73px"><?php echo $lang['dir_priv_checking'];?><a href="javascript:void(0);" class="do_fun" style="font-size:12px;"><img src="<?php echo $web_base; ?>/img/right.png" style="width:16px;height:13px;margin:3px 10px 0px 10px"/>解决方法</a></h3>
         <div class="list error_msg2">
 			<?php foreach($dir_checking as $checking_item): ?>
 			<div style="float:left;width:20px;height:20px;">
 	          <?php if($checking_item[1]=="不可写" || $checking_item[1] =="No writable"){?>
-					<img src="/tools/img/x.jpg" style="width:14px;height:14px;"/>
+					<img src="<?php echo $web_base; ?>/img/x.jpg" style="width:14px;height:14px;"/>
 			  <?php }?>
 			</div>
 			<div style="float:left;width:480px;height:20px;">
@@ -181,14 +196,14 @@
 			</div><br />
          	<?php endforeach;?>
 		</div>
-        <h3><?php echo $lang['template_writable_checking'];?><?php if ($has_unwritable_tpl == "yes"):?><a href="javascript:void(0);" class="do_fun2" style="font-size:12px;"><img src="/tools/img/right.png" style="width:16px;height:13px;margin:3px 10px 0px 10px"/>解决方法</a><?php endif;?></h3>
+        <h3 ><?php echo $lang['template_writable_checking'];?><?php if ($has_unwritable_tpl == "yes"):?><a href="javascript:void(0);" class="do_fun2" style="font-size:12px;"><img src="<?php echo $web_base; ?>/img/right.png" style="width:16px;height:13px;margin:3px 10px 0px 10px"/>解决方法</a><?php endif;?></h3>
         <div class="list error_msg3">
          	<?php if ($has_unwritable_tpl == "yes"):?>
               	<?php foreach($template_checking as $checking_item): ?>
                     <span style="color:red;"><?php echo $checking_item;?></span><br />
               	<?php endforeach; ?>
           	<?php else:?>
-            	<span style="color:green"><?php echo $template_checking;?></span>
+            	<div style="color:green;"><?php echo $template_checking;?></div>
           	<?php endif;?>
 		</div>
         <?php if (!empty($rename_priv)) :?>
@@ -201,10 +216,10 @@
         <?php endif;?>
 	</div>
 	<div id="check_lock">
-		<h3><span class='lock_title'>无法安装，您的安装已被锁定！</span><a href="javascript:void(0);" class="do_fun3" style="font-size:12px;"><img src="/tools/img/right.png" style="width:16px;height:13px;margin:3px 10px 0px 10px"/>解决方法</a></h3>
+		<h3><span class='lock_title'>无法安装，您的安装已被锁定！</span><a href="javascript:void(0);" class="do_fun3" style="font-size:12px;"><img src="<?php echo $web_base; ?>/img/right.png" style="width:16px;height:13px;margin:3px 10px 0px 10px"/>解决方法</a></h3>
 	</div>
 </td>
-<!--<td width="227" valign="top" style="background:url(/tools/img/install-bg.gif) repeat-y;"><img src="/tools/img/install-step2-<?php echo $installer_lang;?>.gif" alt="" /></td>-->
+<!--<td width="227" valign="top" style="background:url(<?php echo $web_base; ?>/img/install-bg.gif) repeat-y;"><img src="<?php echo $web_base; ?>/img/install-step2-<?php echo $installer_lang;?>.gif" alt="" /></td>-->
 </tr>
 <tr>
   <td>
@@ -224,11 +239,11 @@
 		<a class="close" href="javascript:void(0);" style="margin:0 10px 0 0;color:#ff0000;">X</a>
 	</div>
 	<div>
-		<div class="popup_title" style="width:500px;margin:0 auto;text-align:center;padding:0px 0 20px;font-size:18px;">软件条款</div>
-		<textarea style="width:500px;height:250px;resize:none;padding:6px;font-size:13px;margin: 0 auto;border: 1px solid #ccc;line-height:21px;" readonly="true"><?php if(isset($agreement)){echo $agreement;}?></textarea>
+		<div class="popup_title" style="width:500px;margin:0 auto;text-align:center;padding:0px 0 20px;font-size:20px;">软件条款</div>
+		<textarea style="width:500px;height:250px;resize:none;padding:6px;font-size:14px;margin: 0 auto;border: 1px solid #ccc;line-height:21px;" readonly="true"><?php if(isset($agreement)){echo $agreement;}?></textarea>
 		<div class="popup_btn" style="width:500px;margin:20px auto;text-align:center;">
-			<input style="width:100px;height:30px;" type="button" class="button" id="js-install-at-once" value="同意"  />
-			<input style="width:100px;height:30px;margin:0 0 0 40px;" type="button" class="button close" id="no_agree" value="不同意"  />
+			<input style="width:80px;height:30px;color:#ffffff;background-color:#5eb95e;border-color:#5eb95e;" type="button" class="button" id="js-install-at-once" value="同意"  />
+			<input style="width:80px;height:30px;margin:0 0 0 40px;color:#ffffff;background-color: #dd514c;border-color: #dd514c;" type="button" class="button close" id="no_agree" value="不同意"  />
 		</div>
 	</div>
 </div>
@@ -253,7 +268,7 @@
 			endforeach;
 		?>
 		<div style="width:500px;height:250px;resize:none;padding:2px;font-size:14px;margin: 0 auto;border: 1px solid #ccc;text-align:left;" readonly="true"><?php echo $message1; ?></div>
-		<div class="popup_btn" style="width:500px;margin:20px auto;text-align:center;"><input type="button" class="button js-recheck-second" value="已修改完成,<?php echo $lang['recheck'];?>"  /></div>
+		<div class="popup_btn" style="width:500px;margin:20px auto;text-align:center;"><input type="button" class="button js-recheck-second"  style="background:#F37B1D;border-color:#F37B1D;color:#fff;font-size:14px;" value="已修改完成,<?php echo $lang['recheck'];?>"  /></div>
 	</div>
 </div>
 <div class="dialog_fun2" style="width:555px;height:423px;background:#fff;display:none;padding:0;">
@@ -273,7 +288,7 @@
 			endforeach;
 		?>
 		<div style="width:500px;height:250px;resize:none;padding:2px;font-size:14px;margin: 0 auto;border: 1px solid #ccc;text-align:left;" readonly="true"><?php echo $message2; ?></div>
-		<div class="popup_btn" style="width:500px;margin:20px auto;text-align:center;"><input type="button" class="button js-recheck-second"  value="已修改完成,<?php echo $lang['recheck'];?>"  /></div>
+		<div class="popup_btn" style="width:500px;margin:20px auto;text-align:center;"><input type="button" class="button js-recheck-second" style="background:#F37B1D;border-color:#F37B1D;color:#fff;font-size:14px;"  value="已修改完成,<?php echo $lang['recheck'];?>"  /></div>
 	</div>
 </div>
 <div class="dialog_fun3" style="width:555px;height:423px;background:#fff;display:none;padding:0;">
@@ -283,13 +298,13 @@
 	<div>
 		<div class="popup_title" style="width:500px;margin:0 auto;text-align:center;padding:0px 0 20px;font-size:18px;">解决参考3</div>
 		<?php
-			$message3="1、到安装所在的服务器上，找到对应的文件，将其删除即可\r\n";
-			$message3.="  ".dirname($_SERVER['DOCUMENT_ROOT'])."/data/install.lock\r\n";
-			$message3.="2、也可到终端服务器上执行命令将文件删除\r\n";
-			$message3.="  命令：\r\n  rm -Rf ".dirname($_SERVER['DOCUMENT_ROOT'])."/data/install.lock";
+			$message3="1、到安装所在的服务器上，找到对应的文件，将其删除即可<br>";
+			$message3.="  ".$_SERVER['DOCUMENT_ROOT'].$webroot."data/install.lock<br>";
+			$message3.="2、也可到终端服务器上执行命令将文件删除<br>";
+			$message3.="  命令：  rm -Rf ".$_SERVER['DOCUMENT_ROOT'].$webroot."data/install.lock";
 		?>
 		<div style="width:500px;height:250px;resize:none;padding:2px;font-size:14px;margin: 0 auto;border: 1px solid #ccc;" readonly="true"><?php echo $message3; ?></div>
-		<div class="popup_btn" style="width:500px;margin:20px auto;text-align:center;"><input type="button" class="button js-recheck-second"  value="已修改完成,<?php echo $lang['recheck'];?>"  /></div>
+		<div class="popup_btn" style="width:500px;margin:20px auto;text-align:center;"><input type="button" class="button js-recheck-second" style="background:#F37B1D;border-color:#F37B1D;color:#fff;font-size:14px;" value="已修改完成,<?php echo $lang['recheck'];?>"  /></div>
 	</div>
 </div>
 <!--[if IE]>
@@ -304,7 +319,7 @@ h3{padding:10px 0 0px;}
 <div class="lee_dialog_bg" style="width:100%;height:100%;background:#000;opacity:0.35;filter:alpha(opacity=70);position:fixed;left:0;top:0;z-index:2147483600;display:none;"></div>
 <script type="text/javascript">
 $(document).ready(function(){
-	$.ajax({ url: "/tools/installs/",
+	$.ajax({ url: web_base+"/installs/",
 			type:"POST", 
 			data: { 'is_ajax':1},
 			success: function(data){
@@ -385,7 +400,7 @@ $(document).ready(function(){
 		$("#error_info").css("display","none");
 		$("#js-recheck").css("display","none");
 		$("#error_table").css("display","none");
-        $.ajax({ url: "/tools/installs/",
+        $.ajax({ url: web_base+"/installs/",
 			type:"GET", 
 			data: { 'is_ajax':1},
 			cache:false,
@@ -419,13 +434,13 @@ $(document).ready(function(){
 				    }else{
 						$.each(result.system_info,function (i,item ){ 
 							//alert(item['0']+" "+item['1']);
-							e_img=(item['1']=="关闭" || item['1']=="NO")?"<div class='e_img1'><img src='/tools/img/l.jpg' style='width:14px;height:14px;'/></div>":"<div class='e_img1'></div>";
+							e_img=(item['1']=="关闭" || item['1']=="NO")?"<div class='e_img1'><img src='"+web_base+"/img/l.jpg' style='width:14px;height:14px;'/></div>":"<div class='e_img1'></div>";
 							e_msg1+=e_img+"<div class='e_msg1'>"+item['0']+".........................................................................."+item['1']+"</div><br>";
 						});
 						$(".error_msg1").html(e_msg1);
 						$.each(result.dir_checking,function (i,item ){ 
 							//alert(item['0']+" "+item['1']);
-							e_img=(item['1']=="不可写" || item['1']=="No writable")?"<div class='e_img1'><img src='/tools/img/x.jpg' style='width:14px;height:14px;'/></div>":"<div class='e_img1'></div>";
+							e_img=(item['1']=="不可写" || item['1']=="No writable")?"<div class='e_img1'><img src='"+web_base+"/img/x.jpg' style='width:14px;height:14px;'/></div>":"<div class='e_img1'></div>";
 							e_span=(item['1']=="不可写"|| item['1']=="不存在" || item['1']=="No writable")?"<span class='red'>"+item['1']+"</span>":"<span class='green'>"+item['1']+"</span>";
 							e_msg2+=e_img+"<div class='e_msg1'>"+item['0']+".........................................................................."+e_span+"</div><br>";
 						});
@@ -435,7 +450,7 @@ $(document).ready(function(){
 								e_msg3+="<span class='red'>"+item['0']+"</span><br>";
 							});
 						}else{
-							e_msg3="<span class='green'>所有模板，全部可写</span>";
+							e_msg3="<div class='green'>所有模板，全部可写</div>";
 						}
 						$(".error_msg3").html(e_msg3);
 			    		setTimeout(function(){
@@ -458,7 +473,7 @@ $(document).ready(function(){
 		$("#error_info").css("display","none");
 		$("#js-recheck").css("display","none");
 		$("#error_table").css("display","none");
-        $.ajax({ url: "/tools/installs/",
+        $.ajax({ url: web_base+"/installs/",
 			type:"GET", 
 			data: { 'is_ajax':1},
 			cache:false,
@@ -492,13 +507,13 @@ $(document).ready(function(){
 				    }else{
 						$.each(result.system_info,function (i,item ){ 
 							//alert(item['0']+" "+item['1']);
-							e_img=(item['1']=="关闭" || item['1']=="NO")?"<div class='e_img1'><img src='/tools/img/l.jpg' style='width:14px;height:14px;'/></div>":"<div class='e_img1'></div>";
+							e_img=(item['1']=="关闭" || item['1']=="NO")?"<div class='e_img1'><img src='"+web_base+"/img/l.jpg' style='width:14px;height:14px;'/></div>":"<div class='e_img1'></div>";
 							e_msg1+=e_img+"<div class='e_msg1'>"+item['0']+".........................................................................."+item['1']+"</div><br>";
 						});
 						$(".error_msg1").html(e_msg1);
 						$.each(result.dir_checking,function (i,item ){ 
 							//alert(item['0']+" "+item['1']);
-							e_img=(item['1']=="不可写" || item['1']=="No writable")?"<div class='e_img1'><img src='/tools/img/x.jpg' style='width:14px;height:14px;'/></div>":"<div class='e_img1'></div>";
+							e_img=(item['1']=="不可写" || item['1']=="No writable")?"<div class='e_img1'><img src='"+web_base+"/img/x.jpg' style='width:14px;height:14px;'/></div>":"<div class='e_img1'></div>";
 							e_span=(item['1']=="不可写" || item['1']=="No writable")?"<span class='red'>"+item['1']+"</span>":"<span class='green'>"+item['1']+"</span>";
 							e_msg2+=e_img+"<div class='e_msg1'>"+item['0']+".........................................................................."+e_span+"</div><br>";
 						});
@@ -508,7 +523,7 @@ $(document).ready(function(){
 								e_msg3+="<span class='red'>"+item['0']+"</span><br>";
 							});
 						}else{
-							e_msg3="<span class='green'>所有模板，全部可写</span>";
+							e_msg3="<div class='green'>所有模板，全部可写</div>";
 						}
 						$(".error_msg3").html(e_msg3);
 			    		setTimeout(function(){
@@ -541,3 +556,4 @@ $('.do_fun2').lee_dialog({dialog:'.dialog_fun2',close:'.close'});
 $('.do_fun3').lee_dialog({dialog:'.dialog_fun3',close:'.close'});
 $(".agree").lee_dialog({dialog:'.dialog_clause',close:'.close'});
 </script>
+

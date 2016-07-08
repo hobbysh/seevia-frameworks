@@ -15,14 +15,14 @@ window.onload = function () {
     var f = getid("js-setting");
     f.setAttribute("action", "javascript:install();void 0;");
     f["js-db-name"].onblur = function () {
-    	auto=false;
+        auto=false;
         var list = getDbList(auto);
         for (var i = 0; i < list.length; i++) {
             if (f["js-db-name"].value === list[i]) {
                 var answer = confirm("这是一个已经存在的数据库，确定要覆盖该数据库吗？");
                 if (answer === false) {
                     f["js-db-name"].value = "";
-	            }
+                }
             }
         }
     }
@@ -37,26 +37,26 @@ window.onload = function () {
                 }else{
                     getid("js-install-at-once").setAttribute("disabled", "true");
                     if (confirm_password!=''){
-                    	getid("js-admin-confirmpassword-result").innerHTML="<span class='comment'><img src='/tools/img\/no.gif'>密码不相同<\/span>";
+                        getid("js-admin-confirmpassword-result").innerHTML="<span class='comment'><img src='/tools/img\/no.gif'>密码不相同<\/span>";
                     }
                 }
-        	}
+            }
         }
     f["js-admin-password2"].onblur = function  () {
         var password = f['js-admin-password'].value;
         var confirm_password = f['js-admin-password2'].value;
         if(confirm_password!="" && password!=""){
-	        if (password==confirm_password){
-	            getid("js-admin-confirmpassword-result").innerHTML="<span class='comment'><img src='/tools/img\/yes.gif'><\/span>";
-	            getid("js-install-at-once").removeAttribute("disabled");
-	        }else{
-	            getid("js-admin-confirmpassword-result").innerHTML="<span class='comment'><img src='/tools/img\/no.gif'>密码不相同<\/span>";
-	            getid("js-install-at-once").setAttribute("disabled", "true");
-	        }
-		}else{
-			getid("js-admin-confirmpassword-result").innerHTML="<span class='comment'><img src='/tools/img\/no.gif'>密码不能空<\/span>";
-	        getid("js-install-at-once").setAttribute("disabled", "true");
-		}
+            if (password==confirm_password){
+                getid("js-admin-confirmpassword-result").innerHTML="<span class='comment'><img src='/tools/img\/yes.gif'><\/span>";
+                getid("js-install-at-once").removeAttribute("disabled");
+            }else{
+                getid("js-admin-confirmpassword-result").innerHTML="<span class='comment'><img src='/tools/img\/no.gif'>密码不相同<\/span>";
+                getid("js-install-at-once").setAttribute("disabled", "true");
+            }
+        }else{
+            getid("js-admin-confirmpassword-result").innerHTML="<span class='comment'><img src='/tools/img\/no.gif'>密码不能空<\/span>";
+            getid("js-install-at-once").setAttribute("disabled", "true");
+        }
     }
     f["js-admin-password"].onkeyup = function () {
       var pwd = f['js-admin-password'].value;
@@ -75,7 +75,7 @@ window.onload = function () {
           charType = 4;
         }else{
           charType = 4;
-    	}
+        }
         Modes |= charType;
       }
       for (i=0;i<4;i++)
@@ -148,14 +148,14 @@ function displayDbList() {
         f["js-db-name"].value = dbList.options[dbList.selectedIndex].value;
         f["js-db-name"].focus();
     };
-	auto=false;
+    auto=false;
     var opts = getDbList(auto),
         opt;
     if (opts !== false) {
         dbList.options.length = 1;
         var num = opts.length;
-       	var total_num="共 %s 个";
-        	text = total_num.replace("%s", num);
+        var total_num="共 %s 个";
+            text = total_num.replace("%s", num);
         dbList[0] = new Option(text, "", false, false);
         for (var i = 0; i < num; i++) {
             opt = new Option(opts[i], opts[i], false, false);
@@ -177,27 +177,26 @@ function getDbList(auto) {
             + "IS_AJAX_REQUEST=yes";
     var result="";
     var list="";
-        //var result = Ajax.call("/tools/installs/get_db_list", params, null, "POST", "JSON", false);
-        $.ajax({ url: "/tools/installs/get_db_list",
-			type:"POST", 
-			data: { 'db_host':f["js-db-host"].value,'db_port':f["js-db-port"].value,'db_user':encodeURIComponent(f["js-db-user"].value),'db_pass':encodeURIComponent(f["js-db-pass"].value),'lang':getAddressLang(),'IS_AJAX_REQUEST':"yes"},
-			async:false,  // 设置同步方式
-        	cache:false,
-			success: function(data){
-				result=JSON.parse(data);
-				if (result.msg=== "OK") {
-					//alert(result.list);
-					list=result.list.split(",");
-			    }else{
-		    		if(auto){
-		    			$("#custom_install").trigger("click");
-					}else{
-						alert("连接数据库用户名或密码错误");
-					}
-			    }
-			}
-		});
-	return list;
+        $.ajax({ url: web_base+"/installs/get_db_list",
+            type:"POST", 
+            data: { 'db_host':f["js-db-host"].value,'db_port':f["js-db-port"].value,'db_user':encodeURIComponent(f["js-db-user"].value),'db_pass':encodeURIComponent(f["js-db-pass"].value),'lang':getAddressLang(),'IS_AJAX_REQUEST':"yes"},
+            async:false,  // 设置同步方式
+            cache:false,
+            success: function(data){
+                result=JSON.parse(data);
+                if (result.msg=== "OK") {
+                    //alert(result.list);
+                    list=result.list.split(",");
+                }else{
+                    if(auto){
+                        $("#custom_install").trigger("click");
+                    }else{
+                        alert("连接数据库用户名或密码错误");
+                    }
+                }
+            }
+        });
+    return list;
 }
 
 /**
@@ -223,11 +222,11 @@ function switchInputsStatus() {
  * 安装程序主函数
  */
 function install() {
-	//alert("1");
-	$(".dialog_clause").hide();
-  	$(".lee_dialog_bg").hide();
-	 notice = $("#installing");
-	 
+    //alert("1");
+    $(".dialog_clause").hide();
+    $(".lee_dialog_bg").hide();
+     notice = $("#installing");
+     
     lockAllInputs();
 
     //startNotice();
@@ -240,8 +239,8 @@ function install() {
     $("#js-monitor-loading").css("display","block");
     notice.css("display","block");
 //    try {
-	//alert("3");
-	setTimeout(function(){createConfigFile()},1000);
+    //alert("3");
+    setTimeout(function(){createConfigFile()},1000);
         
     //alert("4");
 //    } catch (ex) {
@@ -266,32 +265,32 @@ function createConfigFile() {
             + "IS_AJAX_REQUEST=yes";
     //notice.innerHTML = $_LANG["create_config_file"];
     notice.html("创建配置文件................");
-    $.ajax({ url: "/tools/installs/create_config_file",
-		type:"POST", 
-		data: { 'db_host':f["js-db-host"].value,'db_port':f["js-db-port"].value,'db_user':encodeURIComponent(f["js-db-user"].value),'db_pass':encodeURIComponent(f["js-db-pass"].value),'db_name':encodeURIComponent(f["js-db-name"].value),'timezone':tz_val,'lang':getAddressLang(),'IS_AJAX_REQUEST':"yes"},
-		async:true,  // 设置同步方式
-    	cache:false,
-		success: function(result){
-			if (result.replace(/\s+$/g, '') === "OK") {
-	            displayOKMsg();
-	            createDatabase();
-	        } else {
-	            if(result=="create_config_file erro"){
-		            message="创建配置文件................"
-		            displayErrorMsg(message);
-	        	}
-	        }
-		}
-	});
+    $.ajax({ url: web_base+"/installs/create_config_file",
+        type:"POST", 
+        data: { 'db_host':f["js-db-host"].value,'db_port':f["js-db-port"].value,'db_user':encodeURIComponent(f["js-db-user"].value),'db_pass':encodeURIComponent(f["js-db-pass"].value),'db_name':encodeURIComponent(f["js-db-name"].value),'timezone':tz_val,'lang':getAddressLang(),'IS_AJAX_REQUEST':"yes"},
+        async:true,  // 设置同步方式
+        cache:false,
+        success: function(result){
+            if (result.replace(/\s+$/g, '') === "OK") {
+                displayOKMsg();
+                createDatabase();
+            } else {
+                if(result=="create_config_file erro"){
+                    message="创建配置文件................"
+                    displayErrorMsg(message);
+                }
+            }
+        }
+    });
 //    Ajax.call("/tools/installs/create_config_file", params, function (result) {
 //        if (result.replace(/\s+$/g, '') === "OK") {
 //            displayOKMsg();
 //            createDatabase();
 //        } else {
 //            if(result=="create_config_file erro"){
-//	            message="创建配置文件................"
-//	            displayErrorMsg(message);
-//        	}
+//              message="创建配置文件................"
+//              displayErrorMsg(message);
+//          }
 //        }
 //    });
 }
@@ -307,32 +306,32 @@ function createDatabase() {
             + "db_pass=" + encodeURIComponent(f["js-db-pass"].value) + "&"
             + "db_name=" + encodeURIComponent(f["js-db-name"].value);
     notice.append("创建数据库....................");
-    $.ajax({ url: "/tools/installs/create_database",
-		type:"POST", 
-		data: { 'db_host':f["js-db-host"].value,'db_port':f["js-db-port"].value,'db_user':encodeURIComponent(f["js-db-user"].value),'db_pass':encodeURIComponent(f["js-db-pass"].value),'db_name':encodeURIComponent(f["js-db-name"].value)},
-		async:true,  // 设置同步方式
-    	cache:false,
-		success: function(result){
-			if (result.replace(/\s+$/g, '') === "OK") {
-	            displayOKMsg();
-	            installBaseData();
-	        } else {
-	            if(result=="create_database erro"){
-		            message="创建数据库....................";
-		            displayErrorMsg(message);
-	        	}
-	        }
-		}
-	});
+    $.ajax({ url: web_base+"/installs/create_database",
+        type:"POST", 
+        data: { 'db_host':f["js-db-host"].value,'db_port':f["js-db-port"].value,'db_user':encodeURIComponent(f["js-db-user"].value),'db_pass':encodeURIComponent(f["js-db-pass"].value),'db_name':encodeURIComponent(f["js-db-name"].value)},
+        async:true,  // 设置同步方式
+        cache:false,
+        success: function(result){
+            if (result.replace(/\s+$/g, '') === "OK") {
+                displayOKMsg();
+                installBaseData();
+            } else {
+                if(result=="create_database erro"){
+                    message="创建数据库....................";
+                    displayErrorMsg(message);
+                }
+            }
+        }
+    });
 //    Ajax.call("/tools/installs/create_database", params, function (result) {
 //        if (result.replace(/\s+$/g, '') === "OK") {
-//          	displayOKMsg();
+//              displayOKMsg();
 //            installBaseData();
 //        } else {
 //            if(result=="create_database erro"){
-//	            message="创建数据库...................."
-//	            displayErrorMsg(message);
-//        	}
+//              message="创建数据库...................."
+//              displayErrorMsg(message);
+//          }
 //        }
 //    });
 }
@@ -347,32 +346,32 @@ function installBaseData() {
             + "db_user=" + encodeURIComponent(f["js-db-user"].value) + "&"
             + "db_pass=" + encodeURIComponent(f["js-db-pass"].value);
     notice.append("安装数据........................");
-    $.ajax({ url: "/tools/installs/install_base_data",
-		type:"POST", 
-		data: { 'db_host':f["js-db-host"].value,'db_name':f["js-db-name"].value,'db_user':encodeURIComponent(f["js-db-user"].value),'db_pass':encodeURIComponent(f["js-db-pass"].value)},
-		async:true,  // 设置同步方式
-    	cache:false,
-		success: function(result){
-	        if (result.replace(/\s+$/g, '') === "OK") {
-	          	displayOKMsg();
-	            createAdminPassport();
-	        } else {
-	            if(result=="install_base_data erro"){
-		            message="安装数据........................"
-		            displayErrorMsg(message);
-	        	}
-	        }
-		}
-	});
+    $.ajax({ url: web_base+"/installs/install_base_data",
+        type:"POST", 
+        data: { 'db_host':f["js-db-host"].value,'db_name':f["js-db-name"].value,'db_user':encodeURIComponent(f["js-db-user"].value),'db_pass':encodeURIComponent(f["js-db-pass"].value)},
+        async:true,  // 设置同步方式
+        cache:false,
+        success: function(result){
+            if (result.replace(/\s+$/g, '') === "OK") {
+                displayOKMsg();
+                createAdminPassport();
+            } else {
+                if(result=="install_base_data erro"){
+                    message="安装数据........................"
+                    displayErrorMsg(message);
+                }
+            }
+        }
+    });
 //    Ajax.call("/tools/installs/install_base_data", params, function (result) {
 //        if (result.replace(/\s+$/g, '') === "OK") {
-//          	displayOKMsg();
+//              displayOKMsg();
 //            createAdminPassport();
 //        } else {
 //            if(result=="install_base_data erro"){
-//	            message="安装数据........................"
-//	            displayErrorMsg(message);
-//        	}
+//              message="安装数据........................"
+//              displayErrorMsg(message);
+//          }
 //        }
 //    });
 }
@@ -386,36 +385,36 @@ function createAdminPassport() {
             + "db_name=" + f["js-db-name"].value + "&"
             + "db_user=" + encodeURIComponent(f["js-db-user"].value) + "&"
             + "db_pass=" + encodeURIComponent(f["js-db-pass"].value) + "&"
-        	+ "admin_name=" + encodeURIComponent(f["js-admin-name"].value) + "&"
+            + "admin_name=" + encodeURIComponent(f["js-admin-name"].value) + "&"
             + "admin_password=" + encodeURIComponent(f["js-admin-password"].value) + "&"
             + "admin_password2=" + encodeURIComponent(f["js-admin-password2"].value);
     notice.append("创建管理员帐号............");
-    $.ajax({ url: "/tools/installs/create_admin_passport",
-		type:"POST", 
-		data: { 'db_host':f["js-db-host"].value,'db_name':f["js-db-name"].value,'db_user':encodeURIComponent(f["js-db-user"].value),'db_pass':encodeURIComponent(f["js-db-pass"].value),'admin_name':encodeURIComponent(f["js-admin-name"].value),'admin_password':encodeURIComponent(f["js-admin-password"].value),'admin_password2':encodeURIComponent(f["js-admin-password2"].value)},
-		async:true,  // 设置同步方式
-    	cache:false,
-		success: function(result){
-			if (result.replace(/\s+$/g, '') === "OK") {
-	            displayOKMsg();
-	            doOthers();
-	        } else {
-	            if(result=="create_admin_passport erro"){
-		            message="创建管理员帐号............";
-		            displayErrorMsg(message);
-	        	}
-	        }
-		}
-	});
+    $.ajax({ url: web_base+"/installs/create_admin_passport",
+        type:"POST", 
+        data: { 'db_host':f["js-db-host"].value,'db_name':f["js-db-name"].value,'db_user':encodeURIComponent(f["js-db-user"].value),'db_pass':encodeURIComponent(f["js-db-pass"].value),'admin_name':encodeURIComponent(f["js-admin-name"].value),'admin_password':encodeURIComponent(f["js-admin-password"].value),'admin_password2':encodeURIComponent(f["js-admin-password2"].value)},
+        async:true,  // 设置同步方式
+        cache:false,
+        success: function(result){
+            if (result.replace(/\s+$/g, '') === "OK") {
+                displayOKMsg();
+                doOthers();
+            } else {
+                if(result=="create_admin_passport erro"){
+                    message="创建管理员帐号............";
+                    displayErrorMsg(message);
+                }
+            }
+        }
+    });
 //    Ajax.call("/tools/installs/create_admin_passport", params, function (result) {
 //        if (result.replace(/\s+$/g, '') === "OK") {
 //            displayOKMsg();
 //            doOthers();
 //        } else {
 //            if(result=="create_admin_passport erro"){
-//	            message="创建管理员帐号............"
-//	            displayErrorMsg(message);
-//        	}
+//              message="创建管理员帐号............"
+//              displayErrorMsg(message);
+//          }
 //        }
 //    });
 }
@@ -438,50 +437,62 @@ function doOthers() {
             + "userinterface=" + f["userinterface"].value + "&"
             + "lang=" + getAddressLang();
     notice.append("处理其它........................");
-    $.ajax({ url: "/tools/installs/do_others",
-		type:"POST", 
-		data: { 'db_host':f["js-db-host"].value,'db_name':f["js-db-name"].value,'db_user':encodeURIComponent(f["js-db-user"].value),'db_pass':encodeURIComponent(f["js-db-pass"].value),'install_demo':installDemo,'install_lang':installLang,'userinterface': f["userinterface"].value,'lang':getAddressLang()},
-		async:true,  // 设置同步方式
-    	cache:false,
-		success: function(result){
-			if (result.replace(/\s+$/g, '') === "OK") {
-	            displayOKMsg();
-	            goToDone();
-	        } else {
-	            if(result=="do_others erro"){
-		            message="处理其它........................";
-		            displayErrorMsg(message);
-	        	}
-	        }
-		}
-	});
+    $.ajax({ url: web_base+"/installs/do_others",
+        type:"POST", 
+        data: { 'db_host':f["js-db-host"].value,'db_name':f["js-db-name"].value,'db_user':encodeURIComponent(f["js-db-user"].value),'db_pass':encodeURIComponent(f["js-db-pass"].value),'install_demo':installDemo,'install_lang':installLang,'userinterface': f["userinterface"].value,'lang':getAddressLang()},
+        async:true,  // 设置同步方式
+        cache:false,
+        success: function(result){
+            if (result.replace(/\s+$/g, '') === "OK") {
+                displayOKMsg();
+                setTimeout(function () {
+                    doByDone();
+                },1000)
+                
+            } else {
+                if(result=="do_others erro"){
+                    message="处理其它........................";
+                    displayErrorMsg(message);
+                }
+            }
+        }
+    });
 //    Ajax.call("/tools/installs/do_others", params, function (result) {
 //        if (result.replace(/\s+$/g, '') === "OK") {
 //            displayOKMsg();
 //            goToDone();
 //        } else {
 //            if(result=="do_others erro"){
-//	            message="处理其它........................"
-//	            displayErrorMsg(message);
-//        	}
+//              message="处理其它........................"
+//              displayErrorMsg(message);
+//          }
 //        }
 //    });
 }
 
+function doByDone() {
+    notice.append("安装完成，请等待........................");
+     displayOKMsg();
+    setTimeout(function () {
+     goToDone(); 
+    },2000)
+    
+}
 /**
  * 转到完成页
  */
 function goToDone() {
     stopNotice();
-	$("#js-monitor").css("display","none");
-	$("#installing").css("display","none");
-	$("#install_end").css("display","block");
-	var admin_name=$("input[name=js-admin-name]").val();
-	var admin_pwd=$("input[name=js-admin-password]").val();
-	var front_url=$("#front_url").val();
-	var back_url=$("#back_url").val();
-	var end_html="<div class='finish'>安装完成！</div><div class='admin_info'>管理员账号:"+admin_name+"&nbsp;&nbsp;&nbsp;&nbsp; 登录密码:"+admin_pwd+"</div><div class='end_link'><a target='_blank' class='button' href='"+front_url+"'>访问前台</a><a style='margin-left:20px;' target='_blank' class='button' href='"+back_url+"'>访问后台</a></div>";
-	$("#install_end").html(end_html);
+    $("#js-monitor").css("display","none");
+    $("#installing").css("display","none");
+    $("#install_end").css("display","block");
+    var admin_name=$("input[name=js-admin-name]").val();
+    var admin_pwd=$("input[name=js-admin-password]").val();
+    var front_url=$("#front_url").val();
+    var back_url=$("#back_url").val();
+    var seevia_url = $("#seevia_url").val();
+    var end_html="<div class='finish'>安装完成！</div><div class='admin_info'>管理员账号:"+admin_name+"&nbsp;&nbsp;&nbsp;&nbsp; 登录密码:"+admin_pwd+"</div><div class='end_link'><a target='_blank' class='button' href='"+front_url+"'>访问前台</a><a target='_blank' class='button' href='"+back_url+"'>访问后台</a><a target='_blank' id='seevia_user_id' href='"+seevia_url+"'>了解更多>></a></div>";
+    $("#install_end").html(end_html);
 }
 
 /* 在安装过程中调用该方法 */

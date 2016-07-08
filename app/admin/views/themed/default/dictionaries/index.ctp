@@ -16,13 +16,9 @@
 <div class="search_box">
 	<?php if(isset($language) && sizeof($language)>0){ ?>
 	<div class="am-form-group">
-		<?php if(!isset($is_select_locale)){ ?>
-			<div class="am-u-sm-4">
-		<label class="am-u-sm-3 am-form-label" style="top:12px">选择语言</label>
-		<div class="am-u-sm-8">
-			<?php echo $form->create('dictionaries',array('action'=>'/','name'=>'language_form','id'=>'language_form','type'=>'GET','class'=>'am-form am-form-horizontal'));?>	
+		<div class="am-u-lg-1 am-u-md-2 am-u-sm-4">
+			<?php echo $form->create('dictionaries',array('action'=>'/','name'=>'language_form','id'=>'language_form','type'=>'GET','class'=>'am-form am-form-horizontal'));?>
 			<select id="locale" name="locale" >
-
 				<option value="-1"><?php echo $ld['choose_language'];?></option>
 				<?php foreach($language as $key=>$value){ ?>
 				<?php if($value['Language']['name'] != ""){?>
@@ -37,36 +33,15 @@
 			</select>
 			<?php echo $form->end();?>
 		</div>
-	</div>
-	<?php } ?>
+				<p class="am-text-right am-btn-group-xs" style="margin-right:27px;">
+				<a class='am-btn am-btn-default am-radius am-btn-sm'  href="<?php echo $html->url('/dictionaries/upload');?>"><?php echo $ld['bulk_upload']; ?></a>	
+				</p>
+			
+		     			
+				
 		<?php if(isset($is_select_locale)){ ?>
-		<?php echo $form->create('dictionaries',array('action'=>'/','name'=>'type_form','id'=>'type_form','type'=>'GET','class'=>'am-form am-form-horizontal'));?>
-		<ul class="am-avg-lg-3 am-avg-md-2 am-avg-sm-1">
-			<li>
-		<label class="am-u-sm-3 am-form-label">选择语言</label>
-		<div class="am-u-sm-8">
-			<?php echo $form->create('dictionaries',array('action'=>'/','name'=>'language_form','id'=>'language_form','type'=>'GET','class'=>'am-form am-form-horizontal'));?>	
-			<select id="locale" name="locale" >
-
-				<option value="-1"><?php echo $ld['choose_language'];?></option>
-				<?php foreach($language as $key=>$value){ ?>
-				<?php if($value['Language']['name'] != ""){?>
-				<?php if(isset($is_select_locale) && $is_select_locale == $value['Language']['locale']){?>
-				<option value="<?php echo $value['Language']['locale'];?>" selected>
-				<?php }else{?>
-				<option value="<?php echo $value['Language']['locale'];?>">
-				<?php }?>
-				<?php echo $value['Language']['name'];?></option>
-				<?php }?>
-				<?php }?>
-			</select>
-			<?php echo $form->end();?>
-		</div>
-	</li>
-         <li>
-		
-		<label class="am-u-sm-3 am-form-label">选择类型</label>
-		<div class="am-u-sm-8">
+		<?php echo $form->create('dictionaries',array('action'=>'/','name'=>'type_form','id'=>'type_form','type'=>'GET','class'=>'am-form am-form-horizontal','style'=>'margin-left:110px;'));?>
+		<div class="am-u-lg-1 am-u-md-2 am-u-sm-4">
 			<input type="hidden" name="locale" value="<?php echo $is_select_locale;?>">
 			<select id="language_type" name="language_type" >
 				<option value="all_type" <?php if(isset($_SESSION['language_type']) && $_SESSION['language_type'] == "all_type"){ echo "selected";}?>><?php echo $ld['all_type'];?></option>
@@ -74,39 +49,26 @@
 				<option value="js" <?php if(isset($_SESSION['language_type']) && $_SESSION['language_type'] == "js"){ echo "selected";}?>>js</option>
 			</select>
 		</div>
-	</li>
-	<li>
-		<label class="am-u-sm-3 am-form-label">选择位置</label>
-		<div class="am-u-sm-8" >
+		<div class="am-u-lg-1 am-u-md-2 am-u-sm-4" >
 			<select id="language_location" name="language_location">
 				<option value="all_location" <?php if(isset($_SESSION['is_select_location']) && $_SESSION['is_select_location'] == "all_location"){ echo "selected";}?>><?php echo $ld['all_position'];?></option>
 				<option value="front" <?php if(isset($_SESSION['is_select_location']) && $_SESSION['is_select_location'] == "front"){ echo "selected";}?>><?php echo $ld['frontend'];?></option>
 				<option value="backend" <?php if(isset($_SESSION['is_select_location']) && $_SESSION['is_select_location'] == "backend"){ echo "selected";}?>><?php echo $ld['backend'];?></option>
 			</select>
 		</div>
-	</li>
-		<li >
-		<div class=" am-form-group am-chaxun">
-			<label class="am-u-sm-3 am-form-label"><?php echo $ld['name'].'/'.$ld['content'];?>:</label>
-			<div class="am-u-sm-8">
+		
+		<div class="am-u-lg-9 am-u-md-6 am-u-sm-12 am-form-group">
+			<label class="am-u-lg-2 am-u-md-4 am-u-sm-4 am-text-right" style="margin-top: 5px;"><?php echo $ld['name'].'/'.$ld['content'];?>:</label>
+			<div class="am-u-lg-2 am-u-md-4 am-u-sm-5">
 				<input class="am-input-sm "  type="text" name="keywords"  id="keywords" value="<?php if(isset($_SESSION['is_keywords'])){echo $_SESSION['is_keywords'];}?>" />
 			</div>
-		</div>
-	    </li>
-        <li>
-        	<label class="am-u-sm-3 am-form-label">&nbsp;</label>
-			<div class="am-u-sm-8">
-				<button   type="button" class="am-btn am-btn-success am-radius am-btn-sm" onclick="javascript:check_type_form('submit');"><?php echo $ld['s_select'];?></button>
-			
-	          </div>
-		</li>
-	</ul>
+			<div class="am-u-lg-2 am-u-md-1 am-u-sm-2">
+				<button  style="margin:5px 0 0 5px;" type="button" class="am-btn am-btn-success am-radius am-btn-sm" onclick="javascript:check_type_form('submit');"><?php echo $ld['s_select'];?></button>
+			</div>
+	   </div>
 		<?php echo $form->end();?>
 		<?php } ?>
-				
-		
-		
-	
+	</div>
 		
 <?php echo $form->create('language_dictionaries',array('action'=>'/export','name'=>'Export','type'=>'POST'));?>
 <input type="hidden" name="export_locale" id="export_locale" value="<?php echo isset($is_select_locale)?$is_select_locale:'';?>" />
@@ -129,34 +91,34 @@
 	  <div class="am-u-lg-1 am-u-md-12 am-u-sm-12">
 	    <?php echo$ld['z_added'];?>
 	  </div>
-	  <div class="am-u-lg-2 am-u-md-6 am-u-sm-12">
-		<div class="am-u-lg-12 am-u-md-3 am-u-sm-3" style="margin-left:10px"><?php echo$ld['z_name'];?></div>
-		<div class="am-u-lg-12 am-u-md-8 am-u-sm-8" style="margin-bottom:10px;;">
+	  <div class="am-u-lg-2 am-u-md-12 am-u-sm-12">
+		<div class="am-u-lg-12 am-u-md-4 am-u-sm-4"><?php echo$ld['z_name'];?></div>
+		<div class="am-u-lg-12 am-u-md-8 am-u-sm-8" style="padding-bottom:5px;">
 		  <input type="text" name="name" id="add_name" value="" class="am-input-sm">
 		</div>
 	  </div>
-	  <div class="am-u-lg-1 am-u-md-6 am-u-sm-12">
-		<div class="am-u-lg-12 am-u-md-3 am-u-sm-3" style="margin-left:10px"><?php echo$ld['z_position'];?></div>
-		<div class="am-u-lg-12 am-u-md-8 am-u-sm-8" style="margin-bottom:10px;;">
-		  <select id="language_location"8 name="location">
+	  <div class="am-u-lg-1 am-u-md-12 am-u-sm-12">
+		<div class="am-u-lg-12 am-u-md-4 am-u-sm-4"><?php echo$ld['z_position'];?></div>
+		<div class="am-u-lg-12 am-u-md-8 am-u-sm-8" style="padding-bottom:5px;">
+		  <select id="language_location" name="location">
 			<option value="front"><?php echo $ld['frontend'];?></option>
 			<option value="backend"><?php echo $ld['backend'];?></option>
 		  </select>
 		</div>
 	  </div>
-	  <div class="am-u-lg-1 am-u-md-6 am-u-sm-12 am-md-type">
-		<div class="am-u-lg-12 am-u-md-3 am-u-sm-3" style="margin-left:10px"><?php echo$ld['z_type'];?></div>
-		<div class="am-u-lg-12 am-u-md-8 am-u-sm-8" style="margin-bottom:10px;;">
+	  <div class="am-u-lg-1 am-u-md-12 am-u-sm-12">
+		<div class="am-u-lg-12 am-u-md-4 am-u-sm-4"><?php echo$ld['z_type'];?></div>
+		<div class="am-u-lg-12 am-u-md-8 am-u-sm-8" style="padding-bottom:5px;">
 		  <select id="language_type" name="type">
 			<option value="label">label</option>
 			<option value="js">js</option>
 		  </select>
 		</div>
 	  </div>
-	  <div class="am-u-lg-2 am-u-md-6 am-u-sm-12">
-		<div class="am-u-lg-12 am-u-md-3 am-u-sm-3" style="margin-left:10px"><?php echo$ld['z_language'];?></div>
+	  <div class="am-u-lg-2 am-u-md-12 am-u-sm-12">
+		<div class="am-u-lg-12 am-u-md-4 am-u-sm-4"><?php echo$ld['z_language'];?></div>
 		<?php $n = 0;if(isset($language) && sizeof($language)>0){foreach($language as $key=>$value){ $n++; ?>
-		<div class="am-u-lg-12 am-u-md-4 am-u-sm-4" style="margin-bottom:10px">
+		<div class="am-u-lg-12 am-u-md-4 am-u-sm-4" style="margin-bottom:5px">
 		  <?php echo $value['Language']['name'];?>
 		  <input type="hidden" id="foreach_local_name<?php echo $n?>" value="<?php echo $value['Language']['name']?>" />
 		  <input type="hidden" id="foreach_local<?php echo $n?>" value="<?php echo $value['Language']['locale']?>" />
@@ -168,31 +130,28 @@
 		</div>
 		<?php }}?>
 	  </div>
-	  <div class="am-u-lg-2 am-u-md-6 am-u-sm-12">
-		<div class="am-u-lg-12 am-u-md-3 am-u-sm-3" style="margin-left:10px"><?php echo$ld['z_content'];?></div>
+	  <div class="am-u-lg-2 am-u-md-12 am-u-sm-12">
+		<div class="am-u-lg-12 am-u-md-4 am-u-sm-4"><?php echo$ld['z_content'];?></div>
 		<?php $n = 0;if(isset($language) && sizeof($language)>0){foreach($language as $key=>$value){ $n++; ?>
-		<div class="am-u-lg-12 am-u-md-4 am-u-sm-4" style="margin-bottom:10px">
+		<div class="am-u-lg-12 am-u-md-4 am-u-sm-4" style="margin-bottom:5px">
 		  <input type="text" class="am-input-sm" name="data[Dictionary][<?php echo $value['Language']['locale'];?>][value]" id="locale_value" value="">
 		</div>
 		<?php }}?>
 	  </div>
-	  <div class="am-u-lg-2 am-u-md-6 am-u-sm-12">
-		<div class="am-u-lg-12 am-u-md-3 am-u-sm-3" style="margin-left:10px"><?php echo $ld['z_description'];?></div>
+	  <div class="am-u-lg-2 am-u-md-12 am-u-sm-12">
+		<div class="am-u-lg-12 am-u-md-4 am-u-sm-4"><?php echo $ld['z_description'];?></div>
 		<?php $n = 0;if(isset($language) && sizeof($language)>0){foreach($language as $key=>$value){ $n++; ?>
-		<div class="am-u-lg-12 am-u-md-4 am-u-sm-4" style="margin-bottom:10px">
+		<div class="am-u-lg-12 am-u-md-4 am-u-sm-4" style="margin-bottom:5px">
 		  <input type="text" class="am-input-sm" name="data[Dictionary][<?php echo $value['Language']['locale'];?>][description]" id="locale_description"  value="">
 		</div>
 		<?php }}?>
 	  </div>
-	  <div class="am-u-lg-1 am-u-md-6 am-u-sm-12">
-		<div class="am-u-lg-12 am-u-md-3 am-u-sm-3" style="margin-left:10px"><?php echo $ld['z_operation'];?></div>
+	  <div class="am-u-lg-1 am-u-md-12 am-u-sm-12">
+		<div class="am-u-lg-12 am-u-md-4 am-u-sm-4"><?php echo $ld['z_operation'];?></div>
 		<div class="am-u-lg-12 am-u-md-8 am-u-sm-8">
 		<?php if(sizeof($language) == $n){?>
 		 <div class="am-btn-group-xs"> 
-		 	<span class="am-text-right am-btn-group-xs"style="margin-right:27px;margin-bottom:10px">
-				<a class='am-btn am-btn-default am-radius am-btn-sm'  href="<?php echo $html->url('/dictionaries/upload');?>"><?php echo $ld['bulk_upload']; ?></a>	
-				</span>
-	        <button type="button" class="am-add am-btn am-btn-warning am-radius am-btn-xs addbutton"><span class="am-icon-plus"></span>&nbsp;<?php echo $ld['add'] ?></button>
+	        <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs addbutton"><span class="am-icon-plus"></span>&nbsp;<?php echo $ld['add'] ?></button>
 		 </div>
 		<?php }?>
 		</div>
@@ -201,11 +160,17 @@
 	</div>
   </div>
   <div style="clear:both;"></div>
-		<div class="am-panel-group am-panel-tree" style="margin-top:20px;">
-			<div class="am-panel am-panel-default am-panel-header">
+		<div class="am-panel-group am-panel-tree">
+			<div class="am-panel am-panel-default am-panel-header"  style="margin-top:20px;">
 				<div class="am-panel-hd">
 					<div class="am-panel-title am-g">
-						<div class="am-u-lg-1 am-show-lg-only"><?php echo $ld['z_id'];?></div>
+						<div class="am-u-lg-1 am-show-lg-only">
+							<label class="am-checkbox am-success" style="display: inline;">
+						            <input onclick='listTable.selectAll(this,"checkboxes[]")' type="checkbox"
+									value="checkbox" data-am-ucheck>
+								<?php echo $ld['z_id'];?>
+							</label>
+						</div>
 						<div class="am-u-lg-3 am-u-md-3 am-u-sm-3"><?php echo $ld['z_name'];?></div>
 						<div class="am-u-lg-1 am-show-lg-only"><?php echo $ld['z_position'];?></div>
 						<div class="am-u-lg-1 am-u-md-2 am-u-sm-2"><?php echo $ld['z_type'];?></div>
@@ -217,9 +182,12 @@
 			</div>
 			<?php if(isset($language_dictionaries) && count($language_dictionaries)>0){?>
 			<?php foreach($language_dictionaries as $k=>$v){?>
-			<div <?php if((abs($k)+2)%2!=1){ echo 'class="am-g tr_bgcolor"'; }else{ echo 'class="am-g"'; }?> >
+				<div class="am-panel-hd">
+			<div  <?php if((abs($k)+2)%2!=1){ echo 'class="am-g tr_bgcolor"'; }else{ echo 'class="am-g"'; }?> >
 				<div class="am-u-lg-1 am-show-lg-only" >
-					<div id="lang_id"><?php echo $v['Dictionary']['id']?></div>
+						<label class="am-checkbox am-success">
+							<input type="checkbox" name="checkboxes[]" data-am-ucheck value="<?php echo $v['Dictionary']['id']?>" />
+						</label>
 				</div>
 				<div class="am-panel-title am-u-lg-3 am-u-md-3 am-u-sm-3" >
 					<div>
@@ -250,9 +218,36 @@
 						<button type="button" class="am-btn am-btn-default am-text-danger am-radius am-btn-sm" onclick="if(confirm('<?php echo $ld['confirm_delete']; ?>')){window.location.href='<?php echo $admin_webroot; ?>/dictionaries/remove/<?php echo $v['Dictionary']['id']; ?>';}"><?php echo $ld['remove'];?></button>
 				</div>
 			</div>
+			</div>		
 		<?php }?>
             <div class="btnouterlist" style="position:relative">
-				<?php echo $this->element('pagers');?>
+            	<div class="am-u-lg-6 am-u-md-6 am-u-sm-6 am-hide-sm-down" style="left:6px;">
+						<div class="am-fl">
+					          <label class="am-checkbox am-success" style="display: inline;">
+					            <input onclick='listTable.selectAll(this,"checkboxes[]")' type="checkbox"
+								value="checkbox" data-am-ucheck><span><?php echo $ld['select_all']?></span>
+					          </label>
+			            	</div>
+						<div class="am-fl" style="margin-left:3px;">
+					            <select name="barch_opration_select" id="barch_opration_select" data-am-selected  onchange="barchdics_opration_select_onchange(this)">
+					              <option value="0"><?php echo $ld['batch_operate']?></option>
+					              <option value="delete"><?php echo $ld['batch_delete']?></option>
+					    		  <option value="export_csv"><?php echo $ld['batch_export']?></option>
+					            </select>
+			            	</div> 
+						<div class="am-fl" style="display:none;margin-left:3px;">
+			                    <select id="export_csv" data-am-selected name="barch_opration_select_onchange" >
+			                        <option value=""><?php echo $ld['click_select']?></option>
+			                        <option value="all_export_csv"><?php echo  $ld['all_export']?></option>
+			                        <option value="choice_export"><?php echo $ld['choice_export']?></option>
+			                       
+			                    </select>&nbsp;
+			              	</div>
+						<div class="am-fl" style="margin-left:3px;">
+			               	   <button type="button" class="am-btn am-radius am-btn-danger am-btn-sm" onclick="select_batch_operations()"><?php echo $ld['submit']?></button>
+			              	</div>
+				</div>
+				<div class="am-u-lg-6 am-u-md-6 am-u-sm-6">	<?php echo $this->element('pagers');?> </div>
 			</div>
 		<?php }else{?>
 			<div class="am-g">
@@ -272,14 +267,6 @@
 
 <!--Main Start End-->
 <style>
-@media only screen and (min-width:641px) and (max-width:1024px){
-	.am-md-type{float:right;}
-}
-.am-add{margin-top:10px;}
-@media only screen and (max-width:1025px){
-	.am-add{margin-top:0px;}
-}
-
 @media only screen  and (min-width : 1025px) 
 {
 	/*.lg_width input[type='text']{max-width:200px;}*/
@@ -303,14 +290,95 @@
 	}
 }
 .am-form select{padding:0.3em;}
-@media only screen and (max-width:641px){
-	.am-chaxun{
-		
-	}
-}
-.search_box .am-form-group ul li{margin-bottom:10px;}
 </style>
 <script type="text/javascript">
+function select_batch_operations(){
+	var barch_opration_select = document.getElementById("barch_opration_select");
+      var export_csv = document.getElementById("export_csv");
+      if(barch_opration_select.value==0){
+      	  	alert(j_select_operation_type);
+			return;
+      }
+      if(barch_opration_select.value=='delete'){
+		batch_operations();
+	}
+	if(barch_opration_select.value=='export_csv'){
+		if(export_csv.value=='all_export_csv'){
+			window.location.href=admin_webroot+"/dictionaries/all_export_csv";
+		
+		}
+		if(export_csv.value=='choice_export'){
+			choice_upload();
+		}
+	}
+}
+
+//批量删除
+function batch_operations(){
+	var bratch_operat_check = document.getElementsByName("checkboxes[]");
+	var postData = "";
+	for(var i=0;i<bratch_operat_check.length;i++){
+		if(bratch_operat_check[i].checked){
+			postData+="&checkboxes[]="+bratch_operat_check[i].value;
+		}
+	}
+	if( postData=="" ){
+		alert("<?php echo $ld['please_select'] ?>");
+		return;
+	}
+	if(confirm("<?php echo $ld['confirm_delete']?>")){
+		$.ajax({ 
+			url:admin_webroot+"dictionaries/batch_operations/",
+			type:"GET",
+			dataType:"json",
+			data: postData,
+			success:function(data){
+				window.location.href = window.location.href;
+			}
+		});
+	}
+}	
+
+//选择导出
+function choice_upload(){
+	var bratch_operat_check = document.getElementsByName("checkboxes[]");
+	var postData = "";
+	for(var i=0;i<bratch_operat_check.length;i++){
+		if(bratch_operat_check[i].checked){
+			postData+="&checkboxes[]="+bratch_operat_check[i].value;
+		}
+	}
+	if( postData=="" ){
+		alert("<?php echo $ld['please_select'] ?>");
+		return;
+	}else{
+	window.location.href=admin_webroot+"dictionaries/choice_export/"+postData;
+	
+	}
+}	
+
+//触发子下拉
+function barchdics_opration_select_onchange(obj){
+	if(obj.value!="export_csv"){
+		$("#export_csv").parent().hide();		
+	}
+	$("select[name='barch_opration_select_onchange[]']").parent().hide();
+	
+	var export_csv=document.getElementById("export_csv").value;
+	
+	if(obj.value=="export_csv"){
+		if(export_csv=="all_export_csv"){
+			$("#export_csv").parent().show();
+		}else{
+			$("#export_csv").parent().show();
+		}
+	}
+
+}
+	
+	
+	
+	
 $("#locale").change(function(){
 	document.language_form.submit();
 });
@@ -357,7 +425,7 @@ $(".addbutton").click(function(){
 		$.ajax({
 	        cache: true,
 	        type: "POST",
-	        url:"/admin/dictionaries/add",
+	        url:admin_webroot+"dictionaries/add",
 	        data:$('#dictionariesAddForm').serialize(),// 你的formid
 	        async: false,
 	        success: function(data) {
@@ -374,6 +442,4 @@ $(".addbutton").click(function(){
 		alert("名称和内容不能为空！");
 	}
 });
-
-$("div.tr_bgcolor:eq(0)").css("margin-top","10px")
 </script>

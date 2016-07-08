@@ -1,4 +1,17 @@
-<?php if($route=="PRODUCT"){?>
+<?php 
+	if($route=="PAGE"){
+		if(isset($info)&&$info!=""&&count($info)>0){
+?>
+	<select id='next_homepage' onChange="setHomepage()"> 
+		<?php foreach($info as $v){?>
+			<option value="<?php echo $v['Page']['id'];?>"><?php echo $v['PageI18n']['title'];?></option>
+		<?php } ?>
+	</select>
+<?php	
+		}else if(isset($info)&&$info!=""&&count($info)==0){echo "当前无数据!";} 
+?>
+<input type="text" id="keyword" name="page_key" value="" style="width:200px;"><input type="button" class="am-btn am-btn-success am-btn-sm" onclick="changeHome()" value="<?php echo $ld['search']; ?>" />
+<?php	}else if($route=="PRODUCT"){?>
 	<?php if(isset($info)&&$info!=""&&count($info)>0){?>
 	<select id='next_homepage' onChange="setHomepage()"> 
 		<?php foreach($info as $v){?>
@@ -8,7 +21,7 @@
 	<?php }elseif(isset($info)&&$info!=""&&count($info)==0){ 
 		echo "当前无数据!";
 	}?>
-	<input type="text" id="keyword" name="p_key" value="" style="width:200px;"><input type="button" class="am-btn am-btn-success am-btn-sm" onclick="changeHome()" value="搜索商品" />
+	<input type="text" id="keyword" name="p_key" value="" style="width:200px;"><input type="button" class="am-btn am-btn-success am-btn-sm" onclick="changeHome()" value="<?php echo $ld['search']; ?>" />
 <?php }elseif($route=="ARTICLE"){?>
 	<?php if(isset($info)&&$info!=""&&count($info)>0){?>
 	<select id='next_homepage' onChange="setHomepage()"> 
@@ -19,7 +32,7 @@
 	<?php }elseif(isset($info)&&$info!=""&&count($info)==0){ 
 		echo "当前无数据!";
 	}?>
-	<input type="text" id="keyword" name="a_key" value="" style="width:200px;"><input type="button" class="am-btn am-btn-success am-btn-sm" onclick="changeHome()" value="搜索文章" />
+	<input type="text" id="keyword" name="a_key" value="" style="width:200px;"><input type="button" class="am-btn am-btn-success am-btn-sm" onclick="changeHome()" value="<?php echo $ld['search']; ?>" />
 <?php }else{?>
 	<?php if(isset($info)&&$info!=""&&count($info)>0){?>
 	<select id='next_homepage' onChange="setHomepage()"> 
